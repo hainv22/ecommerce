@@ -162,9 +162,9 @@ class AdminProductController extends Controller
     public function update(AdminProductRequest $request, $id)
     {
         $product = Product::findOrfail($id);
-        $data = $request->except('_token', 'pro_avatar', 'attribute', 'file');
+        $data = $request->except('_token', 'pro_avatar', 'file');
 
-        $data['pro_slug']   =   Str::slug($request->pro_name);
+
         if ($request->pro_avatar) {
             $image = upload_image('pro_avatar');
             if ($image['code'] == 1) {
