@@ -40,7 +40,6 @@ class AdminCategoryController extends Controller
     public function create()
     {
         $categorys = Category::all();
-        // dd($categorys);
         return view('admin.category.create', compact('categorys'));
     }
 
@@ -73,7 +72,6 @@ class AdminCategoryController extends Controller
     {
         $category = Category::findOrfail($id);
         $data = $request->except('_token', 'c_avatar');
-        $data['c_slug']         = Str::slug($request->c_name);
         if ($request->c_avatar) {
             $image = upload_image('c_avatar');
             if ($image['code'] == 1) {
@@ -96,17 +94,6 @@ class AdminCategoryController extends Controller
             $request->session()->flash('toastr', [
                 'type'      => 'error',
                 'message'   => 'Đang có sản phẩm trong danh mục không thể xóa !'
-            ]);
-            return redirect()->back();
-        }
-        if (
-            $id == config('contants.ID_CATEGORY_DEFAULT.DHCH')
-            || $id == config('contants.ID_CATEGORY_DEFAULT.KM')
-            || $id == config('contants.ID_CATEGORY_DEFAULT.PKDH')
-        ) {
-            $request->session()->flash('toastr', [
-                'type'      => 'error',
-                'message'   => 'Danh mục này không thể xóa !'
             ]);
             return redirect()->back();
         }
