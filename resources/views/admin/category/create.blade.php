@@ -55,7 +55,6 @@
                     <a href="{{ route('admin.category.index') }}" class="btn btn-danger"><i class="fa fa-undo"></i> Trở Lại</a>
                     <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Submit</button>
                 </div>
-                </div>
             </form>
         </div>
     </div>
