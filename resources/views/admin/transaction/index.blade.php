@@ -41,84 +41,66 @@
               </div>
               <!-- /.box-header -->
               <div class="box-body table-responsive no-padding">
-                <table class="table table-hover">
-                  <tbody>
-                    <tr>
-                      <th>ID</th>
-                      <th>Info</th>
-                      {{-- <th>Account</th> --}}
-                      <th>Money</th>
-                      <th>Status</th>
-                      <th>Phương thức TT</th>
-                      <th>Time</th>
-                      <th>Action</th>
-                    </tr>
-                    @if(isset($transactions))
-                        @foreach ($transactions as $item)
+                    <form id="frm_action" class="form-horizontal" name="frm_action" method="post" action="" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="txtcustomer" id="txtcustomer" value="">
+                        <table class="table table-bordered tbl_add_orderext">
+                            <thead>
                             <tr>
-                                <td>{{ $item->id }}</td>
+                                <th>Link sản phẩm <font color="red">*</font></th>
+                                <th>Link ảnh (nếu có)</th>
+                                <th>Tên shop </th>
+                                <th>Mô tả <font color="red">*</font></th>
+                                <th>Loại hàng</th>
+                                <th width="100">Đơn giá (tệ)</th>
+                                <th width="100">Số lượng<font color="red">*</font></th>
+                                <th width="100">Thao tác</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
                                 <td>
-                                    <ul>
-                                        <li>Name: {{ $item->tst_name }}</li>
-                                        <li>Email: {{ $item->tst_email }}</li>
-                                        <li>Phone: {{ $item->tst_phone }}</li>
-                                        <li>Address: {{ $item->tst_address }}</li>
-                                    </ul>
-                                </td>
-                                {{-- <td>
-                                    @if ($item->tst_user_id)
-                                        <span class="label label-warning">Thành Viên</span>
-                                    @else
-                                        <span class="label label-default">Khách</span>
-                                    @endif
-                                </td> --}}
-                                <td>{{ number_format($item->tst_total_money,0,',','.') }}</td>
-                                <td>
-                                    <span class="label label-{{ $item->getStatus($item->tst_status)['class'] }}">
-                                        {{ $item->getStatus($item->tst_status)['name'] }}
-                                    </span>
+                                    <input name="txt_link_product[]" class="form-control txt_link_product" id="txt_link_product" type="text" placeholder="Link sản phẩm" required >
                                 </td>
                                 <td>
-                                    <span class="label label-{{ $item->tst_type == config('contants.PTTT.THUONG') ? 'info' : 'success' }}">
-                                        {{ $item->tst_type == config('contants.PTTT.THUONG') ? 'Thường' : 'Online' }}
-                                    </span>
+                                    <input name="txt_link_image[]" class="form-control txt_link_image" type="text" placeholder="Link hình ảnh">
                                 </td>
-                                <td>{{ date("d/m/Y H:i:s", strtotime($item->created_at)) }}</td>
                                 <td>
-                                    <a href="{{ route('admin.transaction.detail',$item->id) }}" class="btn btn-xs btn-info js-preview-transaction"><i class="fa fa-eye"></i>View</a>
-
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-success btn-xs">Action</button>
-                                        <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                            <span class="caret"></span>
-                                            <span class="sr-only">Toggle Dropdown</span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a href="{{ route('admin.transaction.delete',$item->id) }}" class=""><i class="fa fa-trash js-delete-confirm"></i> Delete</a>
-                                            </li>
-                                            <li class="divider"></li>
-                                            <li>
-                                                <a href="{{ route('admin.transaction.action',['process',$item->id]) }}"><i class="fa fa-ban"> Đang Vận Chuyển</i></a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ route('admin.transaction.action',['success',$item->id]) }}"><i class="fa fa-ban"> Đã Bàn Giao</i></a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ route('admin.transaction.action',['cancel',$item->id]) }}"><i class="fa fa-ban"> Hủy</i></a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <input name="txt_name_shop[]" class="form-control txt_name_shop"  type="text" placeholder="Tên shop">
+                                </td>
+                                <td>
+                                    <input name="txt_intro_product[]" class="form-control txt_intro_product"  placeholder="Màu, size..." require>
+                                </td>
+                                <td class="cls_td">
+                                    <input name="txt_note[]" class="form-control txt_note" placeholder="Dễ vỡ, đóng gỗ...">
+                                </td>
+                                <td class="cls_td">
+                                    <input type="text" name="txt_price[]" class="form-control txt_price" value="" class="form-control" placeholder="Đơn giá" >
+                                </td>
+                                <td class="cls_td">
+                                    <input type="number" name="txt_quantity[]" class="form-control txt_quantity" value="1" min="1" placeholder="SL" required>
+                                </td>
+                                <td align="center" class="cls_td">
+                                    <a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a>
                                 </td>
                             </tr>
-                        @endforeach
-                    @endif
-                  </tbody>
-                </table>
+                            </tbody>
+                            <tfoot>
+                            <hr>
+                            <tr>
+                                <td colspan="100%" class="text-left" >
+                                    <input type="checkbox" required id="check_dieukien" checked> Tôi đã xem và đồng ý với <a href="#" style="color:red;font-weight:bold;" id="quydinh">QUY ĐỊNH ĐỐI VỚI CÁC ĐƠN HÀNG ORDER</a> (*)
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                        <div class="clear-both text-center">
+                            <a href="#" class="btn btn-primary add_item_order">+ Thêm sản phẩm</a>
+                            <a class="btn btn-danger save_order" name="cmdsave" id="cmdsave"  onclick="return check_input();" >Lưu đơn hàng</a>
+                        </div>
+                        <p></p>
+                    </form>
               </div>
-              <!-- /.box-body -->
-              {!! $transactions->appends($query)->links() !!}
-              <div></div>
             </div>
             <!-- /.box -->
           </div>
@@ -127,64 +109,104 @@
     <!-- Main row -->
     <!-- /.row (main row) -->
   </section>
-    {{--  <div class="modal fade fade" id="modal-preview-transaction" >
-        <div class="modal-dialog modal-lg">
+  <!-- /.content -->
+    <div id="myModal" class="modal fade col-md-12" role="dialog">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title">Chi Tiết Đơn hàng <b></b></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
                 </div>
-                <div class="modal-body">
-                    <div class="content">
-
-                    </div>
+                <div class="modal-body" id="data_modal">
+                    <p></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="close_modal">Đóng</button>
                 </div>
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
-    </div>  --}}
-  <!-- /.content -->
+    </div>
 @endsection
-{{--  @section('script')
-    <script>
-        $('.js-preview-transaction').click(function(e){
-            e.preventDefault();
-            let $this=$(this);
-            let URL=$this.attr('href');
-            $.ajax({
-                url:URL,
-                success:function(results){
-                    $('#modal-preview-transaction .content').html(results.html)
-                    $('#modal-preview-transaction').modal({
-                        show:true
-                    });
-                },
-                error:function(e){
-                    console.log(e.message);
-                }
+@section('script')
+    <script type="text/javascript">
+        $(document).ready(function(){
+            // thêm item mới
+            $(".add_item_order").on("click",function(){
+                var row_infor='<tr><td><input name="txt_link_product[]" class="form-control txt_link_product"  type="text" placeholder="Link sản phẩm" required></td><td><input name="txt_link_image[]" class="form-control txt_link_image"  type="text" placeholder="Link hình ảnh"></td><td><input name="txt_name_shop[]" class="form-control txt_name_shop"  type="text" placeholder="Tên shop"></td><td><input name="txt_intro_product[]" class="form-control txt_intro_product"  placeholder="VD: màu sắc, kích thước..." ></td><td class="cls_td"><input name="txt_note[]" class="form-control txt_note" placeholder="Dễ vỡ, đóng gỗ..."></td><td class="cls_td"><input type="text" name="txt_price[]" class="form-control txt_price" value="" class="form-control" placeholder="Đơn giá" required></td><td class="cls_td"><input type="number" name="txt_quantity[]" class="form-control txt_quantity" value="1" min="1" placeholder="SL" required></td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
+                $(".tbl_add_orderext tbody").append(row_infor);
+                return false;
             });
         });
-        $('body').on('click','.js-delete-order-item',function(event){
-            event.preventDefault();
-            let URL=$(this).attr('href');
-            let $this=$(this);
-            $.ajax({
-                url:URL,
-                success:function(results){
-                    if(results.code==200){
-                        $this.parents('tr').remove();
-                    }
-                },
-                error:function(e){
-                    console.log(e.message);
+    </script>
+    <script type="text/javascript">
+        //check url
+        function isUrlValid(url) {
+            return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
+        }
+        function deleteItem(thistag){
+            if(confirm("Bạn chắc chắn muốn xóa item này?")==true){
+                $(thistag).parent().parent().remove();
+            }
+        }
+        function check_input(){
+            // var customer=$("#txtcustomer").val();
+            // console.log(customer);
+            // if(customer=="") {
+            //     alert("Bạn cần đăng nhập để thực hiện chức năng này!");
+            //     $("#txtcustomer").focus(); return false;
+            // }
+            var flag=true; var mess="";
+            $(".txt_intro_product").each(function(){
+                var value=$(this).val();
+                if(value=="") {
+                    $(this).css("background-color","#eee"); $(this).focus(); flag= false;
                 }
             })
+            // $(".txt_price").each(function(){
+            // 	var value=$(this).val();
+            //  	if(parseFloat(value)==0 || value=="") {$(this).css("background-color","#eee"); $(this).focus(); flag= false;}
+            // })
+            $(".txt_quantity").each(function(){
+                var value=$(this).val();
+                if(parseFloat(value)==0 || value=="") {
+                    $(this).css("background-color","#eee"); $(this).focus(); flag= false;
+                }
+            });
+            if($("#check_dieukien").is(":checked") !=true){
+                $(this).focus(); flag= false; mess=" Bạn cần đồng ý điều khoản của chúng tôi!";
+            }
+            var rowCount=0;
+            if($(".tbl_add_orderext tbody tr").length>0)
+                rowCount=$(".tbl_add_orderext tbody tr").length;
+            else if($(".tbl_add_orderext .item").length>0)
+                rowCount=$(".tbl_add_orderext .item").length;
+            if(rowCount==0) {flag=false; mess="Dữ liệu trống";}
+            if(flag==true){
+                $("#frm_action").submit();
+                return true;
+            }else {
+                alert("Cần nhập đủ thông tin! "+mess);
+            }
+
+        }
+        $(document).ready(function(){
+            // datepicker bootstrap
+            $.fn.datepicker.defaults.language = 'vi';
+            $.fn.datepicker.defaults.format = "dd/mm/yyyy";
+            $('.datepicker').datepicker({
+                startDate: '-3d'
+            });
+
+            // view quy định điều khoản
+            $("#quydinh").click(function(){
+                $("#myModal").modal("show");
+                $("#myModal .modal-title").html("Quy định và chính sách khi tạo đơn hàng");
+                $("#myModal .modal-dialog").addClass("modal-lg");
+                $("#myModal .modal-body").html("...Dm hải");
+                $("#myModal .modal-body").load("https://www.youtube.com/watch?v=TucgDVWI9wc");
+                return false;
+            })
+
         });
     </script>
-@endsection  --}}
+@endsection
