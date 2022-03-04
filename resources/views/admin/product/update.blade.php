@@ -96,35 +96,7 @@
                           </div>
                       </div>
 
-                        <div class="box box-warning">
-                            <div class="box-header">
-                                <h3 class="box-title">Attribute</h3>
-                            </div>
-                            <div class="box-body js-attribute">
-                                {{--  @foreach ($attributes as $item)
-                                    <div class="form-group col-sm-4">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" name="attribute[]"
-                                                value="{{ $item['id'] }}" {{ in_array($item['id'],$attributeOld) ? 'checked' : '' }}> {{ $item['atb_name'] }}
-                                            </label>
-                                        </div>
-                                    </div>
-                                @endforeach  --}}
-                                @foreach ($attributes as $key => $value)
-                                    <div class="form-group col-sm-3">
-                                        <h4 style="border-bottom: 1px solid #dedede;padding-bottom:10px">{{ $key }}</h4>
-                                        @foreach ($value as $item)
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" name="attribute[]" value="{{ $item['id'] }}" {{ in_array($item['id'],$attributeOld) ? 'checked' : '' }}> {{ $item['atb_name'] }}
-                                                </label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
+
 
                 </div>
                 <div class="col-md-5">
@@ -219,14 +191,6 @@
                                     <option value="3" {{ ($product->pro_country ?? '') ==3 ? 'selected' : ''}}>Thụy Sỹ</option>
                                     <option value="4" {{ ($product->pro_country ?? '') ==4 ? 'selected' : ''}}>Mỹ</option>
                                 </select>
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label>Năng Lượng</label>
-                                <input type="text" name="pro_energy" value="{{ $product->pro_energy ?? '' }}" class="form-control" placeholder="Năng lượng">
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label>Độ chịu nước</label>
-                                <input type="text" name="pro_resistant" value="{{ $product->pro_resistant ?? '' }}" class="form-control" placeholder="Độ chịu nước">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Số Lượng</label>

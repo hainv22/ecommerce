@@ -42,12 +42,11 @@
                                 @endif
                             </div>
 
-                            <div class="form-group col-sm-6 {{ $errors->first('pro_price') ? 'has-error' : '' }}" >
+                            <div class="form-group {{ $errors->first('pro_price') ? 'has-error' : '' }}" >
                                 <label for="pro_price">Giá </label>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
                                         <input type="number" name="pro_price" class="form-control" value="{{ old('pro_price') }}">
-                                        <span class="input-group-addon"></span>
                                 </div>
                                 <small id="emailHelp" class="form-text text-muted "></small>
                                 @if ($errors->first('pro_price'))
@@ -55,21 +54,10 @@
                                 @endif
                             </div>
 
-                            <div class="form-group" {{ $errors->first('pro_sale') ? 'has-error' : '' }}>
-                                <label for="pro_sale">% Giảm Giá</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon">$</span>
-                                        <input type="number" value="{{ old('pro_sale') ?? 0 }}" name="pro_sale" class="form-control">
-                                        <span class="input-group-addon"><i class="fa fa-check"></i></span>
-                                  </div>
-                                @if ($errors->first('pro_sale'))
-                                    <span class="text-danger">{{ $errors->first('pro_sale') }}</span>
-                                @endif
-                            </div>
 
                             <div class="form-group {{ $errors->first('pro_description') ? 'has-error' : '' }}">
                                 <label>Description</label>
-                                <textarea class="form-control" value="" name="pro_description" rows="3" placeholder="Enter ...">{{ old('pro_description') }}</textarea>
+                                <textarea class="form-control" value="" name="pro_description" rows="6" placeholder="Enter ...">{{ old('pro_description') }}</textarea>
                                 @if ($errors->first('pro_description'))
                                     <span class="text-danger">{{ $errors->first('pro_description') }}</span>
                                 @endif
@@ -88,71 +76,44 @@
                                     <span class="text-danger">{{ $errors->first('pro_category_id') }}</span>
                                 @endif
                             </div>
-
-                            <div class="form-group {{ $errors->first('pro_type_product_id') ? 'has-error' : '' }}">
-                                <label>Type Product (*)</label>
-                                <select name="pro_type_product_id" class="form-control js-type-product">
-                                    @if (isset($typeproducts))
-                                        @foreach ($typeproducts as $item)
-                                            <option value="{{ $item->id }}" >{{ $item->tp_name }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                                @if ($errors->first('pro_type_product_id'))
-                                    <span class="text-danger">{{ $errors->first('pro_type_product_id') }}</span>
-                                @endif
-                            </div>
+                              <div class="form-group {{ $errors->first('pro_country') ? 'has-error' : '' }}">
+                                  <label>Xuất sứ</label>
+                                  <select name="pro_country" class="form-control">
+                                      <option value="1">Việt Nam</option>
+                                      <option value="2">Anh</option>
+                                      <option value="3">Thụy Sỹ</option>
+                                      <option value="4">Mỹ</option>
+                                  </select>
+                                  @if ($errors->first('pro_country'))
+                                      <span class="text-danger">{{ $errors->first('pro_country') }}</span>
+                                  @endif
+                              </div>
+                              <div class="form-group {{ $errors->first('pro_number') ? 'has-error' : '' }}">
+                                  <label>Số Lượng</label>
+                                  <input type="number" name="pro_number" value="{{ old('pro_number') }}" class="form-control" placeholder="0">
+                                  @if ($errors->first('pro_number'))
+                                      <span class="text-danger">{{ $errors->first('pro_number') }}</span>
+                                  @endif
+                              </div>
 
                           </div>
                       </div>
-                      <div class="box box-success">
-                            <div class="box-header">
-                                <h3 class="box-title">Attribute</h3>
-                            </div>
-                            <div class="box-body js-attribute">
-                                @if (isset($attributes))
-                                    @foreach ($attributes as $key => $value)
-                                        <div class="form-group col-sm-3">
-                                            <h4 style="border-bottom: 1px solid #dedede;padding-bottom:10px">{{ $key }}</h4>
-                                            @foreach ($value as $item)
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox" name="attribute[]" value="{{ $item['id'] }}"> {{ $item['atb_name'] }}
-                                                    </label>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endforeach
-                                @endif
-                            </div>
-                        </div>
                 </div>
-                <div class="col-md-5">
-                    {{--  <div class="box box-warning">
-                        <div class="box-header with-border">
-                          <h3 class="box-title">Seo Cơ Bản</h3>
-                        </div>
-                        <div class="box-body">
-                            <div class="form-group">
-                                <label>Textarea</label>
-                                <textarea class="form-control" value="{{ old('pro_description_seo') }}" name="pro_description_seo" rows="3" placeholder="Enter ..."></textarea>
-                            </div>
-                        </div>
-                      </div>  --}}
 
+                <div class="col-md-5">
                       <div class="box box-success">
-                        <div class="box-header with-border">
-                          <h3 class="box-title">Content</h3>
-                        </div>
-                        <div class="box-body">
-                            <div class="form-group {{ $errors->first('pro_content') ? 'has-error' : '' }}">
-                                <label>Nội Dung</label>
-                                <textarea class="form-control" value="" name="pro_content" rows="3" placeholder="Enter ...">{{ old('pro_content') }}</textarea>
-                                @if ($errors->first('pro_content'))
-                                    <span class="text-danger">{{ $errors->first('pro_content') }}</span>
-                                @endif
+                            <div class="box-header with-border">
+                              <h3 class="box-title">Content</h3>
                             </div>
-                        </div>
+                            <div class="box-body">
+                                <div class="form-group {{ $errors->first('pro_content') ? 'has-error' : '' }}">
+                                    <label>Nội Dung</label>
+                                    <textarea class="form-control" value="" name="pro_content" rows="4" placeholder="Enter ...">{{ old('pro_content') }}</textarea>
+                                    @if ($errors->first('pro_content'))
+                                        <span class="text-danger">{{ $errors->first('pro_content') }}</span>
+                                    @endif
+                                </div>
+                            </div>
                       </div>
 
                       <div class="box box-info">
@@ -188,50 +149,7 @@
                         </div>
                       </div>
                 </div>
-                <div class="col-md-7">
 
-                </div>
-                <div class="col-md-5">
-                    <div class="box box-warning">
-                        <div class="box-header">
-                            <h3 class="box-title">Thuộc Tính</h3>
-                        </div>
-                        <div class="box-body">
-
-                            <div class="form-group col-sm-6 {{ $errors->first('pro_country') ? 'has-error' : '' }}">
-                                <label>Xuất sứ</label>
-                                <select name="pro_country" class="form-control">
-                                    <option value="1">Việt Nam</option>
-                                    <option value="2">Anh</option>
-                                    <option value="3">Thụy Sỹ</option>
-                                    <option value="4">Mỹ</option>
-                                </select>
-                                @if ($errors->first('pro_country'))
-                                    <span class="text-danger">{{ $errors->first('pro_country') }}</span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-sm-6">
-                                <label>Năng Lượng</label>
-                                <input type="text" name="pro_energy" value="{{ old('pro_energy') }}" class="form-control" placeholder="Năng lượng">
-                            </div>
-
-                            <div class="form-group col-sm-6">
-                                <label>Độ chịu nước</label>
-                                <input type="text" name="pro_resistant" value="{{ old('pro_resistant') }}" class="form-control" placeholder="Độ chịu nước">
-                            </div>
-
-                            <div class="form-group col-sm-6 {{ $errors->first('pro_number') ? 'has-error' : '' }}">
-                                <label>Số Lượng</label>
-                                <input type="number" name="pro_number" value="{{ old('pro_number') }}" class="form-control" placeholder="0">
-                                @if ($errors->first('pro_number'))
-                                    <span class="text-danger">{{ $errors->first('pro_number') }}</span>
-                                @endif
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
                 <div class="col-md-12">
                     <div class="box-footer" style="text-align: center;">
                         <a href="{{ route('admin.product.index') }}" class="btn btn-danger"><i class="fa fa-undo"></i> Trở Lại</a>
@@ -255,7 +173,7 @@
 @section('script')
     <script>
         $(function(){
-            
+
             $('#image').change(function(){
                 let reader = new FileReader();
                 reader.onload = (e) => {

@@ -232,7 +232,7 @@
                                         <img src="{{ pare_url_file($item->pro_avatar) }}" alt="{{ $item->pro_name }}">
                                     </div>
                                     <div class="product-info">
-                                        <a href="{{route('get.product.detail',$item->slug . '-' . $item->id)}}" target="_blank" class="product-title">{{ $item->pro_name }}
+                                        <a href="" target="_blank" class="product-title">{{ $item->pro_name }}
                                         <span class="label label-warning pull-right">{{ number_format($item->pro_price,0,',','.') }} đ</span></a>
                                         <span class="product-description">
                                             {{ $item->pro_pay }} lượt mua

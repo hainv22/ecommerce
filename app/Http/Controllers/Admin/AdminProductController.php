@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminProductRequest;
-use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\TypeProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -42,34 +41,7 @@ class AdminProductController extends Controller
                 $product->save();
             }
         }
-        // $products = Product::with('category:id,c_name')->select(DB::raw('(pro_price*(100-pro_sale)/100) as total, id, pro_name'));
-        // dd($products->orderBy('total', 'DESC')->get());
-        // $products = DB::table('products')->select(DB::raw('(pro_price*(100-pro_sale)/100) as total, id, pro_name'))
-        // $select = DB::raw('(pro_price*(100-pro_sale)/100) as total,
-        //     id,
-        //     pro_name,
-        //     pro_category_id,
-        //     pro_type_product_id,
-        //     pro_user_id,
-        //     pro_price,
-        //     pro_sale,
-        //     pro_avatar,
-        //     pro_view,
-        //     pro_hot,
-        //     pro_active
-        //     pro_pay,
-        //     pro_description,
-        //     pro_content,
-        //     pro_review_total,
-        //     pro_review_star,
-        //     pro_number,
-        //     pro_country,
-        //     pro_energy,
-        //     pro_resistant,
-        //     created_at,
-        //     updated_at
-        // ');
-        // $products = Product::with('category:id,c_name')->select($select);
+
         $products = Product::with('category:id,c_name');
         $categorys = Category::all();
 
@@ -142,7 +114,6 @@ class AdminProductController extends Controller
     public function create()
     {
         $categorys = Category::select('id', 'c_name', 'c_parent_id')->get();
-        // $attributes = Attribute::select('id','atb_name')->get();
         $viewData = [
             'categorys'          => $categorys,
         ];
@@ -151,11 +122,12 @@ class AdminProductController extends Controller
 
     public function store(AdminProductRequest $request)
     {
-        $data = $request->except('_token', 'pro_avatar', 'attribute', 'file');
-        $data['pro_slug']   =   Str::slug($request->pro_name);
-        if (!$request->pro_sale) {
-            $data['pro_sale'] = 0;
-        }
+            $data = $request->except('_token', 'pro_avatar', 'file');
+            $data['pro_user_id'] = Auth::id();
+            $data['pro_slug']   =   Str::slug($request->pro_name);
+            if (!$request->pro_sale) {
+                $data['pro_sale'] = 0;
+            }
 
         if ($request->pro_avatar) {
             $image = upload_image('pro_avatar');
@@ -165,7 +137,6 @@ class AdminProductController extends Controller
         }
         $product = Product::create($data);
         if ($product) {
-            $product->attributes()->sync($request->attribute);
             if ($request->file) {
                 $this->syncAlbumImageAndProduct($request->file, $product->id);
             }
@@ -174,29 +145,17 @@ class AdminProductController extends Controller
             'type'      => 'success',
             'message'   => 'Insert thành công !'
         ]);
-
-        return redirect()->back();
+            return redirect()->back();
     }
 
     public function edit($id)
     {
         $product = Product::with('images')->findOrfail($id);
         $categorys = Category::select('id', 'c_name', 'c_parent_id')->get();
-        $typeproducts = TypeProduct::select('id', 'tp_name', 'tp_category_id')->get();
-        // $attributes = Attribute::select('id','atb_name')->get();
-        $attributes = $this->syncAttributeGroup();
 
-        $attributeOld = DB::table('attribute_product')
-            ->where('ap_product_id', $id)
-            ->pluck('ap_attribute_id')
-            ->toArray();
-        if (!$attributeOld) $attributeOld = [];
         $viewData = [
             'categorys'         => $categorys,
-            'attributes'        => $attributes,
-            'typeproducts'      => $typeproducts,
             'product'           => $product,
-            'attributeOld'      => $attributeOld
         ];
         return view('admin.product.update', $viewData);
     }
@@ -214,7 +173,6 @@ class AdminProductController extends Controller
         }
 
         $product->update($data);
-        $product->attributes()->sync($request->attribute);
         if ($request->file) $this->syncAlbumImageAndProduct($request->file, $id);
         $request->session()->flash('toastr', [
             'type'      => 'success',
@@ -226,7 +184,7 @@ class AdminProductController extends Controller
     public function delete(Request $request, $id)
     {
         DB::beginTransaction();
-        $product = Product::with('images', 'attributes', 'ratings', 'orders')->findOrfail($id);
+        $product = Product::with('images', 'orders')->findOrfail($id);
         if ($product) {
             // dd(empty($product->orders[0]));
 
@@ -234,12 +192,6 @@ class AdminProductController extends Controller
                 try {
                     foreach ($product->images as $item) {
                         $this->deleteImage($request, $item->id);
-                    }
-                    foreach ($product->attributes as $item) {
-                        $product->attributes()->detach($item->id);
-                    }
-                    foreach ($product->ratings as $item) {
-                        $item->delete();
                     }
                 } catch (\Exception $e) {
                     DB::rollBack();
@@ -329,7 +281,7 @@ class AdminProductController extends Controller
             DB::table('images')
                 ->insert([
                     'img_name'       => $fileImage->getClientOriginalName(),
-                    'img_slug'       => $filename,
+                    'img_path'       => $filename,
                     'img_product_id' => $productID,
                     'created_at'    => Carbon::now()
                 ]);
@@ -345,53 +297,6 @@ class AdminProductController extends Controller
         return redirect()->back();
     }
 
-    public function syncAttributeGroup()
-    {
-        $attributes = Attribute::where('atb_category_id', config('contants.ID_CATEGORY_DEFAULT.DHCH'))->get();
-        $groupAttribute = [];
-        foreach ($attributes as $key => $attribute) {
-            $aaa = $attribute->gettype($attribute->atb_type)['name'];
-            $groupAttribute[$aaa][] = $attribute->toArray();
-        }
-        return $groupAttribute;
-    }
-
-    public function getTypeProduct(Request $request, $categoryId)
-    {
-        $category = Category::find($categoryId);
-        if ($category->c_parent_id) {
-            $categoryId = $category->c_parent_id;
-        }
-        $attributeOld = [];
-        if ($request->idProduct) {
-            $idProduct = $request->idProduct;
-            $attributeOld = DB::table('attribute_product')
-                ->where('ap_product_id', $idProduct)
-                ->pluck('ap_attribute_id')
-                ->toArray();
-        }
-
-        $typeproducts = TypeProduct::where('tp_category_id', $categoryId)->get();
-        $attributes = $this->AttributeGroup(Attribute::where('atb_category_id', $categoryId)->get());
-        $type_product = view('admin.product.data_type_product', compact('typeproducts'))->render();
-        $attribute = view('admin.product.data_attribute', compact('attributes', 'attributeOld'))->render();
-
-        return response([
-            'type_product' => $type_product ?? null,
-            'attribute' => $attribute ?? null,
-            'id' => $idProduct ?? null
-        ]);
-    }
-
-    public function AttributeGroup($attributes)
-    {
-        $groupAttribute = [];
-        foreach ($attributes as $key => $attribute) {
-            $aaa = $attribute->gettype($attribute->atb_type)['name'];
-            $groupAttribute[$aaa][] = $attribute->toArray();
-        }
-        return $groupAttribute;
-    }
     function stripVN($str)
     {
         $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/", 'a', $str);

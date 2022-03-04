@@ -26,14 +26,12 @@ class AdminProductRequest extends FormRequest
         return [
             'pro_name' => 'required|max:190|min:3|unique:products,pro_name,' . $this->id,
             'pro_price' => 'required',
-            'pro_sale' => 'between:0,2',
             'pro_avatar' => 'image',
             'pro_description' => 'required',
             'pro_content' => 'required',
             'pro_category_id' => 'required',
             'pro_country' => 'required',
             'pro_number' => 'required',
-            'pro_type_product_id' => 'required',
             'file.*' => 'image',
         ];
     }
@@ -50,7 +48,6 @@ class AdminProductRequest extends FormRequest
             'pro_category_id.required' => 'Dữ Liệu không để trống',
             'pro_country.required' => 'Dữ Liệu không để trống',
             'pro_number.required' => 'Dữ Liệu không để trống',
-            'pro_type_product_id.required' => 'Dữ Liệu không để trống',
             'pro_avatar.image' => 'Định dạng hình ảnh sai !',
             'file.*.image' => 'Định dạng hình ảnh sai !',
             'pro_sale.between' => 'Giá trị phải nằm trong khoảng 0-99 !',

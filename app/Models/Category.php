@@ -23,14 +23,6 @@ class Category extends Model
     {
         return $this->children()->with('childrenRecursive');
     }
-    public function typeproducts()
-    {
-        return $this->hasmany(TypeProduct::class, 'tp_category_id');
-    }
-    public function attributes()
-    {
-        return $this->hasmany(Attribute::class, 'atb_category_id');
-    }
     public function products()
     {
         return $this->hasMany(Product::class, 'pro_category_id');

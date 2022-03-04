@@ -44,29 +44,7 @@ Route::middleware(['auth'])->group(function () {
             // Route::get('ajax-search-table',[AdminCategoryController::class,'ajax_search_table'])->name('ajax.admin.category.search');
         });
 
-        Route::group(['prefix' => 'type-product'], function () {
-            Route::get('/', [AdminTypeProductController::class, 'index'])->name('admin.typeproduct.index');
-            Route::get('create', [AdminTypeProductController::class, 'create'])->name('admin.typeproduct.create');
-            Route::post('create', [AdminTypeProductController::class, 'store'])->name('admin.typeproduct.store');
 
-            Route::get('update/{id}', [AdminTypeProductController::class, 'edit'])->name('admin.typeproduct.edit');
-            Route::post('update/{id}', [AdminTypeProductController::class, 'update'])->name('admin.typeproduct.update');
-
-            Route::get('delete/{id}', [AdminTypeProductController::class, 'delete'])->name('admin.typeproduct.delete');
-            Route::get('active/{id}', [AdminTypeProductController::class, 'active'])->name('admin.typeproduct.active');
-            Route::get('hot/{id}', [AdminTypeProductController::class, 'hot'])->name('admin.typeproduct.hot');
-        });
-
-        Route::group(['prefix' => 'attribute'], function () {
-            Route::get('/', [AdminAttributeController::class, 'index'])->name('admin.attribute.index');
-            Route::get('create', [AdminAttributeController::class, 'create'])->name('admin.attribute.create');
-            Route::post('create', [AdminAttributeController::class, 'store'])->name('admin.attribute.store');
-
-            Route::get('update/{id}', [AdminAttributeController::class, 'edit'])->name('admin.attribute.edit');
-            Route::post('update/{id}', [AdminAttributeController::class, 'update']);
-
-            Route::get('delete/{id}', [AdminAttributeController::class, 'delete'])->name('admin.attribute.delete');
-        });
 
         Route::group(['prefix' => 'product'], function () {
             Route::get('/', [AdminProductController::class, 'index'])->name('admin.product.index');
@@ -84,47 +62,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('get-type-product/{categoryId?}', [AdminProductController::class, 'getTypeProduct'])->name('admin.product.get.typeproduct');
         });
 
-        Route::group(['prefix' => 'slide'], function () {
-            Route::get('/', [AdminSlideController::class, 'index'])->name('admin.slide.index');
-            Route::get('create', [AdminSlideController::class, 'create'])->name('admin.slide.create');
-            Route::post('create', [AdminSlideController::class, 'store'])->name('admin.slide.store');
 
-            Route::get('update/{id}', [AdminSlideController::class, 'edit'])->name('admin.slide.edit');
-            Route::post('update/{id}', [AdminSlideController::class, 'update'])->name('admin.slide.update');
-
-            Route::get('delete/{id}', [AdminSlideController::class, 'delete'])->name('admin.slide.delete');
-            Route::get('active/{id}', [AdminSlideController::class, 'active'])->name('admin.slide.active');
-
-            Route::get('delete-image/{id}', [AdminSlideController::class, 'deleteImage'])->name('admin.slide.delete_image');
-        });
-
-        Route::group(['prefix' => 'menu'], function () {
-            Route::get('/', [AdminMenuController::class, 'index'])->name('admin.menu.index');
-            Route::get('create', [AdminMenuController::class, 'create'])->name('admin.menu.create');
-            Route::post('create', [AdminMenuController::class, 'store']);
-
-            Route::get('update/{id}', [AdminMenuController::class, 'edit'])->name('admin.menu.update');
-            Route::post('update/{id}', [AdminMenuController::class, 'update']);
-
-            Route::get('delete/{id}', [AdminMenuController::class, 'delete'])->name('admin.menu.delete');
-            Route::get('active/{id}', [AdminMenuController::class, 'active'])->name('admin.menu.active');
-
-            Route::get('hot/{id}', [AdminMenuController::class, 'hot'])->name('admin.menu.hot');
-        });
-
-        Route::group(['prefix' => 'article'], function () {
-            Route::get('/', [AdminArticleController::class, 'index'])->name('admin.article.index');
-            Route::get('create', [AdminArticleController::class, 'create'])->name('admin.article.create');
-            Route::post('create', [AdminArticleController::class, 'store']);
-
-            Route::get('update/{id}', [AdminArticleController::class, 'edit'])->name('admin.article.update');
-            Route::post('update/{id}', [AdminArticleController::class, 'update']);
-
-            Route::get('delete/{id}', [AdminArticleController::class, 'delete'])->name('admin.article.delete');
-            Route::get('active/{id}', [AdminArticleController::class, 'active'])->name('admin.article.active');
-
-            Route::get('hot/{id}', [AdminArticleController::class, 'hot'])->name('admin.article.hot');
-        });
 
         Route::group(['prefix' => 'transaction'], function () {
             Route::get('/', [AdminTransactionController::class, 'index'])->name('admin.transaction.index');
@@ -134,12 +72,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('action/{action}/{id}', [AdminTransactionController::class, 'getAction'])->name('admin.transaction.action');
         });
 
-        Route::group(['prefix' => 'rating'], function () {
-            Route::get('/', [AdminRatingController::class, 'index'])->name('admin.rating.index');
-            Route::get('active/{id}', [AdminRatingController::class, 'active'])->name('admin.rating.active');
-            Route::get('delete/{id}', [AdminRatingController::class, 'delete'])->name('admin.rating.delete');
-            Route::get('view_detail/{id}', [AdminRatingController::class, 'viewDetail'])->name('admin.ajax.view.detail.rating');
-        });
 
         Route::group(['prefix' => 'user'], function () {
             Route::get('/', [AdminUserController::class, 'index'])->name('admin.user.index');
