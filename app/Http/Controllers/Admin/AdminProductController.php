@@ -87,8 +87,20 @@ class AdminProductController extends Controller
                     $products->orderBy('pro_price', 'DESC');
                     break;
             }
-        } else {
+        }
+        if ($sort_pay = $request->sort_pay) {
+            switch ($sort_pay) {
+                case 1:
+                    $products->orderBy('pro_pay', 'DESC');
+                    break;
+                case 2:
+                    $products->orderBy('pro_pay', 'ASC');
+                    break;
+            }
+        }
+        if (!($request->sort && $request->sort_pay)) {
             $products->orderByDesc('id');
+
         }
         $products = $products->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
         $viewData = [

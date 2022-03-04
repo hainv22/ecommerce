@@ -32,9 +32,9 @@
                 </div>
                 <div class="box-title">
                     <form action="" method="GET" class="form-inline">
-                        <input type="text" value="{{ Request::get('id') }}" class="form-control" name="id" placeholder="ID">
-                        <input type="text" value="{{ Request::get('name') }}" class="form-control" name="name" placeholder="name ...">
-                        <select name="category" class="form-control">
+{{--                        <input type="text" value="{{ Request::get('id') }}" class="form-control" name="id" placeholder="ID">--}}
+                        <input type="text" value="{{ Request::get('name') }}" class="form-control" name="name" placeholder="name ..." style="margin-bottom: 10px">
+                        <select name="category" class="form-control" style="margin-bottom: 10px">
                             <option value="0">__Danh Mục__</option>
                             @if (isset($categorys))
                                 @php
@@ -42,24 +42,34 @@
                                 @endphp
                             @endif
                         </select>
-                        <select name="sort" class="form-control">
+                        <select name="sort" class="form-control" style="margin-bottom: 10px">
                             <option value="0" >Xắp Xếp</option>
                             <option value="1" {{ Request::get('sort') == 1 ? "selected='selected'" : "" }}>Cũ -> Mới</option>
                             <option value="2" {{ Request::get('sort') == 2 ? "selected='selected'" : "" }}>Mới -> Cũ</option>
                             <option value="3" {{ Request::get('sort') == 3 ? "selected='selected'" : "" }}>Giá Thấp -> Cao</option>
                             <option value="4" {{ Request::get('sort') == 4 ? "selected='selected'" : "" }}>Giá Cao -> Thấp</option>
                         </select>
-                        <select name="hot" class="form-control">
+                        <select name="hot" class="form-control" style="margin-bottom: 10px">
                             <option value="">_ Hót _</option>
                             <option value="1" {{ Request::get('hot') == 1 ? "selected='selected'" : "" }}>Sản Phẩm Hót</option>
                             <option value="2" {{ Request::get('hot') == 2 ? "selected='selected'" : "" }}>Sản Phẩm Không Hót</option>
                         </select>
-                        <select name="status" class="form-control">
+                        <select name="status" class="form-control" style="margin-bottom: 10px">
                             <option value="">_ Active _</option>
                             <option value="1" {{ Request::get('status') == 1 ? "selected='selected'" : "" }}>Sản Phẩm active</option>
                             <option value="2" {{ Request::get('status') == 2 ? "selected='selected'" : "" }}>Sản Phẩm Không active</option>
                         </select>
-                        <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
+                        <select name="sort_pay" class="form-control" style="margin-bottom: 10px">
+                            <option value="" >Số lượt mua</option>
+                            <option value="1" {{ Request::get('sort_pay') == 1 ? "selected='selected'" : "" }}>nhiều -> ít</option>
+                            <option value="2" {{ Request::get('sort_pay') == 2 ? "selected='selected'" : "" }}>ít -> nhiều</option>
+                        </select>
+                        <br>
+                        <button type="submit" class="btn btn-success" style="margin-bottom: 10px"><i class="fa fa-search"> </i> Search</button>
+                        <button type="submit" class="btn btn-danger" style="margin-bottom: 10px">
+                            <a href="{{route('admin.product.index')}}" style="color: white">Reset</a>
+                        </button>
+
                         {{--  <button type="submit" name="export" value="true" class="btn btn-info">
                             <i class="fa fa-save"> </i> Export
                         </button>  --}}
@@ -85,9 +95,9 @@
 @section('script')
 <script>
     $(document).ready(function(){
-  
+
         // $(document).on('click', '.page-link', function(event){
-        //     event.preventDefault(); 
+        //     event.preventDefault();
         //     var page = $(this).attr('href').split('page=')[1];
         //     let URL = $(this).attr('href');
 
@@ -109,11 +119,11 @@
                     $('#js-data').html(results.data);
                     if(results.messages) {
                         toastr.success(results.messages);
-                    }         
+                    }
                 }
             });
         }
-  
+
   });
-  </script> 
+  </script>
 @endsection

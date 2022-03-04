@@ -280,25 +280,25 @@
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
-            <li class="{{ Request::is('admin-datn') ? 'active' : '' }}">
+            <li class="{{ Request::is('admin-ecommerce') ? 'active' : '' }}">
                 <a href="{{ route('admin.index') }}">
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                 </a>
             </li>
 
-            <li class="{{ Request::is('admin-datn/category*') ? 'active' : '' }}">
+            <li class="{{ Request::is('admin-ecommerce/category*') ? 'active' : '' }}">
                 <a href="{{ route('admin.category.index') }}">
                     <i class="fa fa-edit"></i> <span>Category</span>
                 </a>
             </li>
 
-            <li class="{{ Request::is('admin-datn/product*') ? 'active' : '' }}">
+            <li class="{{ Request::is('admin-ecommerce/product*') ? 'active' : '' }}">
                 <a href="{{ route('admin.product.index') }}">
                     <i class="fa fa-fw fa-anchor"></i> <span>Product</span>
                 </a>
             </li>
 
-            <li class="{{ Request::is('admin-datn/transaction*') ? 'active' : '' }}">
+            <li class="{{ Request::is('admin-ecommerce/transaction*') ? 'active' : '' }}">
                 <a href="{{ route('admin.transaction.index') }}">
                     <i class="fa fa-cart-arrow-down"></i> <span>Transaction</span>
                 </a>
@@ -306,12 +306,12 @@
 
             <li class="header">Hệ Thống</li>
 
-            <li class="{{ Request::is('admin-datn/statistical*') ? 'active' : '' }}">
+            <li class="{{ Request::is('admin-ecommerce/statistical*') ? 'active' : '' }}">
               <a href="{{ route('admin.statistical.index') }}">
                   <i class="fa fa-circle-o text-red"></i> <span>Thống Kê</span>
               </a>
             </li>
-            <li class="{{ Request::is('admin-datn/user*') ? 'active' : '' }}">
+            <li class="{{ Request::is('admin-ecommerce/user*') ? 'active' : '' }}">
               <a href="{{ route('admin.user.index') }}">
                   <i class="fa fa-users"></i> <span>User</span>
               </a>

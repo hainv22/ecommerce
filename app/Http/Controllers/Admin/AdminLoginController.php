@@ -18,7 +18,7 @@ class AdminLoginController extends Controller
         $data = $request->only('email', 'password');
         if (Auth::attempt($data)) {
             $request->session()->regenerate();
-            return redirect()->intended('/admin-datn');
+            return redirect()->intended('/admin-ecommerce');
         }
         return redirect()->back();
     }

@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('login', [AdminLoginController::class, 'index'])->middleware('guest');
+    Route::get('login', [AdminLoginController::class, 'index'])->middleware('guest')->name('login');
     Route::post('login', [AdminLoginController::class, 'postLoginAdmin'])->name('post.login.admin')->middleware('guest');
     Route::get('logout', [AdminLoginController::class, 'getLogoutAdmin'])->name('get.logout.admin');
 });
@@ -24,7 +24,7 @@ Route::group(['prefix' => 'admin'], function () {
 //    \UniSharp\LaravelFilemanager\Lfm::routes();
 //});
 Route::middleware(['auth'])->group(function () {
-    Route::group(['prefix' => 'admin-datn'], function () {
+    Route::group(['prefix' => 'admin-ecommerce'], function () {
         Route::get('/', [AdminHomeController::class, 'index'])->name('admin.index');
         Route::get('ajax-read-notify/{id}', [AdminHomeController::class, 'readNotify'])->name('ajax.read.notify');
 
