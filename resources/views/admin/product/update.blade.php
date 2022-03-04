@@ -32,8 +32,8 @@
                                 @endif
                             </div>
 
-                            <div class="form-group col-sm-6 {{ $errors->first('pro_price') ? 'has-error' : '' }}" >
-                                <label for="pro_price">Giá Bán Ra</label>
+                            <div class="form-group {{ $errors->first('pro_price') ? 'has-error' : '' }}" >
+                                <label for="pro_price">Giá</label>
                                 <div class="input-group ">
                                     <span class="input-group-addon">$</span>
                                         <input type="number" name="pro_price" value="{{ $product->pro_price }}" class="form-control">
@@ -41,17 +41,6 @@
                                   </div>
                                   @if ($errors->first('pro_price'))
                                     <span class="text-danger">{{ $errors->first('pro_price') }}</span>
-                                @endif
-                            </div>
-                            <div class="form-group" {{ $errors->first('pro_sale') ? 'has-error' : '' }}>
-                                <label for="pro_sale">% Giảm Giá</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon">$</span>
-                                        <input type="number" value="{{ $product->pro_sale }}" name="pro_sale" class="form-control">
-                                        <span class="input-group-addon"><i class="fa fa-check"></i></span>
-                                  </div>
-                                @if ($errors->first('pro_sale'))
-                                    <span class="text-danger">{{ $errors->first('pro_sale') }}</span>
                                 @endif
                             </div>
                             <div>
@@ -78,24 +67,29 @@
                                     <span class="text-danger">{{ $errors->first('pro_category_id') }}</span>
                                 @endif
                             </div>
-                            <div class="form-group {{ $errors->first('pro_type_product_id') ? 'has-error' : '' }}">
-                                <label>Type Product (*)</label>
-                                <select name="pro_type_product_id" class="form-control js-type-product">
-                                    <option value="">__Click__</option>
-                                    @if (isset($typeproducts))
-                                        @foreach ($typeproducts as $item)
-                                            <option value="{{ $item->id }}" {{ $item->id==$product->pro_type_product_id ? 'selected' :''}}>{{ $item->tp_name }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                                @if ($errors->first('pro_type_product_id'))
-                                    <span class="text-danger">{{ $errors->first('pro_type_product_id') }}</span>
-                                @endif
-                            </div>
-
                           </div>
                       </div>
-
+                    <div class="box box-warning">
+                        <div class="box-header">
+                            <h3 class="box-title">Thuộc Tính</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group col-sm-6">
+                                <label>Xuất sứ</label>
+                                <select name="pro_country" class="form-control">
+                                    <option value="0" >_Click_</option>
+                                    <option value="1" {{ ($product->pro_country ?? '') ==1 ? 'selected' : ''}}>Việt Nam</option>
+                                    <option value="2" {{ ($product->pro_country ?? '') ==2 ? 'selected' : ''}}>Anh</option>
+                                    <option value="3" {{ ($product->pro_country ?? '') ==3 ? 'selected' : ''}}>Thụy Sỹ</option>
+                                    <option value="4" {{ ($product->pro_country ?? '') ==4 ? 'selected' : ''}}>Mỹ</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label>Số Lượng</label>
+                                <input type="number" value="{{ $product->pro_number ?? '' }}" name="pro_number" class="form-control" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
 
 
                 </div>
@@ -118,7 +112,7 @@
                         <div class="box-body">
                             <div class="form-group {{ $errors->first('pro_content') ? 'has-error' : '' }}">
                                 <label>Nội Dung</label>
-                                <textarea class="form-control" value="" name="pro_content" rows="3" placeholder="Enter ...">{{ $product->pro_content }}</textarea>
+                                <textarea class="form-control" value="" name="pro_content" rows="6" placeholder="Enter ...">{{ $product->pro_content }}</textarea>
                                 @if ($errors->first('pro_content'))
                                     <span class="text-danger">{{ $errors->first('pro_content') }}</span>
                                 @endif
@@ -152,8 +146,8 @@
                                     <div class="row" style="margin-bottom: 10px">
                                         @foreach ($product->images as $item)
                                             <div class="col-sm-3">
-                                                <a href="{{ route('admin.product.delete_image',$item->id) }}" style="display: block">
-                                                    <img src="{{ pare_url_file($item->img_slug) }}" alt="" width="100%" height="auto">
+                                                <a href="{{ route('admin.product.delete_image',$item->id) }}" style="display: block" class="js-delete-confirm">
+                                                    <img src="{{ pare_url_file($item->img_name) }}" alt="" width="100%" height="auto">
                                                 </a>
                                             </div>
                                         @endforeach
@@ -171,34 +165,7 @@
                         </div>
 
                 </div>
-                <div class="col-md-7">
 
-
-
-                </div>
-                <div class="col-md-5">
-                    <div class="box box-warning">
-                        <div class="box-header">
-                            <h3 class="box-title">Thuộc Tính</h3>
-                        </div>
-                        <div class="box-body">
-                            <div class="form-group col-sm-6">
-                                <label>Xuất sứ</label>
-                                <select name="pro_country" class="form-control">
-                                    <option value="0" >_Click_</option>
-                                    <option value="1" {{ ($product->pro_country ?? '') ==1 ? 'selected' : ''}}>Việt Nam</option>
-                                    <option value="2" {{ ($product->pro_country ?? '') ==2 ? 'selected' : ''}}>Anh</option>
-                                    <option value="3" {{ ($product->pro_country ?? '') ==3 ? 'selected' : ''}}>Thụy Sỹ</option>
-                                    <option value="4" {{ ($product->pro_country ?? '') ==4 ? 'selected' : ''}}>Mỹ</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label>Số Lượng</label>
-                                <input type="number" value="{{ $product->pro_number ?? '' }}" name="pro_number" class="form-control" placeholder="0">
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-md-12">
                     <div class="box-footer" style="text-align: center;">
                         <a href="{{ route('admin.product.index') }}" class="btn btn-danger"><i class="fa fa-undo"></i> Trở Lại</a>

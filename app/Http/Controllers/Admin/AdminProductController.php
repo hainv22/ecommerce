@@ -280,10 +280,10 @@ class AdminProductController extends Controller
             $fileImage->move($path, $filename);
             DB::table('images')
                 ->insert([
-                    'img_name'       => $fileImage->getClientOriginalName(),
-                    'img_path'       => $filename,
+                    'img_name'       => $filename,
                     'img_product_id' => $productID,
-                    'created_at'    => Carbon::now()
+                    'created_at'    => Carbon::now(),
+                    'updated_at'    => Carbon::now()
                 ]);
         }
     }
