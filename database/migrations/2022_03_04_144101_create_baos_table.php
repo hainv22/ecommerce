@@ -22,7 +22,7 @@ class CreateBaosTable extends Migration
             $table->string('b_note')->nullable();
             $table->unsignedBigInteger('b_transaction_id');
             $table->timestamp('b_success_date')->nullable();
-            $table->timestamp('created_at')->nullable();
+            $table->timestamps();
         });
     }
 

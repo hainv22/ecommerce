@@ -109,6 +109,12 @@ class AdminProductController extends Controller
             'query'         => $request->query()
         ];
         if ($request->ajax()) {
+            if ($request->transaction_get_products == 1) {
+                $html = view('admin.transaction.data_product', $viewData)->render();
+                return response([
+                    'data' => $html ?? null
+                ]);
+            }
             $html = view('admin.product.data', $viewData)->render();
             // if ($request->p_hot == 1 || $request->p_hot == 2 || $request->p_status == 1 || $request->p_status == 2) {
             //     return response([

@@ -66,6 +66,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::group(['prefix' => 'transaction'], function () {
             Route::get('/', [AdminTransactionController::class, 'index'])->name('admin.transaction.index');
+            Route::get('/create', [AdminTransactionController::class, 'create'])->name('admin.transaction.create');
+            Route::post('/create', [AdminTransactionController::class, 'store'])->name('admin.transaction.store');
             Route::get('delete/{id}', [AdminTransactionController::class, 'delete'])->name('admin.transaction.delete');
             Route::get('view/{id}', [AdminTransactionController::class, 'getTransactionDetail'])->name('admin.transaction.detail');
             Route::get('order-delete/{id}', [AdminTransactionController::class, 'order_detail_delete'])->name('admin.order_detail.delete');

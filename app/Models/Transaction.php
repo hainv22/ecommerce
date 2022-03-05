@@ -43,4 +43,14 @@ class Transaction extends Model
     {
         return $this->belongsTo(User::class, 'tst_user_id');
     }
+
+    public function baos()
+    {
+        return $this->hasMany(Bao::class, 'b_transaction_id');
+    }
+
+    public function transaction_histories()
+    {
+        return $this->hasMany(TransactionHistory::class, 'th_transaction_id');
+    }
 }

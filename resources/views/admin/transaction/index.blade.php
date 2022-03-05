@@ -19,26 +19,30 @@
         <div class="col-xs-12">
             <div class="box">
               <div class="box-header">
-                    <div class="box-title">
-                        <form action="" method="GET" class="form-inline">
-                            <input type="text" value="{{ Request::get('id') }}" class="form-control" name="id" placeholder="ID">
-                            <input type="text" value="{{ Request::get('email') }}" class="form-control" name="email" placeholder="Email ...">
-                            {{-- <select name="type" class="form-control">
-                                <option value="0">__Phân Loại Khách__</option>
-                                <option value="1" {{ Request::get('type') == 1 ? "selected='selected'" : "" }}>Thành Viên</option>
-                                <option value="2" {{ Request::get('type') == 2 ? "selected='selected'" : "" }}>Khách</option>
-                            </select> --}}
-                            <select name="status" class="form-control">
-                                <option value="0">__Trạng Thái__</option>
-                                <option value="1" {{ Request::get('status') == 1 ? "selected='selected'" : "" }}>Tiếp Nhận</option>
-                                <option value="2" {{ Request::get('status') == 2 ? "selected='selected'" : "" }}>Đang Vận Chuyển</option>
-                                <option value="3" {{ Request::get('status') == 3 ? "selected='selected'" : "" }}>Đã Bàn Giao</option>
-                                <option value="-1" {{ Request::get('status') == -1 ? "selected='selected'" : "" }}>Hủy Bỏ</option>
-                            </select>
-                            <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
-                        </form>
-                    </div>
+                  <h3 class="box-title"><a href="{{ route('admin.transaction.create') }}" class="btn btn-primary">Thêm mới </a></h3>
               </div>
+                <div class="box-title">
+                    <form action="" method="GET" class="form-inline">
+                        <select name="user_id" class="form-control">
+                            <option value="0">__ Chọn Khách Hàng __</option>
+                            @if (isset($users))
+                                @foreach($users as $user)
+                                    <option value="{{$user->id}}" {{ Request::get('user_id') == $user->id ? "selected='selected'" : "" }}>{{$user->name}} - {{$user->phone}}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        <input type="text" value="{{ Request::get('phone') }}" class="form-control" name="phone" placeholder="phone">
+
+                        <select name="status" class="form-control">
+                            <option value="0">__Trạng Thái__</option>
+                            <option value="1" {{ Request::get('status') == 1 ? "selected='selected'" : "" }}>Tiếp Nhận</option>
+                            <option value="2" {{ Request::get('status') == 2 ? "selected='selected'" : "" }}>Đang Vận Chuyển</option>
+                            <option value="3" {{ Request::get('status') == 3 ? "selected='selected'" : "" }}>Đã Bàn Giao</option>
+                            <option value="-1" {{ Request::get('status') == -1 ? "selected='selected'" : "" }}>Hủy Bỏ</option>
+                        </select>
+                        <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
+                    </form>
+                </div><br>
               <!-- /.box-header -->
               <div class="box-body table-responsive no-padding">
                 <table class="table table-hover">
@@ -59,10 +63,10 @@
                                 <td>{{ $item->id }}</td>
                                 <td>
                                     <ul>
-                                        <li>Name: {{ $item->tst_name }}</li>
-                                        <li>Email: {{ $item->tst_email }}</li>
-                                        <li>Phone: {{ $item->tst_phone }}</li>
-                                        <li>Address: {{ $item->tst_address }}</li>
+                                        <li>Name: {{ $item->user->name }}</li>
+                                        <li>Email: {{ $item->user->email }}</li>
+                                        <li>Phone: {{ $item->user->phone }}</li>
+                                        <li>Address: {{ $item->user->address }}</li>
                                     </ul>
                                 </td>
                                 {{-- <td>
