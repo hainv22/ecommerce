@@ -1,6 +1,6 @@
 <span>
                                                         @if(empty($bao->b_success_date))
-        chưa có giá chính thức
+        {{$bao->transport->tp_fee}} đ / 1kg
     @else
         số cân * giá tiền/1kg <br/>
         {{$bao->b_weight}} * {{$bao->b_fee}} =

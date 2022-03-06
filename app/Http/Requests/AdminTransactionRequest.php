@@ -27,6 +27,9 @@ class AdminTransactionRequest extends FormRequest
             'tst_user_id' => 'required',
             'txt_id.*' => 'required',
             'txt_quantity.*' => 'required',
+            'tst_order_date' => 'required',
+            'tst_expected_date' => 'required',
+            'tst_deposit' => 'required',
         ];
     }
 }

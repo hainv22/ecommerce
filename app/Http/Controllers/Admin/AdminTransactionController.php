@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\TransactionHistory;
+use App\Models\Transport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -47,8 +48,10 @@ class AdminTransactionController extends Controller
     public function create()
     {
         $users = User::all();
+        $transports = Transport::all();
         $viewData = [
-            'users'  =>  $users
+            'users'  =>  $users,
+            'transports' => $transports
         ];
         return view('admin.transaction.create', $viewData);
     }
@@ -72,7 +75,10 @@ class AdminTransactionController extends Controller
                 'tst_total_products' => $total_products,
                 'tst_note' => $data['tst_note'],
                 'tst_status' => 1,
-                'tst_type' => 1
+                'tst_type' => 1,
+                'tst_order_date' => $data['tst_order_date'],
+                'tst_expected_date' => $data['tst_expected_date'],
+                'tst_deposit' => $data['tst_deposit'],
             ]);
 
             foreach ($data['txt_id_product'] as $key => $idProduct) {
@@ -80,7 +86,8 @@ class AdminTransactionController extends Controller
                     'od_transaction_id' => $transaction->id,
                     'od_product_id' => $idProduct,
                     'od_qty' => $data['txt_quantity_product'][$key],
-                    'od_price' => Product::find($idProduct)->pro_price
+                    'od_price' => Product::find($idProduct)->pro_price,
+                    'od_note' => $data['od_note'][$key]
                 ]);
             }
 
@@ -93,7 +100,8 @@ class AdminTransactionController extends Controller
                         'b_fee' => null,
                         'b_status' => 1,
                         'b_note' => $data['b_note'][$key],
-                        'b_transaction_id' => $transaction->id
+                        'b_transaction_id' => $transaction->id,
+                        'b_transport_id' => $data['b_transport_id'][$key]
                     ]);
                     $total_bao += 1;
                 }
@@ -143,6 +151,7 @@ class AdminTransactionController extends Controller
                 foreach ($orders as $key => $item) {
                     $item->update([
                         'od_qty' => $data['txt_quantity_product'][$key],
+                        'od_note' => $data['od_note'][$key],
                     ]);
                 }
 
@@ -152,7 +161,8 @@ class AdminTransactionController extends Controller
                             'od_transaction_id' => $transaction->id,
                             'od_product_id' => $data['txt_id_product'][$i],
                             'od_qty' => $data['txt_quantity_product'][$i],
-                            'od_price' => Product::find($data['txt_id_product'][$i])->pro_price
+                            'od_price' => Product::find($data['txt_id_product'][$i])->pro_price,
+                            'od_note' => $data['od_note'][$i]
                         ]);
                     }
                 }
@@ -195,7 +205,8 @@ class AdminTransactionController extends Controller
                             'b_fee' => null,
                             'b_status' => 1,
                             'b_note' => $data['b_note'][$i],
-                            'b_transaction_id' => $transaction->id
+                            'b_transaction_id' => $transaction->id,
+                            'b_transport_id' => $data['b_transport_id'][$i]
                         ]);
                         $total_bao += 1;
                         $weight_total += $data['b_weight'][$i];
@@ -224,6 +235,7 @@ class AdminTransactionController extends Controller
 
     public function getTransactionDetail(Request $request, $id)
     {
+        $transports = Transport::all();
         $transaction = Transaction::query()->with(['baos', 'transaction_histories', 'transport'])->findOrFail($id);
         $order = Order::with('product:id,pro_name,pro_avatar')
             ->where('od_transaction_id', $id)
@@ -233,9 +245,14 @@ class AdminTransactionController extends Controller
         foreach ($transport_success as $item) {
             $total_transport_success += ($item->b_weight * $item->b_fee);
         }
-        $total_transport = $total_transport_success + (Bao::where('b_transaction_id', $id)->whereNull('b_success_date')->sum('b_weight') * $transaction->transport->tp_fee);
-//        $total_transport = Bao::where('b_transaction_id', $id)->sum('b_weight') * $transaction->transport->tp_fee;
-        return view('admin.transaction.view', compact('transaction', 'order', 'total_transport'));
+
+        $total_transport = 0;
+        $transport_pending = Bao::with('transport')->where('b_transaction_id', $id)->whereNull('b_success_date')->get();
+        foreach ($transport_pending as $item) {
+            $total_transport += ($item->b_weight * $item->transport->tp_fee);
+        }
+        $total_transport +=$total_transport_success;
+        return view('admin.transaction.view', compact('transaction', 'order', 'total_transport', 'transports'));
     }
 
     public function getAction($action, $id)
@@ -313,11 +330,10 @@ class AdminTransactionController extends Controller
 
     public function updateSuccessDate(Request $request, $id)
     {
-        $bao = Bao::findOrfail($id);
-        $transaction = Transaction::with('transport')->findOrfail($bao->b_transaction_id);
+        $bao = Bao::with('transport')->findOrfail($id);
         $bao->update([
             'b_success_date' => $request->value == 'true' ? Carbon::now() : null,
-            'b_fee' => $request->value == 'true' ? $transaction->transport->tp_fee : null
+            'b_fee' => $request->value == 'true' ? $bao->transport->tp_fee : null
         ]);
         $price_bao = view('admin.transaction.data_edit_bao.price_bao', compact('bao'))->render();
         $success_date = view('admin.transaction.data_edit_bao.success_date', compact('bao'))->render();
@@ -328,6 +344,20 @@ class AdminTransactionController extends Controller
         ]);
     }
 
+    public function updateTransportIdBao(Request $request, $id)
+    {
+        $bao = Bao::with('transport')->findOrfail($id);
+        $bao->update([
+            'b_transport_id' => $request->id_bao,
+            'b_fee' => empty($bao->b_fee) == true ? null : Transport::findOrfail($request->id_bao)->tp_fee
+        ]);
+        $bao = Bao::with('transport')->findOrfail($id);
+        $price_bao = view('admin.transaction.data_edit_bao.price_bao', compact('bao'))->render();
+        return response([
+            'data' => 'success',
+            'price_bao' => $price_bao,
+        ]);
+    }
 
     // if($transaction->tst_status != -1) {
     //     switch ($action) {

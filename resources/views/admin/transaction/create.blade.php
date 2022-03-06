@@ -48,48 +48,44 @@
                             @endif
                         </div>
 
+                        <div class="form-group {{ $errors->first('tst_deposit') ? 'has-error' : '' }}" >
+                            <label for="pro_price">Số Tiền đặt cọc </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                                <input type="number" name="tst_deposit" class="form-control" value="{{ old('tst_deposit') }}">
+                            </div>
+                            <small id="emailHelp" class="form-text text-muted "></small>
+                            @if ($errors->first('tst_deposit'))
+                                <span class="text-danger">{{ $errors->first('tst_deposit') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="form-group {{ $errors->first('tst_order_date') ? 'has-error' : '' }} col-md-6" >
+                            <label for="pro_price">Ngày đặt hàng</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                                <input type="date" name="tst_order_date" class="form-control" value="{{ old('tst_order_date') }}">
+                            </div>
+                            <small id="emailHelp" class="form-text text-muted "></small>
+                            @if ($errors->first('tst_order_date'))
+                                <span class="text-danger">{{ $errors->first('tst_order_date') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="form-group {{ $errors->first('tst_expected_date') ? 'has-error' : '' }} col-md-6" >
+                            <label for="pro_price">Ngày dự kiến nhận hàng </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                                <input type="date" name="tst_expected_date" class="form-control" value="{{ old('tst_expected_date') }}">
+                            </div>
+                            <small id="emailHelp" class="form-text text-muted "></small>
+                            @if ($errors->first('tst_expected_date'))
+                                <span class="text-danger">{{ $errors->first('tst_expected_date') }}</span>
+                            @endif
+                        </div>
 
                     </div>
                 </div>
-
-                <div class="box box-warning">
-                    <div class="box-header">
-                        <div class="clear-both text-center">
-                            <a href="#" class="btn btn-primary add_item_order">+ Thêm sản phẩm</a>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="box-body table-responsive no-padding">
-                            <table class="table table-bordered tbl_add_orderext ">
-                                <thead>
-                                <tr>
-                                    <th >ID SảnPhẩm</th>
-                                    <th >image</th>
-                                    <th>Số lượng<span style="color: red; ">*</span></th>
-                                    <th>Thao tác</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td class="cls_td col-sm-2" >
-                                        <input type="input" name="txt_id_product[]" class="form-control txt_id" value="Click Chọn SP" class="form-control" placeholder="id" id="get_products" data-url-products="{{route('admin.product.index')}}" required>
-                                    </td>
-                                    <td class="cls_td col-sm-5" >
-                                        <img src="{{ pare_url_file(null) }}" alt="" width="150px" height="100px">
-                                    </td>
-                                    <td class="cls_td col-sm-2">
-                                        <input type="number" name="txt_quantity_product[]" class="form-control txt_quantity" value="" min="1" placeholder="SL" required>
-                                    </td>
-                                    <td align="center" class="cls_td">
-                                        <a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
 
 
             </div>
@@ -107,9 +103,10 @@
                             <table class="table table-bordered tbl_add_bao ">
                                 <thead>
                                 <tr>
-                                    <th width="200px">Tên bao</th>
+                                    <th width="200px">Tên bao ****</th>
                                     <th >Số cân nặng</th>
-                                    <th width="200px">Note</th>
+                                    <th width="200px">Note *********</th>
+                                    <th>Vận chuyển *********</th>
                                     <th>Thao tác</th>
                                 </tr>
                                 </thead>
@@ -138,7 +135,49 @@
 
 
             </div>
-
+            <div class="col-md-12">
+                <div class="box box-warning">
+                    <div class="box-header">
+                        <div class="clear-both text-center">
+                            <a href="#" class="btn btn-primary add_item_order">+ Thêm sản phẩm</a>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-bordered tbl_add_orderext ">
+                                <thead>
+                                    <tr>
+                                        <th >ID SảnPhẩm</th>
+                                        <th >image</th>
+                                        <th>Số lượng<span style="color: red; ">*</span></th>
+                                        <th>Chú ý ********</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="cls_td col-sm-1" >
+                                            <input type="input" name="txt_id_product[]" class="form-control txt_id" value="Click Chọn SP" class="form-control" placeholder="id" id="get_products" data-url-products="{{route('admin.product.index')}}" required>
+                                        </td>
+                                        <td class="cls_td col-sm-4" >
+                                            <img src="{{ pare_url_file(null) }}" alt="" width="150px" height="100px">
+                                        </td>
+                                        <td class="cls_td col-sm-2">
+                                            <input type="number" name="txt_quantity_product[]" class="form-control txt_quantity" value="" min="1" placeholder="SL" required>
+                                        </td>
+                                        <td class="cls_td col-sm-4">
+                                            <textarea class="form-control" value="" name="od_note[]" rows="3" placeholder="Enter ..." ></textarea>
+                                        </td>
+                                        <td align="center" class="cls_td">
+                                            <a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-md-12">
                 <div class="box-footer" style="text-align: center;">
                     <a href="{{ route('admin.product.index') }}" class="btn btn-danger"><i class="fa fa-undo"></i> Trở Lại</a>
@@ -229,13 +268,13 @@
         });
 
         $(".add_item_order").on("click", function() {
-            var row_infor = '<tr> <td class="cls_td col-sm-2" > <input type="input" name="txt_id_product[]" class="form-control txt_id" value="Click Chọn SP" class="form-control" placeholder="id" id="get_products" data-url-products="{{route('admin.product.index')}}" required> </td><td class="cls_td col-sm-5" ><img src="{{ pare_url_file(null) }}" alt="" width="150px" height="100px"></td><td class="cls_td col-sm-2"><input type="number" name="txt_quantity_product[]" class="form-control txt_quantity" value="" min="1" placeholder="SL" required></td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
+            var row_infor = '<tr> <td class="cls_td col-sm-1" > <input type="input" name="txt_id_product[]" class="form-control txt_id" value="Click Chọn SP" class="form-control" placeholder="id" id="get_products" data-url-products="{{route('admin.product.index')}}" required> </td><td class="cls_td col-sm-4" ><img src="{{ pare_url_file(null) }}" alt="" width="150px" height="100px"></td><td class="cls_td col-sm-2"><input type="number" name="txt_quantity_product[]" class="form-control txt_quantity" value="" min="1" placeholder="SL" required></td><td class="cls_td col-sm-4"><textarea class="form-control" value="" name="od_note[]" rows="3" placeholder="Enter ..." ></textarea></td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
             $(".tbl_add_orderext tbody").append(row_infor);
             return false;
         });
 
         $(".add_item_bao").on("click", function() {
-            var row_infor = '<tr> <td class="cls_td col-md-5" > <textarea class="form-control" value="" name="b_name[]" rows="3" placeholder="Enter ..." required></textarea></td><td class="cls_td col-md-2" ><input type="number" name="b_weight[]" class="form-control" value="" required></td><td class="cls_td col-md-5"><textarea class="form-control" value="" name="b_note[]" rows="3" placeholder="Enter ..."></textarea></td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
+            var row_infor = '<tr> <td class="cls_td col-md-3"> <textarea class="form-control" value="" name="b_name[]" rows="3" placeholder="Enter ..." required=""></textarea></td> <td class="cls_td col-md-2"><input type="number" name="b_weight[]" class="form-control" value="" required=""></td><td class="cls_td col-md-3"><textarea class="form-control" value="" name="b_note[]" rows="3" placeholder="Enter ..."></textarea></td><td class="cls_td col-sm-3"><select name="b_transport_id[]" class="form-control"><?php if(isset($transports)) {  ?><?php foreach($transports as $item) { ?><option value="{{$item->id}}">{{$item->tp_name}}</option><?php } ?><?php } ?></select></td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
             $(".tbl_add_bao tbody").append(row_infor);
             return false;
         });

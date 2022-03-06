@@ -9,4 +9,9 @@ class Bao extends Model
 {
     use HasFactory;
     protected $guarded = [''];
+
+    public function transport()
+    {
+        return $this->belongsTo(Transport::class, 'b_transport_id');
+    }
 }

@@ -131,6 +131,7 @@
                                             <th>Price</th>
                                             <th>Số lượng ***</th>
                                             <th>Total</th>
+                                            <th>Ghi Chú ****</th>
                                              <th >Action</th>
                                         </tr>
                                         @php
@@ -152,6 +153,9 @@
                                                     <input type="number" name="txt_quantity_product[]" class="form-control txt_quantity" value="{{ $item->od_qty }}" min="1" placeholder="SL" required>
                                                 </td>
                                                 <td>{{ number_format($item->od_price * $item->od_qty,0,',','.') }} đ</td>
+                                                <td>
+                                                    <textarea class="form-control" value="" name="od_note[]" rows="3" placeholder="Enter ..." >{{$item->od_note}}</textarea>
+                                                </td>
                                                 <td align="center" class="cls_td">
                                                     <a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a>
                                                 </td>
@@ -185,6 +189,7 @@
                                             <th >Tên bao ***</th>
                                             <th >Số cân nặng</th>
                                             <th >Ghi Chú ****************</th>
+                                            <th >Vận chuyển *****</th>
                                             <th >Giá tiền</th>
                                             <th >Tình trạng</th>
                                             <th>Thao tác</th>
@@ -206,9 +211,19 @@
                                                     <textarea class="form-control" value="" name="b_note[]" rows="3" placeholder="Enter ...">{{$item->b_note}}</textarea>
                                                 </td>
                                                 <td class="cls_td ">
+                                                    <select name="b_transport_id[]" class="form-control" id="js_b_transport_id" data-url-update-transport="{{route('admin.update.transport.id.bao', $item->id)}}">
+                                                        <?php if(isset($transports)) { ?>
+                                                            <?php foreach($transports as $transport) { ?>
+                                                                <option {{ $item->b_transport_id==$transport->id ? 'selected' :''}} value="{{$transport->id}}">{{$transport->tp_name}}</option>
+                                                            <?php } ?>
+                                                        <?php } ?>
+                                                    </select>
+
+                                                </td>
+                                                <td class="cls_td ">
                                                     <span>
                                                         @if(empty($item->b_success_date))
-                                                            chưa có giá chính thức
+                                                            {{$item->transport->tp_fee}} đ / 1kg
                                                         @else
                                                             số cân * giá tiền/1kg <br/>
                                                             {{$item->b_weight}} * {{$item->b_fee}} =
@@ -370,6 +385,7 @@
                             if(results.data == 'success') {
                                 $data.parent().prev().html(results.price_bao)
                                 $this.parent().html(results.success_date)
+                                toastr.success('Cập nhật thành công');
                             }
                         },
                         error:function(error){
@@ -397,16 +413,38 @@
             });
 
             $(".add_item_order").on("click", function() {
-                var row_infor = '<tr><td></td><td><input type="button" value="CLICK" id="get_products" data-url-products="{{route('admin.product.index')}}"><input type="hidden" name="txt_id_product[]"></td><td><span></span></td><td class="cls_td " ><img src="{{ pare_url_file(null) }}" alt="" width="120px" height="100px"></td><td><span></span></td><td class="cls_td col-sm-2"><input type="number" name="txt_quantity_product[]" class="form-control txt_quantity" value="" min="1" placeholder="SL" required></td><td></td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
+                var row_infor = '<tr><td></td><td><input type="button" value="CLICK" id="get_products" data-url-products="{{route('admin.product.index')}}"><input type="hidden" name="txt_id_product[]" value="" ></td><td></td><td class="cls_td " ><img src="{{ pare_url_file(null) }}" alt="" width="120px" height="100px"></td><td></td><td class="cls_td col-sm-2"><input type="number" name="txt_quantity_product[]" class="form-control txt_quantity" value="" min="1" placeholder="SL" required></td><td></td><td><textarea class="form-control" value="" name="od_note[]" rows="3" placeholder="Enter ..." ></textarea></td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
                 $(".tbl_add_orderext tbody").append(row_infor);
                 return false;
             });
 
             $(".add_item_bao").on("click", function() {
-                var row_infor = '<tr> <td></td><td class="cls_td "><textarea class="form-control" value="" name="b_name[]" rows="3" placeholder="Enter ..." required=""></textarea></td><td class="cls_td "><input type="number" name="b_weight[]" class="form-control" value="" required=""></td><td class="cls_td "><textarea class="form-control" value="" name="b_note[]" rows="3" placeholder="Enter ..."></textarea></td><td class="cls_td "><span></span></td><td class="cls_td "><input type="checkbox" name="b_success_date[]" class="form-check-input" >Chưa giao</td><td class="cls_td "><input type="checkbox" name="b_status[]" class="form-check-input">chưa thanh toán</td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
+                var row_infor = '<tr> <td></td><td class="cls_td "><textarea class="form-control" value="" name="b_name[]" rows="3" placeholder="Enter ..." required="">{{$item->b_name}}</textarea></td><td class="cls_td "><input type="number" name="b_weight[]" class="form-control" value="{{$item->b_weight}}" required=""></td><td class="cls_td "><textarea class="form-control" value="" name="b_note[]" rows="3" placeholder="Enter ...">{{$item->b_note}}</textarea></td><td class="cls_td "><select name="b_transport_id[]" class="form-control" id="js_b_transport_id" data-url-update-transport="{{route('admin.update.transport.id.bao', $item->id)}}"><?php if(isset($transports)) { ?><?php foreach($transports as $transport) { ?><option {{ $item->b_transport_id==$transport->id ? 'selected' :''}} value="{{$transport->id}}">{{$transport->tp_name}}</option><?php } ?><?php } ?></select></td><td class="cls_td "><span></span></td><td class="cls_td "><input type="checkbox" name="b_success_date[]" data-url="{{route('admin.transaction.update.success.date', $item->id)}}" id="update_success_date" class="form-check-input" {{ empty($item->b_success_date) == true ? '' : 'checked' }} ></td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
                 $(".tbl_add_bao tbody").append(row_infor);
                 return false;
             });
+
+            $(document).on('change','#js_b_transport_id',function(e){
+                let $this = $(this);
+                let id_bao = this.value;
+                let URL = $this.attr('data-url-update-transport');
+                if(URL){
+                    $.ajax({
+                        url:URL,
+                        data:{
+                            id_bao:id_bao
+                        },
+                        success:function(results){
+                            console.log(results.price_bao)
+                            $this.parent().next().html(results.price_bao)
+                            toastr.success('Cập nhật thành công');
+                        },
+                        error:function(error){
+                            console.log(error.messages);
+                        }
+                    });
+                }
+            })
 
         });
         function deleteItem(thistag){
