@@ -34,19 +34,19 @@
                             <h3 class="box-title">Thông tin cơ bản</h3>
                         </div>
                         <div class="box-body">
-                            <div class="form-group {{ $errors->first('u_name') ? 'has-error' : '' }}">
+                            <div class="form-group {{ $errors->first('name') ? 'has-error' : '' }}">
                                 <label for="name">Name</label>
-                                <input type="text" name="u_name" class="form-control" value="{{ old('u_name') }}"  placeholder="Name ....">
-                                @if ($errors->first('u_name'))
-                                    <span class="text-danger">{{ $errors->first('u_name') }}</span>
+                                <input type="text" name="name" class="form-control" value="{{ old('name') }}"  placeholder="Name ....">
+                                @if ($errors->first('name'))
+                                    <span class="text-danger">{{ $errors->first('name') }}</span>
                                 @endif
                             </div>
 
-                            <div class="form-group {{ $errors->first('u_email') ? 'has-error' : '' }}">
+                            <div class="form-group {{ $errors->first('email') ? 'has-error' : '' }}">
                                 <label for="email">Email</label>
-                                <input type="text" name="u_email" class="form-control" value="{{ old('u_email') }}"  placeholder="Email ....">
-                                @if ($errors->first('u_email'))
-                                    <span class="text-danger">{{ $errors->first('u_email') }}</span>
+                                <input type="text" name="email" class="form-control" value="{{ old('email') }}"  placeholder="Email ....">
+                                @if ($errors->first('email'))
+                                    <span class="text-danger">{{ $errors->first('email') }}</span>
                                 @endif
                             </div>
 

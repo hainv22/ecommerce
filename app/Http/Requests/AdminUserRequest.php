@@ -24,23 +24,19 @@ class AdminUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'u_email ' => 'required|unique:users,email,' . $this->id,
-            'u_name ' => 'required',
-            'avatar' => 'image',
+            'email' => 'required|unique:users,email,' . $this->id,
+            'name' => 'required',
             'phone' => 'required|unique:users,phone,' . $this->id,
             'address' => 'required',
         ];
     }
     public function messages()
     {
-        return [
-            'u_email.required' => 'Email không được phép để trống.',
-            'u_email.email' => 'Bạn nhập không phải là email',
-            'u_email.unique' => 'Email đã tồn tại trên hệ thống.',
-            'u_email.min' => 'Email không được dưới 5 kí tự.',
-            'u_name.required' => 'Username không được phép để trống.',
+        return[
+            'email.required' => 'Email không được phép để trống.',
+            'email.unique' => 'Email đã tồn tại trên hệ thống.',
+            'name.required' => 'Username không được phép để trống.',
             'phone.required' => 'SĐT không được để trống.',
-            'phone.numeric' => 'SĐT phải là chuỗi số',
             'phone.unique' => 'SĐT đã được đăng kí.',
             'address.required' => 'Địa chỉ không được để trống',
         ];
