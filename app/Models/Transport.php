@@ -9,4 +9,5 @@ class Transport extends Model
 {
     use HasFactory;
     protected $guarded = [''];
+
 }

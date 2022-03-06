@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\AdminRatingController;
 use App\Http\Controllers\Admin\AdminSlideController;
 use App\Http\Controllers\Admin\AdminStatisticalController;
 use App\Http\Controllers\Admin\AdminTransactionController;
+use App\Http\Controllers\Admin\AdminTransportController;
 use App\Http\Controllers\Admin\AdminTypeProductController;
 use App\Http\Controllers\Admin\AdminUserController;
 use Illuminate\Support\Facades\Route;
@@ -79,9 +80,20 @@ Route::middleware(['auth'])->group(function () {
 
         Route::group(['prefix' => 'user'], function () {
             Route::get('/', [AdminUserController::class, 'index'])->name('admin.user.index');
-            Route::get('update/{id}', [AdminUserController::class, 'edit'])->name('admin.user.update');
-            Route::post('update/{id}', [AdminUserController::class, 'update']);
-            Route::get('delete/{id}', [AdminUserController::class, 'delete'])->name('admin.user.delete');
+            Route::get('/create', [AdminUserController::class, 'create'])->name('admin.user.create');
+            Route::post('/store', [AdminUserController::class, 'store'])->name('admin.user.store');
+            Route::get('/update/{id}', [AdminUserController::class, 'edit'])->name('admin.user.update');
+            Route::post('/update/{id}', [AdminUserController::class, 'update']);
+            Route::get('/delete/{id}', [AdminUserController::class, 'delete'])->name('admin.user.delete');
+        });
+
+        Route::group(['prefix' => 'transport'], function () {
+            Route::get('/', [AdminTransportController::class, 'index'])->name('admin.transport.index');
+            Route::get('/create', [AdminTransportController::class, 'create'])->name('admin.transport.create');
+            Route::post('/create', [AdminTransportController::class, 'store'])->name('admin.transport.store');
+            Route::get('/update/{id}', [AdminTransportController::class, 'edit'])->name('admin.transport.update');
+            Route::post('/update/{id}', [AdminTransportController::class, 'update']);
+            Route::get('/delete/{id}', [AdminTransportController::class, 'destroy'])->name('admin.transport.delete');
         });
 
         Route::group(['prefix' => 'statistical'], function () {

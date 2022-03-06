@@ -80,7 +80,6 @@
                     @include('admin.product.data')
                 </div>
               <!-- /.box-body -->
-              <div></div>
             </div>
             <!-- /.box -->
           </div>
