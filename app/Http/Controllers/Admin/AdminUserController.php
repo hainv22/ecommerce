@@ -30,8 +30,7 @@ class AdminUserController extends Controller
 
     public function store(AdminUserRequest $request)
     {
-        dd($request->all());
-        $data = $request->except('_token', 'avatar');
+        $data = $request->except('_token');
         if ($request->avatar) {
             $image = upload_image('avatar');
             if ($image['code'] == 1) {
@@ -58,10 +57,10 @@ class AdminUserController extends Controller
         return view('admin.user.update', $viewData);
     }
 
-    public function update(Request $request, $id)
+    public function update(AdminUserRequest $request, $id)
     {
         $user = User::findOrfail($id);
-        $data = $request->except('_token', 'avatar');
+        $data = $request->except('_token');
 
         if ($request->avatar) {
             $image = upload_image('avatar');
@@ -84,9 +83,9 @@ class AdminUserController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $user = User::with('ratings')->find($id);
+        $user = User::find($id);
         if ($user) {
-            if ($user->role == \config('contants.ROLE.ADMIN') && $user->id == 1) {
+            if ($user->id == 1) {
                 $request->session()->flash('toastr', [
                     'type'      => 'error',
                     'message'   => 'Không thể xóa Supper Admin !'
@@ -101,26 +100,7 @@ class AdminUserController extends Controller
                 ]);
                 return redirect()->back();
             }
-            DB::beginTransaction();
-            try {
-                foreach ($user->ratings as $item) {
-                    $product = Product::find($item->r_product_id);
-                    $product->pro_review_total--;
-                    $product->pro_review_star -= $item->r_number;
-                    $product->save();
-
-                    $item->delete();
-                }
-                $user->delete();
-            } catch (\Exception $e) {
-                DB::rollBack();
-                $request->session()->flash('toastr', [
-                    'type'      => 'error',
-                    'message'   => 'loi xay ra vui long goi admin !'
-                ]);
-            }
         };
-        DB::commit();
         $request->session()->flash('toastr', [
             'type'      => 'success',
             'message'   => 'Xóa user thành công !'

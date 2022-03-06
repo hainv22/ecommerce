@@ -59,7 +59,7 @@
 
                             <div class="form-group {{ $errors->first('password') ? 'has-error' : '' }}">
                                 <label for="pro_name">Password New </label>
-                                <input type="text" name="phone" class="form-control" value=""  placeholder="Nhập mật khẩu mới ...">
+                                <input type="password" name="password" class="form-control" value=""  placeholder="Nhập mật khẩu mới ...">
                                 @if ($errors->first('password'))
                                     <span class="text-danger">{{ $errors->first('password') }}</span>
                                 @endif
