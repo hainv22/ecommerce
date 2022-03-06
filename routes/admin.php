@@ -70,6 +70,8 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/create', [AdminTransactionController::class, 'store'])->name('admin.transaction.store');
             Route::get('delete/{id}', [AdminTransactionController::class, 'delete'])->name('admin.transaction.delete');
             Route::get('view/{id}', [AdminTransactionController::class, 'getTransactionDetail'])->name('admin.transaction.detail');
+            Route::post('view/{id}', [AdminTransactionController::class, 'update'])->name('admin.transaction.update');
+            Route::get('update-success-date/{id}', [AdminTransactionController::class, 'updateSuccessDate'])->name('admin.transaction.update.success.date');
             Route::get('order-delete/{id}', [AdminTransactionController::class, 'order_detail_delete'])->name('admin.order_detail.delete');
             Route::get('action/{action}/{id}', [AdminTransactionController::class, 'getAction'])->name('admin.transaction.action');
         });

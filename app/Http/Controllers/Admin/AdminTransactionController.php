@@ -11,6 +11,7 @@ use App\Models\Transaction;
 use App\Models\TransactionHistory;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AdminTransactionController extends Controller
@@ -120,13 +121,121 @@ class AdminTransactionController extends Controller
         return redirect()->back();
     }
 
+    public function update(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $total_money = 0;
+            $total_products = 0;
+            $data = $request->all();
+            $transaction = Transaction::with('transport')->findOrFail($id);
+            if(!empty($data['txt_id_product'][0])) {
+                $order_old = Order::where('od_transaction_id', $id)->pluck('id')->toArray();
+                $array_diff = array_diff($order_old, $data['product_ids']);
+                Order::where('od_transaction_id', $id)->whereIn('id', $array_diff)->delete();
+                $orders = Order::where('od_transaction_id', $id)->whereIn('id', $data['product_ids'])->get();
+                foreach ($data['txt_id_product'] as $key => $idProduct) {
+                    $product = Product::find($idProduct);
+                    $total_money += ($product->pro_price * $data['txt_quantity_product'][$key]);
+                    $total_products += $data['txt_quantity_product'][$key];
+                }
+
+                foreach ($orders as $key => $item) {
+                    $item->update([
+                        'od_qty' => $data['txt_quantity_product'][$key],
+                    ]);
+                }
+
+                if(count($data['txt_id_product']) > count($orders)) {
+                    for ($i = count($orders); $i < count($data['txt_id_product']); $i++) {
+                        Order::create([
+                            'od_transaction_id' => $transaction->id,
+                            'od_product_id' => $data['txt_id_product'][$i],
+                            'od_qty' => $data['txt_quantity_product'][$i],
+                            'od_price' => Product::find($data['txt_id_product'][$i])->pro_price
+                        ]);
+                    }
+                }
+
+                TransactionHistory::create([
+                    'th_transaction_id' => $transaction->id,
+                    'th_content' => "Cập nhật: \n số lượng sp: {$transaction->tst_total_products} -> {$total_products} \n Tiền: {$transaction->tst_total_money} -> $total_money "
+                ]);
+
+                $transaction->update([
+                    'tst_total_products' => $total_products,
+                    'tst_total_money' => $total_money
+                ]);
+            }
+            if (!empty($data['b_weight'])) {
+                $count_bao_old = Bao::where('b_transaction_id', $id)->count();
+                $baos_old = Bao::where('b_transaction_id', $id)->pluck('id')->toArray();
+                $input_array = array_diff($baos_old, $data['id_bao']);
+                Bao::where('b_transaction_id', $id)->whereIn('id', $input_array)->delete();
+                $sum_old = Bao::where('b_transaction_id', $id)->sum('b_weight');
+                $baos = Bao::where('b_transaction_id', $id)->whereIn('id', $data['id_bao'])->get();
+                $total_bao = 0;
+                $weight_total = 0;
+                foreach ($baos as $key => $item) {
+                    $item->update([
+                        'b_name' => $data['b_name'][$key],
+                        'b_weight' => $data['b_weight'][$key],
+                        'b_status' => 1,
+                        'b_note' => $data['b_note'][$key],
+                        'b_transaction_id' => $transaction->id
+                    ]);
+                    $total_bao += 1;
+                    $weight_total += $data['b_weight'][$key];
+                }
+                if(count($data['b_weight']) > count($baos)) {
+                    for ($i = count($baos); $i < count($data['b_weight']); $i++) {
+                        Bao::create([
+                            'b_name' => $data['b_name'][$i],
+                            'b_weight' => $data['b_weight'][$i],
+                            'b_fee' => null,
+                            'b_status' => 1,
+                            'b_note' => $data['b_note'][$i],
+                            'b_transaction_id' => $transaction->id
+                        ]);
+                        $total_bao += 1;
+                        $weight_total += $data['b_weight'][$i];
+                    }
+                }
+                TransactionHistory::create([
+                    'th_transaction_id' => $transaction->id,
+                    'th_content' => "Cập nhật: \n số lượng bao: {$count_bao_old} -> {$total_bao} \n số cân: {$sum_old} -> $weight_total "
+                ]);
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $request->session()->flash('toastr', [
+                'type'      => 'error',
+                'message'   => $e->getMessage()
+            ]);
+            return redirect()->back();
+        }
+        $request->session()->flash('toastr', [
+            'type'      => 'success',
+            'message'   => 'Cập nhật thành công !'
+        ]);
+        return redirect()->back();
+    }
+
     public function getTransactionDetail(Request $request, $id)
     {
-        $transaction = Transaction::query()->findOrFail($id);
-        $order = Order::with('product:id,pro_name,pro_slug,pro_avatar')
+        $transaction = Transaction::query()->with(['baos', 'transaction_histories', 'transport'])->findOrFail($id);
+        $order = Order::with('product:id,pro_name,pro_avatar')
             ->where('od_transaction_id', $id)
             ->get();
-        return view('admin.transaction.view', compact('transaction', 'order'));
+        $transport_success = Bao::where('b_transaction_id', $id)->whereNotNull('b_success_date')->get();
+        $total_transport_success = 0;
+        foreach ($transport_success as $item) {
+            $total_transport_success += ($item->b_weight * $item->b_fee);
+        }
+        $total_transport = $total_transport_success + (Bao::where('b_transaction_id', $id)->whereNull('b_success_date')->sum('b_weight') * $transaction->transport->tp_fee);
+//        $total_transport = Bao::where('b_transaction_id', $id)->sum('b_weight') * $transaction->transport->tp_fee;
+        return view('admin.transaction.view', compact('transaction', 'order', 'total_transport'));
     }
 
     public function getAction($action, $id)
@@ -200,6 +309,23 @@ class AdminTransactionController extends Controller
             DB::table('orders')->where('od_transaction_id', $id)->delete();
         }
         return redirect()->back();
+    }
+
+    public function updateSuccessDate(Request $request, $id)
+    {
+        $bao = Bao::findOrfail($id);
+        $transaction = Transaction::with('transport')->findOrfail($bao->b_transaction_id);
+        $bao->update([
+            'b_success_date' => $request->value == 'true' ? Carbon::now() : null,
+            'b_fee' => $request->value == 'true' ? $transaction->transport->tp_fee : null
+        ]);
+        $price_bao = view('admin.transaction.data_edit_bao.price_bao', compact('bao'))->render();
+        $success_date = view('admin.transaction.data_edit_bao.success_date', compact('bao'))->render();
+        return response([
+            'data' => 'success',
+            'price_bao' => $price_bao,
+            'success_date' => $success_date,
+        ]);
     }
 
 

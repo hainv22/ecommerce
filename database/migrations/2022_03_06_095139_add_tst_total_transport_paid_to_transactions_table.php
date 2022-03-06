@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransactionHistoriesTable extends Migration
+class AddTstTotalTransportPaidToTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateTransactionHistoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('transaction_histories', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('th_transaction_id');
-            $table->text('th_content');
-            $table->timestamps();
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->unsignedBigInteger('total_transport_paid')->default(0);
         });
     }
 
@@ -28,6 +25,8 @@ class CreateTransactionHistoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transaction_histories');
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->dropColumn(['total_transport_paid']);
+        });
     }
 }

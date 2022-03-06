@@ -53,4 +53,9 @@ class Transaction extends Model
     {
         return $this->hasMany(TransactionHistory::class, 'th_transaction_id');
     }
+
+    public function transport()
+    {
+        return $this->belongsTo(Transport::class, 'tst_transport_id');
+    }
 }
