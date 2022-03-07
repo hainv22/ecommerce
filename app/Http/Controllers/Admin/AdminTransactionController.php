@@ -89,6 +89,9 @@ class AdminTransactionController extends Controller
                     'od_price' => Product::find($idProduct)->pro_price,
                     'od_note' => $data['od_note'][$key]
                 ]);
+                DB::table('products')
+                    ->where('id', $idProduct)
+                    ->increment('pro_pay', $data['txt_quantity_product'][$key]);
             }
 
             if (!empty($data['b_weight'])) {
@@ -140,19 +143,31 @@ class AdminTransactionController extends Controller
             if(!empty($data['txt_id_product'][0])) {
                 $order_old = Order::where('od_transaction_id', $id)->pluck('id')->toArray();
                 $array_diff = array_diff($order_old, $data['product_ids']);
-                Order::where('od_transaction_id', $id)->whereIn('id', $array_diff)->delete();
-                $orders = Order::where('od_transaction_id', $id)->whereIn('id', $data['product_ids'])->get();
-                foreach ($data['txt_id_product'] as $key => $idProduct) {
-                    $product = Product::find($idProduct);
-                    $total_money += ($product->pro_price * $data['txt_quantity_product'][$key]);
-                    $total_products += $data['txt_quantity_product'][$key];
+                $orders_delete = Order::where('od_transaction_id', $id)->whereIn('id', $array_diff)->get();
+                foreach($orders_delete as $order_delete) {
+                        DB::table('products')
+                            ->where('id', $order_delete->od_product_id)
+                            ->decrement('pro_pay', $order_delete->od_qty);
+                    $order_delete->delete();
                 }
+                $orders = Order::where('od_transaction_id', $id)->whereIn('id', $data['product_ids'])->get();
 
                 foreach ($orders as $key => $item) {
+                    if($item->od_qty != (int)$data['txt_quantity_product'][$key]) {
+                        DB::table('products')
+                            ->where('id', $item->od_product_id)
+                            ->decrement('pro_pay', $item->od_qty);
+                        DB::table('products')
+                            ->where('id', $item->od_product_id)
+                            ->increment('pro_pay', $data['txt_quantity_product'][$key]);
+                    }
                     $item->update([
                         'od_qty' => $data['txt_quantity_product'][$key],
                         'od_note' => $data['od_note'][$key],
                     ]);
+                    $total_money += ($item->od_price * $data['txt_quantity_product'][$key]);
+                    $total_products += $data['txt_quantity_product'][$key];
+
                 }
 
                 if(count($data['txt_id_product']) > count($orders)) {
@@ -164,6 +179,11 @@ class AdminTransactionController extends Controller
                             'od_price' => Product::find($data['txt_id_product'][$i])->pro_price,
                             'od_note' => $data['od_note'][$i]
                         ]);
+                        $total_money += (Product::find($data['txt_id_product'][$i])->pro_price * $data['txt_quantity_product'][$i]);
+                        $total_products += $data['txt_quantity_product'][$i];
+                        DB::table('products')
+                            ->where('id', $data['txt_id_product'][$i])
+                            ->increment('pro_pay', $data['txt_quantity_product'][$i]);
                     }
                 }
 
@@ -179,11 +199,17 @@ class AdminTransactionController extends Controller
             }
             if (!empty($data['b_weight'])) {
                 $count_bao_old = Bao::where('b_transaction_id', $id)->count();
-                $baos_old = Bao::where('b_transaction_id', $id)->pluck('id')->toArray();
-                $input_array = array_diff($baos_old, $data['id_bao']);
-                Bao::where('b_transaction_id', $id)->whereIn('id', $input_array)->delete();
-                $sum_old = Bao::where('b_transaction_id', $id)->sum('b_weight');
-                $baos = Bao::where('b_transaction_id', $id)->whereIn('id', $data['id_bao'])->get();
+                $baos = [];
+                $sum_old = 0;
+                if (array_key_exists('id_bao', $data)) {
+                    $baos_old = Bao::where('b_transaction_id', $id)->pluck('id')->toArray();
+                    $input_array = array_diff($baos_old, $data['id_bao']);
+                    $sum_old = Bao::where('b_transaction_id', $id)->whereIn('id', $input_array)->sum('b_weight');
+                    Bao::where('b_transaction_id', $id)->whereIn('id', $input_array)->delete();
+                    $baos = Bao::where('b_transaction_id', $id)->whereIn('id', $data['id_bao'])->get();
+                }
+
+                $sum_old += Bao::where('b_transaction_id', $id)->sum('b_weight');
                 $total_bao = 0;
                 $weight_total = 0;
                 foreach ($baos as $key => $item) {

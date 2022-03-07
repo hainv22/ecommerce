@@ -45,6 +45,14 @@
                                         <td>Địa Chỉ KH</td>
                                         <td><span >{{ $transaction->user->address }}</span></td>
                                     </tr>
+                                    <tr>
+                                        <td>Ngày đặt hàng</td>
+                                        <td><span >{{ date("d-m-Y", strtotime($transaction->tst_order_date )) }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ngày dự kiến nhận</td>
+                                        <td><span >{{ date("d-m-Y", strtotime($transaction->tst_expected_date )) }}</span></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -74,7 +82,9 @@
                                             <br>
                                             Đã trả: {{$transaction->tst_total_paid}} đ
                                             <br/>
-                                            Còn nợ: {{number_format($transaction->tst_total_money - $transaction->tst_total_paid, 0,',','.')}} đ
+                                            Đặt cọc: {{$transaction->tst_deposit}} đ
+                                            <br/>
+                                            Còn nợ: {{number_format($transaction->tst_total_money - $transaction->tst_total_paid - $transaction->tst_deposit, 0,',','.')}} đ
                                         </td>
                                     </tr>
 
@@ -95,7 +105,7 @@
                                             (Tiền hàng nợ + Tiền vận chuyển nợ:)
                                             <br>
                                             <span class="label label-danger" style="font-size: 15px">
-                                                {{number_format(($transaction->tst_total_money - $transaction->tst_total_paid) + ($total_transport - $transaction->total_transport_paid), 0,',','.')}} đ
+                                                {{number_format(($transaction->tst_total_money - $transaction->tst_total_paid - $transaction->tst_deposit) + ($total_transport - $transaction->total_transport_paid), 0,',','.')}} đ
                                             </span>
                                         </td>
                                     </tr>
