@@ -140,7 +140,7 @@ class AdminTransactionController extends Controller
             $total_products = 0;
             $data = $request->all();
             $transaction = Transaction::with('transport')->findOrFail($id);
-            if(!empty($data['txt_id_product'][0])) {
+            if(array_key_exists('txt_id_product', $data)) {
                 $order_old = Order::where('od_transaction_id', $id)->pluck('id')->toArray();
                 $array_diff = array_diff($order_old, $data['product_ids']);
                 $orders_delete = Order::where('od_transaction_id', $id)->whereIn('id', $array_diff)->get();
@@ -197,7 +197,7 @@ class AdminTransactionController extends Controller
                     'tst_total_money' => $total_money
                 ]);
             }
-            if (!empty($data['b_weight'])) {
+            if (array_key_exists('b_weight', $data)) {
                 $count_bao_old = Bao::where('b_transaction_id', $id)->count();
                 $baos = [];
                 $sum_old = 0;
@@ -241,6 +241,13 @@ class AdminTransactionController extends Controller
                 TransactionHistory::create([
                     'th_transaction_id' => $transaction->id,
                     'th_content' => "Cập nhật: \n số lượng bao: {$count_bao_old} -> {$total_bao} \n số cân: {$sum_old} -> $weight_total "
+                ]);
+            }
+            if (array_key_exists('tst_order_date', $data) || array_key_exists('tst_expected_date', $data) || array_key_exists('tst_note', $data)) {
+                $transaction->update([
+                    'tst_order_date' => empty($data['tst_order_date']) ? $transaction->tst_expected_date : $data['tst_order_date'],
+                    'tst_expected_date' => empty($data['tst_expected_date']) ? $transaction->tst_expected_date : $data['tst_expected_date'],
+                    'tst_note' => $data['tst_note']
                 ]);
             }
             DB::commit();

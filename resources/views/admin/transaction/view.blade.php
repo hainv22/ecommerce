@@ -23,6 +23,8 @@
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body no-padding">
+                        <form action="" method="post">
+                            @csrf
                             <table class="table table-striped">
                                 <tbody>
                                     <tr>
@@ -47,14 +49,44 @@
                                     </tr>
                                     <tr>
                                         <td>Ngày đặt hàng</td>
-                                        <td><span >{{ date("d-m-Y", strtotime($transaction->tst_order_date )) }}</span></td>
+                                        <td>
+                                            <span >{{ date("d-m-Y", strtotime($transaction->tst_order_date )) }}</span>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                                                <input type="date" name="tst_order_date" class="form-control" value="{{ old('tst_order_date') }}">
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>Ngày dự kiến nhận</td>
-                                        <td><span >{{ date("d-m-Y", strtotime($transaction->tst_expected_date )) }}</span></td>
+                                        <td>
+                                            <span >{{ date("d-m-Y", strtotime($transaction->tst_expected_date )) }}</span>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                                                <input type="date" name="tst_expected_date" class="form-control" value="{{ old('tst_expected_date') }}">
+                                            </div>
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>content</td>
+                                        <td>
+                                            <div class="form-group {{ $errors->first('tst_note') ? 'has-error' : '' }}">
+                                                <textarea class="form-control" value="" name="tst_note" rows="6" placeholder="Enter ...">{{ $transaction->tst_note}}</textarea>
+                                                @if ($errors->first('tst_note'))
+                                                    <span class="text-danger">{{ $errors->first('tst_note') }}</span>
+                                                @endif
+                                            </div>
+                                            <div class="clear-both text-right">
+                                                <button type="submit" class="btn btn-danger" >Cập nhật sản phẩm</button>
+                                            </div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
+                        </form>
                         </div>
                     </div>
                 </div>
@@ -82,7 +114,7 @@
                                             <br>
                                             Đã trả: {{$transaction->tst_total_paid}} đ
                                             <br/>
-                                            Đặt cọc: {{$transaction->tst_deposit}} đ
+                                            Đặt cọc: {{ number_format($transaction->tst_deposit,0,',','.') }} đ
                                             <br/>
                                             Còn nợ: {{number_format($transaction->tst_total_money - $transaction->tst_total_paid - $transaction->tst_deposit, 0,',','.')}} đ
                                         </td>
