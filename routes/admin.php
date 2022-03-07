@@ -72,6 +72,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('delete/{id}', [AdminTransactionController::class, 'delete'])->name('admin.transaction.delete');
             Route::get('view/{id}', [AdminTransactionController::class, 'getTransactionDetail'])->name('admin.transaction.detail');
             Route::post('view/{id}', [AdminTransactionController::class, 'update'])->name('admin.transaction.update');
+            Route::get('update-money/{id}', [AdminTransactionController::class, 'updateMoney'])->name('admin.transaction.update.money');
+            Route::get('update-money-transport/{id}', [AdminTransactionController::class, 'updateMoneyTransport'])->name('admin.transaction.update.money.transport');
             Route::get('update-success-date/{id}', [AdminTransactionController::class, 'updateSuccessDate'])->name('admin.transaction.update.success.date');
             Route::get('update-transport-id-bao/{id}', [AdminTransactionController::class, 'updateTransportIdBao'])->name('admin.update.transport.id.bao');
             Route::get('order-delete/{id}', [AdminTransactionController::class, 'order_detail_delete'])->name('admin.order_detail.delete');

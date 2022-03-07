@@ -186,10 +186,11 @@ class AdminTransactionController extends Controller
                             ->increment('pro_pay', $data['txt_quantity_product'][$i]);
                     }
                 }
-
+                $tst_total_money_old_format = number_format($transaction->tst_total_money,0,',','.');
+                $tst_total_money_new_format = number_format($total_money,0,',','.');
                 TransactionHistory::create([
                     'th_transaction_id' => $transaction->id,
-                    'th_content' => "Cập nhật: \n số lượng sp: {$transaction->tst_total_products} -> {$total_products} \n Tiền: {$transaction->tst_total_money} -> $total_money "
+                    'th_content' => "Cập nhật: \n số lượng sp: {$transaction->tst_total_products} -> {$total_products} \n / Tiền: {$tst_total_money_old_format} -> $tst_total_money_new_format "
                 ]);
 
                 $transaction->update([
@@ -363,32 +364,134 @@ class AdminTransactionController extends Controller
 
     public function updateSuccessDate(Request $request, $id)
     {
-        $bao = Bao::with('transport')->findOrfail($id);
-        $bao->update([
-            'b_success_date' => $request->value == 'true' ? Carbon::now() : null,
-            'b_fee' => $request->value == 'true' ? $bao->transport->tp_fee : null
-        ]);
-        $price_bao = view('admin.transaction.data_edit_bao.price_bao', compact('bao'))->render();
-        $success_date = view('admin.transaction.data_edit_bao.success_date', compact('bao'))->render();
-        return response([
-            'data' => 'success',
-            'price_bao' => $price_bao,
-            'success_date' => $success_date,
-        ]);
+        DB::beginTransaction();
+        try {
+            $bao = Bao::with('transport')->findOrfail($id);
+            $bao->update([
+                'b_success_date' => $request->value == 'true' ? Carbon::now() : null,
+                'b_fee' => $request->value == 'true' ? $bao->transport->tp_fee : null
+            ]);
+            $price_bao = view('admin.transaction.data_edit_bao.price_bao', compact('bao'))->render();
+            $success_date = view('admin.transaction.data_edit_bao.success_date', compact('bao'))->render();
+            DB::commit();
+            return response([
+                'data' => 'success',
+                'price_bao' => $price_bao,
+                'success_date' => $success_date,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
+
     }
 
     public function updateTransportIdBao(Request $request, $id)
     {
-        $bao = Bao::with('transport')->findOrfail($id);
-        $bao->update([
-            'b_transport_id' => $request->id_bao,
-            'b_fee' => empty($bao->b_fee) == true ? null : Transport::findOrfail($request->id_bao)->tp_fee
-        ]);
-        $bao = Bao::with('transport')->findOrfail($id);
-        $price_bao = view('admin.transaction.data_edit_bao.price_bao', compact('bao'))->render();
+        DB::beginTransaction();
+        try {
+            $bao = Bao::with('transport')->findOrfail($id);
+            $bao->update([
+                'b_transport_id' => $request->id_bao,
+                'b_fee' => empty($bao->b_fee) == true ? null : Transport::findOrfail($request->id_bao)->tp_fee
+            ]);
+            $bao = Bao::with('transport')->findOrfail($id);
+            $price_bao = view('admin.transaction.data_edit_bao.price_bao', compact('bao'))->render();
+
+            DB::commit();
+            return response([
+                'data' => 'success',
+                'price_bao' => $price_bao,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
+    }
+
+    public function updateMoney(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $transaction = Transaction::findOrfail($id);
+            $tst_total_paid_old = $transaction->tst_total_paid;
+
+            $tst_total_money_old = number_format($transaction->tst_total_money,0,',','.');
+            $so_tien_no_cuoi_cu = number_format($transaction->tst_total_money - $transaction->tst_total_paid,0,',','.');
+            $tst_total_money_new_format = number_format($transaction->tst_total_money - (int)$request->value - $transaction->tst_total_paid,0,',','.');
+            $value_format = number_format($request->value,0,',','.');
+            $so_tien_hang_da_tra_format = number_format((int)$request->value + $tst_total_paid_old,0,',','.');
+            $transaction->update([
+                'tst_total_paid' => (int)$request->value + $tst_total_paid_old
+            ]);
+            $con_no_tong = number_format($transaction->tst_total_money - $transaction->tst_total_paid, 0,',','.');
+            TransactionHistory::create([
+                'th_transaction_id' => $id,
+                'th_content' => "Cập nhật Tiền hàng: \n Trả: {$value_format} đ \n/ Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền trả lần này): {$so_tien_no_cuoi_cu} - {$value_format} = {$tst_total_money_new_format} /
+                Tổng số tiền hàng đã trả: $so_tien_hang_da_tra_format
+                (còn nợ tổng: $con_no_tong)"
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response([
+                'code' => 400,
+                'message' => $e->getMessage(),
+                'data' => ''
+            ]);
+        }
         return response([
-            'data' => 'success',
-            'price_bao' => $price_bao,
+            'code' => 200,
+            'message' => 'Update số tiền thành công',
+            'data' => ''
+        ]);
+    }
+
+    public function updateMoneyTransport(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $transaction = Transaction::findOrfail($id);
+
+            $transport_success = Bao::where('b_transaction_id', $id)->whereNotNull('b_success_date')->get();
+            $total_transport_success = 0;
+            foreach ($transport_success as $item) {
+                $total_transport_success += ($item->b_weight * $item->b_fee);
+            }
+
+            $total_transport = 0;
+            $transport_pending = Bao::with('transport')->where('b_transaction_id', $id)->whereNull('b_success_date')->get();
+            foreach ($transport_pending as $item) {
+                $total_transport += ($item->b_weight * $item->transport->tp_fee);
+            }
+            $total_transport +=$total_transport_success;
+            $total_transport_old = number_format($total_transport - $transaction->total_transport_paid,0,',','.');
+            $tst_total_transport_new = $transaction->total_transport_paid + (int)$request->value;
+            $so_tien_con_no_format = number_format($total_transport - $tst_total_transport_new,0,',','.');
+            $tst_total_transport_new_format = number_format($tst_total_transport_new,0,',','.');
+            $value_format = number_format($request->value,0,',','.');
+            $transaction->update([
+                'total_transport_paid' => $tst_total_transport_new
+            ]);
+            $con_no_tong = number_format($total_transport - $transaction->total_transport_paid,0,',','.');
+            TransactionHistory::create([
+                'th_transaction_id' => $id,
+                'th_content' => "Cập nhật tiền vận chuyển: \n Trả: {$value_format} đ \n/
+                Số tiền còn nợ =(số tiền nợ cuối cũ - số tiền trả lần này): {$total_transport_old} - {$tst_total_transport_new} = {$so_tien_con_no_format}/
+                Tổng số tiền vận chuyển đã trả: $tst_total_transport_new_format
+                (còn nợ tổng: $con_no_tong)"
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response([
+                'code' => 400,
+                'message' => $e->getMessage(),
+                'data' => ''
+            ]);
+        }
+        return response([
+            'code' => 200,
+            'message' => 'Update số tiền thành công',
+            'data' => ''
         ]);
     }
 

@@ -110,24 +110,28 @@
                                     <tr>
                                         <td>Tiền Hàng</td>
                                         <td>
-                                            Tổng: {{number_format($transaction->tst_total_money,0,',','.') }} đ
+                                            <button type="button" class="btn btn-success" id="decrementPrice_js">+</button>
+                                            <br/>
+                                            Tổng: <span class="js_tst_money">{{number_format($transaction->tst_total_money,0,',','.') }}</span> đ
                                             <br>
-                                            Đã trả: {{$transaction->tst_total_paid}} đ
+                                            Đã trả: <span class="js_tst_total_paid">{{number_format($transaction->tst_total_paid,0,',','.')}}</span> đ
                                             <br/>
-                                            Đặt cọc: {{ number_format($transaction->tst_deposit,0,',','.') }} đ
+                                            Đặt cọc: <span class="js_tst_deposit">{{ number_format($transaction->tst_deposit,0,',','.') }}</span> đ
                                             <br/>
-                                            Còn nợ: {{number_format($transaction->tst_total_money - $transaction->tst_total_paid - $transaction->tst_deposit, 0,',','.')}} đ
+                                            Còn nợ: <span class="js_tst_money_verb">{{number_format($transaction->tst_total_money - $transaction->tst_total_paid, 0,',','.')}} đ</span>
                                         </td>
                                     </tr>
 
                                     <tr>
                                         <td>Tiền Vận Chuyển</td>
                                         <td>
-                                            Tổng: {{number_format($total_transport, 0,',','.')}} đ
-                                            <br>
-                                            Đã trả: {{ number_format($transaction->total_transport_paid,0,',','.') }} đ
+                                            <button type="button" class="btn btn-success" id="decrementPrice_transport_js">+</button>
                                             <br/>
-                                            Còn nợ: {{number_format($total_transport - $transaction->total_transport_paid, 0,',','.')}}
+                                            Tổng: <span class="js_total_transport">{{number_format($total_transport, 0,',','.')}}</span> đ
+                                            <br>
+                                            Đã trả: <span class="js_total_transport_paid">{{ number_format($transaction->total_transport_paid,0,',','.') }}</span> đ
+                                            <br/>
+                                            Còn nợ: <span class="js_total_transport_verb">{{number_format($total_transport - $transaction->total_transport_paid, 0,',','.')}}</span> đ
                                         </td>
                                     </tr>
 
@@ -136,9 +140,9 @@
                                         <td>
                                             (Tiền hàng nợ + Tiền vận chuyển nợ:)
                                             <br>
-                                            <span class="label label-danger" style="font-size: 15px">
+                                            <span class="label label-danger js_total_money_verb" style="font-size: 15px">
                                                 {{number_format(($transaction->tst_total_money - $transaction->tst_total_paid - $transaction->tst_deposit) + ($total_transport - $transaction->total_transport_paid), 0,',','.')}} đ
-                                            </span>
+                                            </span> đ
                                         </td>
                                     </tr>
                                     <tr>
@@ -373,6 +377,50 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="decrementPrice" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Khách trả thêm tiền hàng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label for="pro_price">Số tiền hàng trả: </label><span id="js_money_pay_format" style="color: red; font-size: 15px; margin-left:15px"></span>
+                <input type="number" name="js_money_pay" id="js_money_pay" class="form-control txt_quantity" value="" min="1" placeholder="money" required="">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="js_save_money_pay" data-url-update-money="{{route('admin.transaction.update.money', $transaction->id)}}">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="decrementPriceTransport" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Khách trả tiền vận chuyển</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label for="pro_price">Số tiền vận chuyển trả: </label><span id="js_transport_pay_format" style="color: red; font-size: 15px; margin-left:15px"></span>
+                <input type="number" name="js_transport_pay" id="js_transport_pay" class="form-control txt_quantity" value="" min="1" placeholder="money" required="">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="js_save_transport_pay" data-url-update-money-transport="{{route('admin.transaction.update.money.transport', $transaction->id)}}">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
   <!-- /.content -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/css/fileinput.css"  />
 <script src="https://code.jquery.com/jquery-3.2.1.js" ></script>
@@ -488,7 +536,126 @@
                 }
             })
 
+
+
+
+            $(document).on('click','#decrementPrice_js',function(e){
+                $("#decrementPrice").modal("show");
+            });
+            $(document).on('click','#js_save_money_pay',function(e){
+                e.preventDefault();
+                let $this = $(this);
+                let value = $('#js_money_pay').val();
+                if(value == '' || value < 0) {
+                    toastr.error('Giá trị phải lớn hơn 1');
+                    return false;
+                }
+                let URL = $this.attr('data-url-update-money');
+                if(URL){
+                    $.ajax({
+                        url:URL,
+                        type:"GET",
+                        data:{
+                            value: value
+                        },
+                        success:function(results){
+                            console.log(results)
+                            if(results.code == 200) {
+                                location.reload();
+                                toastr.success(results.message);
+                            } else {
+                                toastr.error(results.message);
+                            }
+                            $('#decrementPrice').modal('hide');
+                            // $('#body_list_products').html(results.data);
+                            // $data_this = $this;
+                        },
+                        error:function(error){
+                            console.log(error.messages);
+                        }
+                    });
+                }
+            });
+            $(document).on('keyup', '#js_money_pay', function (e) {
+                nStr = $(this).val();
+                decSeperate = '.';
+                groupSeperate = ',';
+                nStr += '';
+                x = nStr.split(decSeperate);
+                x1 = x[0];
+                x2 = x.length > 1 ? '.' + x[1] : '';
+                var rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                    x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
+                }
+                $("#js_money_pay_format").text(x1+x2 + ' đ')
+            })
+
+
+
+
+
+
+
+
+
+
+
+
+            $(document).on('click','#decrementPrice_transport_js',function(e){
+                $("#decrementPriceTransport").modal("show");
+            });
+            $(document).on('click','#js_save_transport_pay',function(e){
+                e.preventDefault();
+                let $this = $(this);
+                let value = $('#js_transport_pay').val();
+                if(value == '' || value < 0) {
+                    toastr.error('Giá trị phải lớn hơn 1');
+                    return false;
+                }
+                let URL = $this.attr('data-url-update-money-transport');
+                if(URL){
+                    $.ajax({
+                        url:URL,
+                        type:"GET",
+                        data:{
+                            value: value
+                        },
+                        success:function(results){
+                            console.log(results)
+                            if(results.code == 200) {
+                                location.reload();
+                                toastr.success(results.message);
+                            } else {
+                                toastr.error(results.message);
+                            }
+                            $('#decrementPriceTransport').modal('hide');
+                            // $('#body_list_products').html(results.data);
+                            // $data_this = $this;
+                        },
+                        error:function(error){
+                            console.log(error.messages);
+                        }
+                    });
+                }
+            });
+            $(document).on('keyup', '#js_transport_pay', function (e) {
+                nStr = $(this).val();
+                decSeperate = '.';
+                groupSeperate = ',';
+                nStr += '';
+                x = nStr.split(decSeperate);
+                x1 = x[0];
+                x2 = x.length > 1 ? '.' + x[1] : '';
+                var rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                    x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
+                }
+                $("#js_transport_pay_format").text(x1+x2 + ' đ')
+            })
+
         });
+
         function deleteItem(thistag){
             if(confirm("Bạn chắc chắn muốn xóa item này?")==true){
                 $(thistag).parent().parent().remove();
