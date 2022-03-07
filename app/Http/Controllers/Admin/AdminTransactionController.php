@@ -495,6 +495,57 @@ class AdminTransactionController extends Controller
         ]);
     }
 
+    public function convertDeposit(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $transaction = Transaction::findOrfail($id);
+            if($transaction->tst_deposit <= 0) {
+                return response([
+                    'code' => 400,
+                    'message' => 'tiền cọc nhỏ hơn 0',
+                    'data' => ''
+                ]);
+            }
+
+            $tst_total_paid_old = $transaction->tst_total_paid;
+            $tst_total_paid_new = $tst_total_paid_old + $transaction->tst_deposit;
+
+            $tst_total_money_format = number_format($transaction->tst_total_money - $transaction->tst_total_paid,0,',','.');
+            $tst_total_paid_new_format = number_format($tst_total_paid_new,0,',','.');
+            $tst_deposit_format = number_format($transaction->tst_deposit,0,',','.');
+            $a = number_format($transaction->tst_total_money - $transaction->tst_total_paid - $transaction->tst_deposit,0,',','.');
+
+
+            $transaction->update([
+                'tst_deposit' => 0,
+                'tst_total_paid' => $tst_total_paid_new
+
+            ]);
+
+            TransactionHistory::create([
+                'th_transaction_id' => $id,
+                'th_content' => "Convert tiền cọc: \n Tiền cọc: {$tst_deposit_format} đ \n/
+                Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền cọc): {$tst_total_money_format} - {$tst_deposit_format} = {$a} /
+                Tổng số tiền hàng đã trả: $tst_total_paid_new_format
+                (còn nợ tổng: $a)"
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response([
+                'code' => 400,
+                'message' => 'lỗi',
+                'data' => ''
+            ]);
+        }
+        return response([
+            'code' => 200,
+            'message' => 'Update số tiền thành công',
+            'data' => ''
+        ]);
+    }
+
     // if($transaction->tst_status != -1) {
     //     switch ($action) {
     //         case 'process':

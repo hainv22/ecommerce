@@ -111,6 +111,7 @@
                                         <td>Tiền Hàng</td>
                                         <td>
                                             <button type="button" class="btn btn-success" id="decrementPrice_js">+</button>
+                                            <button type="button" class="btn btn-warning" id="js_tst_deposit" data-url-convert="{{route('admin.transaction.convert.deposit', $transaction->id)}}" style="float: right">Chuyển</button>
                                             <br/>
                                             Tổng: <span class="js_tst_money">{{number_format($transaction->tst_total_money,0,',','.') }}</span> đ
                                             <br>
@@ -655,6 +656,45 @@
             })
 
         });
+
+        $('#js_tst_deposit').click(function(event){
+            event.preventDefault();
+            let URL=$(this).attr('data-url-convert');
+            $.confirm({
+                title: ' Bạn muốn chuyển tiền đặt cọc',
+                content: 'Chuyển tiền cọc sang tiền khách hàng trả!',
+                type: 'red',
+                buttons: {
+                    ok: {
+                        text: "ok!",
+                        btnClass: 'btn-primary',
+                        keys: ['enter'],
+                        action: function(){
+                            if(URL){
+                                $.ajax({
+                                    url:URL,
+                                    success:function(results){
+                                        console.log(results.code)
+                                        if(results.code == 200) {
+                                            location.reload();
+                                            toastr.success(results.message);
+                                        } else {
+                                            toastr.error(results.message);
+                                        }
+                                    },
+                                    error:function(error){
+                                        console.log(error.messages);
+                                    }
+                                });
+                            }
+                        }
+                    },
+                    cancel: function(){
+                        console.log('the user clicked cancel');
+                    }
+                }
+            });
+        })
 
         function deleteItem(thistag){
             if(confirm("Bạn chắc chắn muốn xóa item này?")==true){
