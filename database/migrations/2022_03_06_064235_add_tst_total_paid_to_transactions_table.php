@@ -14,7 +14,7 @@ class AddTstTotalPaidToTransactionsTable extends Migration
     public function up()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->unsignedBigInteger('tst_total_paid')->default(0);
+            $table->unsignedBigInteger('tst_total_paid')->default(0)->comment('tổng tiền khách trả tiền hàng');
         });
     }
 

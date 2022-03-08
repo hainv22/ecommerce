@@ -546,6 +546,36 @@ class AdminTransactionController extends Controller
         ]);
     }
 
+    public function updateLockTransaction(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $transaction = Transaction::findOrfail($id);
+
+            $transaction->update([
+                'tst_lock' => !$transaction->tst_lock
+            ]);
+            TransactionHistory::create([
+                'th_transaction_id' => $id,
+                'th_content' => $transaction->tst_lock == 1 ? "Đã khóa transaction" : "Đã mở khóa transaction"
+            ]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response([
+                'code' => 400,
+                'message' => 'lỗi',
+                'data' => ''
+            ]);
+        }
+        return response([
+            'code' => 200,
+            'message' => 'ok',
+            'data' => ''
+        ]);
+    }
+
     // if($transaction->tst_status != -1) {
     //     switch ($action) {
     //         case 'process':

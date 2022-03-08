@@ -80,7 +80,7 @@
                                                 @endif
                                             </div>
                                             <div class="clear-both text-right">
-                                                <button type="submit" class="btn btn-danger" >Cập nhật sản phẩm</button>
+                                                <button type="submit" class="btn btn-danger {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" >Cập nhật sản phẩm</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -104,14 +104,26 @@
                                         <th>Giá Trị</th>
                                     </tr>
                                     <tr>
+                                        <td style="width: 40%">Trạng thái lock đơn hàng</td>
+                                        <td>
+                                            <input type="checkbox" data-url-lock="{{route('admin.transaction.update.lock', $transaction->id)}}" onchange="update_tst_lock(this)" id="js_update_tst_lock" {{$transaction->tst_lock ==1 ? 'checked' : ''}} data-toggle="toggle" data-onstyle="danger" data-width="50" data-height="40">
+                                            <br/>
+                                            @if($transaction->tst_lock == 1)
+                                                Đơn hàng đang bị khóa -> không thể update
+                                            @else
+                                                Đơn hàng đang mở khóa -> có thể update
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td>Trạng Thái</td>
                                         <td><span class="badge bg-light-blue">{{ $transaction->getStatus($transaction->tst_status)['name'] }}</span></td>
                                     </tr>
                                     <tr>
                                         <td>Tiền Hàng</td>
                                         <td>
-                                            <button type="button" class="btn btn-success" id="decrementPrice_js">+</button>
-                                            <button type="button" class="btn btn-warning" id="js_tst_deposit" data-url-convert="{{route('admin.transaction.convert.deposit', $transaction->id)}}" style="float: right">Chuyển</button>
+                                            <button type="button" class="btn btn-success {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" id="{{$transaction->tst_lock == 1 ? 'js_click_lock' : 'decrementPrice_js'}}">+</button>
+                                            <button type="button" class="btn btn-warning {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" id="{{$transaction->tst_lock == 1 ? 'js_click_lock' : 'js_tst_deposit'}}" data-url-convert="{{route('admin.transaction.convert.deposit', $transaction->id)}}" style="float: right">Chuyển</button>
                                             <br/>
                                             Tổng: <span class="js_tst_money">{{number_format($transaction->tst_total_money,0,',','.') }}</span> đ
                                             <br>
@@ -126,7 +138,7 @@
                                     <tr>
                                         <td>Tiền Vận Chuyển</td>
                                         <td>
-                                            <button type="button" class="btn btn-success" id="decrementPrice_transport_js">+</button>
+                                            <button type="button" class="btn btn-success {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" id="{{$transaction->tst_lock == 1 ? 'js_click_lock' : 'decrementPrice_transport_js'}}">+</button>
                                             <br/>
                                             Tổng: <span class="js_total_transport">{{number_format($total_transport, 0,',','.')}}</span> đ
                                             <br>
@@ -162,7 +174,7 @@
                             <h3 class="box-title">Chi Tiết Về Đơn Hàng</h3>
                         </div>
                         <div class="clear-both text-left">
-                            <a href="#" class="btn btn-primary add_item_order">+ Thêm sản phẩm</a>
+                            <a href="#" class="btn btn-primary  {{$transaction->tst_lock == 1 ? 'js_click_lock' : 'add_item_order'}}">+ Thêm sản phẩm</a>
                         </div>
                         <!-- /.box-header -->
                         <form role="form" id="frm_action" name="frm_action" method="post" action="{{route('admin.transaction.update', $transaction->id)}}" enctype="multipart/form-data">
@@ -204,7 +216,7 @@
                                                     <textarea class="form-control" value="" name="od_note[]" rows="3" placeholder="Enter ..." >{{$item->od_note}}</textarea>
                                                 </td>
                                                 <td align="center" class="cls_td">
-                                                    <a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a>
+                                                    <a href="#" class="btn_action btn_del {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" onclick="{{$transaction->tst_lock == 1 ? 'js_click_lock' : "deleteItem(this);return false;"}}"><i class="fa fa-trash-o fa_user fa_del"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -212,7 +224,7 @@
                                 </table>
                             </div>
                             <div class="clear-both text-right">
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn muốn cập nhật?')">Cập nhật sản phẩm</button>
+                                <button type="submit" class="btn btn-danger {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" onclick=" {{$transaction->tst_lock == 1 ? '' : "return confirm('Bạn muốn cập nhật?')"}} ">Cập nhật sản phẩm</button>
                             </div>
                         </form>
                     </div>
@@ -222,7 +234,7 @@
                     <div class="box box-warning">
                         <div class="box-header">
                             <div class="clear-both text-center">
-                                <a href="#" class="btn btn-primary add_item_bao">+ Thêm số bao</a>
+                                <a href="#" class="btn btn-primary {{$transaction->tst_lock == 1 ? 'js_click_lock' : 'add_item_bao'}}">+ Thêm số bao</a>
                             </div>
                         </div>
                         <div class="box-body">
@@ -258,7 +270,7 @@
                                                     <textarea class="form-control" value="" name="b_note[]" rows="3" placeholder="Enter ...">{{$item->b_note}}</textarea>
                                                 </td>
                                                 <td class="cls_td ">
-                                                    <select name="b_transport_id[]" class="form-control" id="js_b_transport_id" data-url-update-transport="{{route('admin.update.transport.id.bao', $item->id)}}">
+                                                    <select name="b_transport_id[]" class="form-control {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" id="{{$transaction->tst_lock == 1 ? 'js_click_lock' : 'js_b_transport_id'}}" data-url-update-transport="{{route('admin.update.transport.id.bao', $item->id)}}">
                                                         <?php if(isset($transports)) { ?>
                                                             <?php foreach($transports as $transport) { ?>
                                                                 <option {{ $item->b_transport_id==$transport->id ? 'selected' :''}} value="{{$transport->id}}">{{$transport->tp_name}}</option>
@@ -279,7 +291,7 @@
                                                     </span>
                                                 </td>
                                                 <td class="cls_td ">
-                                                    <input type="checkbox" name="b_success_date[]" data-url="{{route('admin.transaction.update.success.date', $item->id)}}" id="update_success_date" class="form-check-input" {{ empty($item->b_success_date) == true ? '' : 'checked' }} >
+                                                    <input type="checkbox" name="b_success_date[]" data-url="{{route('admin.transaction.update.success.date', $item->id)}}" id="{{$transaction->tst_lock == 1 ? 'js_click_lock' : 'update_success_date'}}" class="form-check-input {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" {{ empty($item->b_success_date) == true ? '' : 'checked' }} >
                                                     @if(empty($item->b_success_date) == true)
                                                         Chưa giao
                                                     @else
@@ -287,7 +299,7 @@
                                                     @endif
                                                 </td>
                                                 <td align="center" class="cls_td">
-                                                    <a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td>
+                                                    <a href="#" class="btn_action btn_del {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" onclick="{{$transaction->tst_lock == 1 ? 'js_click_lock' : "deleteItem(this);return false;"}}"><i class="fa fa-trash-o fa_user fa_del"></i></a></td>
                                             </tr>
                                         @endforeach
                                     @endif
@@ -295,7 +307,7 @@
                                 </table>
                             </div>
                             <div class="clear-both text-center">
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn muốn cập nhật?')">Cập nhật số lượng bao</button>
+                                <button type="submit" class="btn btn-danger {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" onclick="{{$transaction->tst_lock == 1 ? '' : "return confirm('Bạn muốn cập nhật?')"}}">Cập nhật số lượng bao</button>
                             </div>
                         </form>
                         </div>
@@ -427,6 +439,8 @@
 <script src="https://code.jquery.com/jquery-3.2.1.js" ></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/js/fileinput.js" ></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/themes/fa/theme.js" ></script>
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 @endsection
 
 @section('script')
@@ -655,6 +669,23 @@
                 $("#js_transport_pay_format").text(x1+x2 + ' đ')
             })
 
+
+            $('.js_click_lock').click(function(event){
+                event.preventDefault();
+                $.confirm({
+                    title: 'Đơn hàng đang bị khóa',
+                    content: 'Hãy mở khóa đơn hàng để thao tác!',
+                    type: 'red',
+                    buttons: {
+                        ok: {
+                            text: "ok!",
+                            btnClass: 'btn-primary',
+                            keys: ['enter']
+                        }
+                    }
+                });
+            })
+
         });
 
         $('#js_tst_deposit').click(function(event){
@@ -699,6 +730,27 @@
         function deleteItem(thistag){
             if(confirm("Bạn chắc chắn muốn xóa item này?")==true){
                 $(thistag).parent().parent().remove();
+            }
+        }
+
+
+
+        function update_tst_lock(element){
+            let preStatus = $(element).prop('checked');
+            let URL = $(element).attr('data-url-lock');
+            if(URL){
+                $.ajax({
+                    url:URL,
+                    success:function(results){
+                        if(results.code == 200) {
+                            location.reload();
+                        }
+                        console.log(results)
+                    },
+                    error:function(error){
+                        console.log(error.messages);
+                    }
+                });
             }
         }
     </script>

@@ -76,6 +76,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('update-money-transport/{id}', [AdminTransactionController::class, 'updateMoneyTransport'])->name('admin.transaction.update.money.transport');
             Route::get('update-success-date/{id}', [AdminTransactionController::class, 'updateSuccessDate'])->name('admin.transaction.update.success.date');
             Route::get('convert-deposit/{id}', [AdminTransactionController::class, 'convertDeposit'])->name('admin.transaction.convert.deposit');
+            Route::get('update-lock-transaction/{id}', [AdminTransactionController::class, 'updateLockTransaction'])->name('admin.transaction.update.lock');
             Route::get('update-transport-id-bao/{id}', [AdminTransactionController::class, 'updateTransportIdBao'])->name('admin.update.transport.id.bao');
             Route::get('order-delete/{id}', [AdminTransactionController::class, 'order_detail_delete'])->name('admin.order_detail.delete');
             Route::get('action/{action}/{id}', [AdminTransactionController::class, 'getAction'])->name('admin.transaction.action');
