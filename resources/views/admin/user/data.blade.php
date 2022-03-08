@@ -25,6 +25,7 @@
                     <td>{{ Config::get('contants.GET_NAME_ROLE.'.$item->role, '[N\A]') }}</td>
                     <td>{{ $item->created_at }}</td>
                     <td>
+                        <a href="{{ route('admin.user.detail',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
                         <a href="{{ route('admin.user.update',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i> Edit</a>
                         <a href="{{ route('admin.user.delete',$item->id) }}" class="btn btn-xs btn-danger js-delete-confirm"><i class="fa fa-trash"></i> Delete</a>
                     </td>

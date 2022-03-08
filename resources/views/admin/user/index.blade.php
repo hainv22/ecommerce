@@ -21,12 +21,14 @@
               <div class="box-header">
                   <h3 class="box-title"><a href="{{ route('admin.user.create') }}" class="btn btn-primary">Thêm mới </a></h3>
                 <div class="box-tools">
-                  <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-                    <div class="input-group-btn">
-                      <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                    </div>
-                  </div>
+                    <form action="" method="GET" class="form-inline">
+                      <div class="input-group input-group-sm" style="width: 150px;">
+                          <input type="text" value="{{ Request::get('email') }}" class="form-control" name="email" placeholder="nhập">
+                        <div class="input-group-btn">
+                          <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </div>
+                      </div>
+                    </form>
                 </div>
               </div>
               <!-- /.box-header -->
