@@ -14,11 +14,20 @@ use Illuminate\Support\Str;
 
 class AdminUserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $user = User::paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
+        $user = User::query();
+        if ($email = $request->email) {
+            $user->where('email', 'like', '%' . $request->email . '%')
+                ->orwhere('name', 'like', '%' . $request->email . '%')
+                ->orwhere('phone', 'like', '%' . $request->email . '%');
+        }
+
+        $user = $user->orderByDesc('id')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
+
         $viewData = [
-            'user'  => $user
+            'user'  => $user,
+            'query'         =>  $request->query()
         ];
         return view('admin.user.index', $viewData);
     }
@@ -71,6 +80,8 @@ class AdminUserController extends Controller
 
         if(!empty($_POST['password'])) {
             $data['password'] = Hash::make($request->password);
+        }else{
+            $data['password'] = $user['password'];
         }
 
         $user->update($data);
@@ -106,5 +117,14 @@ class AdminUserController extends Controller
             'message'   => 'Xóa user thành công !'
         ]);
         return redirect()->back();
+    }
+
+    public function showDetail(Request $request,$id)
+    {
+        $user = User::findOrFail($id);
+        $viewData = [
+            'user' => $user,
+        ];
+        return view('admin.user.detail', $viewData);
     }
 }
