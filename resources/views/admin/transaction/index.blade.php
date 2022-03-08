@@ -51,9 +51,10 @@
                       <th>ID</th>
                       <th>Info</th>
                       {{-- <th>Account</th> --}}
-                      <th>Money</th>
-                      <th>Status</th>
-                      <th>Phương thức TT</th>
+                        <th>Money</th>
+                        <th>Trạng thái thanh toán</th>
+                        <th>Status</th>
+                        <th>Trạng thái lock</th>
                       <th>Time</th>
                       <th>Action</th>
                     </tr>
@@ -69,50 +70,80 @@
                                         <li>Address: {{ $item->user->address }}</li>
                                     </ul>
                                 </td>
-                                {{-- <td>
-                                    @if ($item->tst_user_id)
-                                        <span class="label label-warning">Thành Viên</span>
-                                    @else
-                                        <span class="label label-default">Khách</span>
-                                    @endif
-                                </td> --}}
-                                <td>{{ number_format($item->tst_total_money,0,',','.') }}</td>
+
+                                <td>
+                                    <ul>
+                                    <?php
+                                        $total_transport = 0;
+                                        $check_money = false;
+                                        $check_money_transport = false;
+                                        if($item->tst_total_paid == $item->tst_total_money) {
+                                            $check_money = true;
+                                        }
+                                        foreach ($item->baos as $bao) {
+                                            if(!empty($bao->b_success_date)) {
+                                                $total_transport += ($bao->b_weight * $bao->b_fee);
+                                            } else {
+                                                $total_transport += ($bao->b_weight * $bao->transport->tp_fee);
+                                            }
+                                        }
+                                        if($item->total_transport_paid - $total_transport == 0) {
+                                            $check_money_transport = true;
+                                        }
+                                    ?>
+                                        <li>Tiền hàng: {{ number_format($item->tst_total_money,0,',','.') }}</li>
+                                        <li>Tiền vận chuyển: {{ number_format($total_transport,0,',','.') }}</li>
+                                    <li>Tổng :
+                                        <span class="label label-success">
+                                       {{ number_format($item->tst_total_money + $total_transport,0,',','.') }}
+                                    </span></li>
+                                    </ul>
+                                </td>
+                                <td>
+                                        @if($check_money && $check_money_transport)
+                                            <span class="label label-info">
+                                                Đã thanh toán hết
+                                            </span>
+                                        @else
+                                            <span class="label label-danger">
+                                                Chưa Thanh Toán Xong
+                                            </span>
+                                        @endif
+                                </td>
                                 <td>
                                     <span class="label label-{{ $item->getStatus($item->tst_status)['class'] }}">
                                         {{ $item->getStatus($item->tst_status)['name'] }}
                                     </span>
                                 </td>
                                 <td>
-                                    <span class="label label-{{ $item->tst_type == config('contants.PTTT.THUONG') ? 'info' : 'success' }}">
-                                        {{ $item->tst_type == config('contants.PTTT.THUONG') ? 'Thường' : 'Online' }}
-                                    </span>
+                                    <input type="checkbox" data-url-lock="{{route('admin.transaction.update.lock', $item->id)}}" onchange="update_tst_lock(this)" id="js_update_tst_lock" {{$item->tst_lock ==1 ? 'checked' : ''}} data-toggle="toggle" data-onstyle="danger" data-width="50" data-height="40">
                                 </td>
                                 <td>{{ date("d/m/Y H:i:s", strtotime($item->created_at)) }}</td>
                                 <td>
-                                    <a href="{{ route('admin.transaction.detail',$item->id) }}" class="btn btn-xs btn-info js-preview-transaction"><i class="fa fa-eye"></i>View</a>
+                                    <a href="{{ route('admin.transaction.detail',$item->id) }}" class="btn btn-md btn-info js-preview-transaction"><i class="fa fa-eye"></i>View</a>
 
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-success btn-xs">Action</button>
-                                        <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                            <span class="caret"></span>
-                                            <span class="sr-only">Toggle Dropdown</span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a href="{{ route('admin.transaction.delete',$item->id) }}" class=""><i class="fa fa-trash js-delete-confirm"></i> Delete</a>
-                                            </li>
-                                            <li class="divider"></li>
-                                            <li>
-                                                <a href="{{ route('admin.transaction.action',['process',$item->id]) }}"><i class="fa fa-ban"> Đang Vận Chuyển</i></a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ route('admin.transaction.action',['success',$item->id]) }}"><i class="fa fa-ban"> Đã Bàn Giao</i></a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ route('admin.transaction.action',['cancel',$item->id]) }}"><i class="fa fa-ban"> Hủy</i></a>
-                                            </li>
-                                        </ul>
-                                    </div>
+{{--                                    <div class="btn-group">--}}
+{{--                                        <button type="button" class="btn btn-success btn-xs">Action</button>--}}
+{{--                                        <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">--}}
+{{--                                            <span class="caret"></span>--}}
+{{--                                            <span class="sr-only">Toggle Dropdown</span>--}}
+{{--                                        </button>--}}
+{{--                                        <ul class="dropdown-menu">--}}
+{{--                                            <li>--}}
+{{--                                                <a href="{{ route('admin.transaction.delete',$item->id) }}" class=""><i class="fa fa-trash js-delete-confirm"></i> Delete</a>--}}
+{{--                                            </li>--}}
+{{--                                            <li class="divider"></li>--}}
+{{--                                            <li>--}}
+{{--                                                <a href="{{ route('admin.transaction.action',['process',$item->id]) }}"><i class="fa fa-ban"> Đang Vận Chuyển</i></a>--}}
+{{--                                            </li>--}}
+{{--                                            <li>--}}
+{{--                                                <a href="{{ route('admin.transaction.action',['success',$item->id]) }}"><i class="fa fa-ban"> Đã Bàn Giao</i></a>--}}
+{{--                                            </li>--}}
+{{--                                            <li>--}}
+{{--                                                <a href="{{ route('admin.transaction.action',['cancel',$item->id]) }}"><i class="fa fa-ban"> Hủy</i></a>--}}
+{{--                                            </li>--}}
+{{--                                        </ul>--}}
+{{--                                    </div>--}}
                                 </td>
                             </tr>
                         @endforeach
@@ -131,64 +162,33 @@
     <!-- Main row -->
     <!-- /.row (main row) -->
   </section>
-    {{--  <div class="modal fade fade" id="modal-preview-transaction" >
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title">Chi Tiết Đơn hàng <b></b></h4>
-                </div>
-                <div class="modal-body">
-                    <div class="content">
 
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>  --}}
-  <!-- /.content -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/css/fileinput.css"  />
+<script src="https://code.jquery.com/jquery-3.2.1.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/js/fileinput.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/themes/fa/theme.js" ></script>
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 @endsection
-{{--  @section('script')
+@section('script')
     <script>
-        $('.js-preview-transaction').click(function(e){
-            e.preventDefault();
-            let $this=$(this);
-            let URL=$this.attr('href');
-            $.ajax({
-                url:URL,
-                success:function(results){
-                    $('#modal-preview-transaction .content').html(results.html)
-                    $('#modal-preview-transaction').modal({
-                        show:true
-                    });
-                },
-                error:function(e){
-                    console.log(e.message);
-                }
-            });
-        });
-        $('body').on('click','.js-delete-order-item',function(event){
-            event.preventDefault();
-            let URL=$(this).attr('href');
-            let $this=$(this);
-            $.ajax({
-                url:URL,
-                success:function(results){
-                    if(results.code==200){
-                        $this.parents('tr').remove();
+        function update_tst_lock(element) {
+            let preStatus = $(element).prop('checked');
+            let URL = $(element).attr('data-url-lock');
+            if (URL) {
+                $.ajax({
+                    url: URL,
+                    success: function (results) {
+                        if (results.code == 200) {
+                            location.reload();
+                        }
+                        console.log(results)
+                    },
+                    error: function (error) {
+                        console.log(error.messages);
                     }
-                },
-                error:function(e){
-                    console.log(e.message);
-                }
-            })
-        });
+                });
+            }
+        }
     </script>
-@endsection  --}}
+@endsection
