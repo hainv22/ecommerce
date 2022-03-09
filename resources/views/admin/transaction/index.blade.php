@@ -68,6 +68,7 @@
                                         <li>Email: {{ $item->user->email }}</li>
                                         <li>Phone: {{ $item->user->phone }}</li>
                                         <li>Address: {{ $item->user->address }}</li>
+                                        <a href="{{ route('admin.user.detail',$item->user->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
                                     </ul>
                                 </td>
 

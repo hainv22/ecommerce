@@ -33,7 +33,9 @@
                                     </tr>
                                     <tr>
                                         <td>Tên KH</td>
-                                        <td><span >{{ $transaction->user->name }}</span></td>
+                                        <td><span >{{ $transaction->user->name }}</span> <br>
+                                            <a href="{{ route('admin.user.detail',$transaction->user->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>Email KH</td>

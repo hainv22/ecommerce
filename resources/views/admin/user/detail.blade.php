@@ -83,6 +83,59 @@
                 </div>
 
                 <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">Thông Tin Khách Hàng</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body no-padding">
+                            <form action="" method="post">
+                                @csrf
+                                <table class="table table-striped">
+                                    <tbody>
+                                    <tr>
+                                        <th style="width: 30%">Thuộc Tính</th>
+                                        <th>Giá Trị</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Danh sách đơn hàng khách đặt</td>
+                                        <td>
+                                            <a href="{{ route('admin.transaction.index') }}?user_id={{$user->id}}" class="btn btn-warning"><i class="fa fa"></i> Click để xem danh sách đơn hàng khác đã đặt</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tất cả Tiền hàng của khách</td>
+                                        <td>
+                                            Tổng số tiền Khách đã chi vào cửa hàng:
+                                            <span class="js_tst_money">{{number_format($total_money_user,0,',','.') }}</span> đ
+                                            <br>
+                                            Tổng số tiền khách đã trả:
+                                            <span class="js_tst_total_paid">{{number_format($total_money_paid,0,',','.')}}</span> đ
+                                            <br/>
+                                            Tổng số khách Còn nợ:
+                                            <span class="js_tst_money_verb">{{number_format($total_money_user - $total_money_paid, 0,',','.')}} đ</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tất cả Tiền vận chuyển</td>
+                                        <td>
+                                            Tổng số tiền Khách đã chi vào cửa hàng:
+                                            <span class="js_tst_money">{{number_format($total_transport,0,',','.') }}</span> đ
+                                            <br>
+                                            Tổng số tiền khách đã trả:
+                                            <span class="js_tst_total_paid">{{number_format($total_money_transport_paid,0,',','.')}}</span> đ
+                                            <br/>
+                                            Tổng số khách Còn nợ:
+                                            <span class="js_tst_money_verb">{{number_format($total_transport - $total_money_transport_paid, 0,',','.')}} đ</span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
                     <div class="box-footer" style="text-align: center;">
                         <a href="{{ route('admin.product.index') }}" class="btn btn-danger"><i class="fa fa-undo"></i> Trở Lại</a>
                         <a href="{{ route('admin.user.update',$user->id) }}" class="btn btn-primary"><i class="fa fa-pencil"></i> Edit</a>

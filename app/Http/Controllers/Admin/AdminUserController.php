@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminUserRequest;
+use App\Models\Bao;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\User;
@@ -122,8 +123,31 @@ class AdminUserController extends Controller
     public function showDetail(Request $request,$id)
     {
         $user = User::findOrFail($id);
+        $total_money_user = Transaction::where('tst_user_id', $id)->sum('tst_total_money');
+        $total_money_paid = Transaction::where('tst_user_id', $id)->sum('tst_total_paid');
+        $total_money_transport_paid = Transaction::where('tst_user_id', $id)->sum('total_transport_paid');
+        $transactions = Transaction::where('tst_user_id', $id)->get();
+        $total_transport_success = 0;
+        $total_transport = 0;
+        foreach ($transactions as $transaction) {
+            $transport_success = Bao::where('b_transaction_id', $transaction->id)->whereNotNull('b_success_date')->get();
+            foreach ($transport_success as $item) {
+                $total_transport_success += ($item->b_weight * $item->b_fee);
+            }
+
+            $transport_pending = Bao::with('transport')->where('b_transaction_id', $transaction->id)->whereNull('b_success_date')->get();
+            foreach ($transport_pending as $item) {
+                $total_transport += ($item->b_weight * $item->transport->tp_fee);
+            }
+        }
+
+        $total_transport +=$total_transport_success;
         $viewData = [
             'user' => $user,
+            'total_money_user' => $total_money_user,
+            'total_money_paid' => $total_money_paid,
+            'total_money_transport_paid' => $total_money_transport_paid,
+            'total_transport' => $total_transport
         ];
         return view('admin.user.detail', $viewData);
     }
