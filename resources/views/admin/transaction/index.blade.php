@@ -121,29 +121,6 @@
                                 <td>{{ date("d/m/Y H:i:s", strtotime($item->created_at)) }}</td>
                                 <td>
                                     <a href="{{ route('admin.transaction.detail',$item->id) }}" class="btn btn-md btn-info js-preview-transaction"><i class="fa fa-eye"></i>View</a>
-
-{{--                                    <div class="btn-group">--}}
-{{--                                        <button type="button" class="btn btn-success btn-xs">Action</button>--}}
-{{--                                        <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">--}}
-{{--                                            <span class="caret"></span>--}}
-{{--                                            <span class="sr-only">Toggle Dropdown</span>--}}
-{{--                                        </button>--}}
-{{--                                        <ul class="dropdown-menu">--}}
-{{--                                            <li>--}}
-{{--                                                <a href="{{ route('admin.transaction.delete',$item->id) }}" class=""><i class="fa fa-trash js-delete-confirm"></i> Delete</a>--}}
-{{--                                            </li>--}}
-{{--                                            <li class="divider"></li>--}}
-{{--                                            <li>--}}
-{{--                                                <a href="{{ route('admin.transaction.action',['process',$item->id]) }}"><i class="fa fa-ban"> Đang Vận Chuyển</i></a>--}}
-{{--                                            </li>--}}
-{{--                                            <li>--}}
-{{--                                                <a href="{{ route('admin.transaction.action',['success',$item->id]) }}"><i class="fa fa-ban"> Đã Bàn Giao</i></a>--}}
-{{--                                            </li>--}}
-{{--                                            <li>--}}
-{{--                                                <a href="{{ route('admin.transaction.action',['cancel',$item->id]) }}"><i class="fa fa-ban"> Hủy</i></a>--}}
-{{--                                            </li>--}}
-{{--                                        </ul>--}}
-{{--                                    </div>--}}
                                 </td>
                             </tr>
                         @endforeach

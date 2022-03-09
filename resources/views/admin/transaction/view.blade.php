@@ -117,7 +117,11 @@
                                     </tr>
                                     <tr>
                                         <td>Trạng Thái</td>
-                                        <td><span class="badge bg-light-blue">{{ $transaction->getStatus($transaction->tst_status)['name'] }}</span></td>
+                                        <td>
+                                            <span class="label label-{{ $transaction->getStatus($transaction->tst_status)['class'] }}">
+                                                {{ $transaction->getStatus($transaction->tst_status)['name'] }}
+                                            </span>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>Tiền Hàng</td>
@@ -350,8 +354,16 @@
 
                 <div class="col-md-12">
                     <div class="box-footer" style="text-align: center;">
-                        <a href="{{ route('admin.transaction.index') }}" class="btn btn-danger"><i class="fa fa-undo"></i> Trở Lại</a>
-                        {{-- <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Submit</button> --}}
+                        <a href="{{ route('admin.transaction.index') }}" class="btn btn-info"><i class="fa fa-undo"></i> Trở Lại</a>
+                        @switch($transaction->tst_status)
+                            @case(1)
+                                <a href="{{ route('admin.transaction.action',['process',$transaction->id]) }}" class="btn btn-primary {{$transaction->tst_lock == 1 ? 'js_click_lock' : 'js-action-confirm'}}"><i class="fa"></i>Chuyển Đang vận chuyển</a>
+                                <a href="{{ route('admin.transaction.action',['cancel',$transaction->id]) }}" class="btn btn-danger {{$transaction->tst_lock == 1 ? 'js_click_lock' : 'js-action-confirm'}}"><i class="fa"></i>Chuyển Hủy</a>
+                                @break
+                            @case(2)
+                                <a href="{{ route('admin.transaction.action',['success',$transaction->id]) }}" class="btn btn-success {{$transaction->tst_lock == 1 ? 'js_click_lock' : 'js-action-confirm'}}"><i class="fa"></i>Chuyển Đã bàn giao</a>
+                                @break
+                        @endswitch
                     </div>
                 </div>
     </div>
@@ -444,6 +456,41 @@
 @endsection
 
 @section('script')
+    <script>
+        $(document).ready(function(){
+            $('.js-action-confirm').click(function(event){
+                event.preventDefault();
+                let URL=$(this).attr('href');
+                $.confirm({
+                    title: ' Bạn Muốn Chuyển trạng thái chứ ?',
+                    content: 'Đã chuyển là không quay lại được đâu !',
+                    type: 'red',
+                    buttons: {
+                        ok: {
+                            text: "ok!",
+                            btnClass: 'btn-primary',
+                            keys: ['enter'],
+                            action: function(){
+                                window.location.href=URL;
+                            }
+                        },
+                        cancel: function(){
+                            console.log('the user clicked cancel');
+                        }
+                    }
+                });
+            })
+        });
+
+        $(document).ready(function(){
+            $(document).on('click','#js-notification',function(e){
+                e.preventDefault();
+                // $('.total-message').html(0);
+                // console.log(1);
+            });
+        });
+
+    </script>
     <script>
         $(function(){
             let $data_this;

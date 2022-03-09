@@ -93,9 +93,9 @@ class AdminTransactionController extends Controller
                     ->where('id', $idProduct)
                     ->increment('pro_pay', $data['txt_quantity_product'][$key]);
             }
+            $total_bao = 0;
 
             if (!empty($data['b_weight'])) {
-                $total_bao = 0;
                 foreach ($data['b_weight'] as $key => $value) {
                     Bao::create([
                         'b_name' => $data['b_name'][$key],
@@ -109,11 +109,16 @@ class AdminTransactionController extends Controller
                     $total_bao += 1;
                 }
             }
+            $a = number_format($total_products,0,',','.');
+            $b = number_format($total_money,0,',','.');
+            $c = number_format($data['tst_deposit'],0,',','.');
+            $d = number_format($total_bao,0,',','.');
 
             if ($transaction) {
                 TransactionHistory::create([
                     'th_transaction_id' => $transaction->id,
-                    'th_content' => "tạo đơn hàng thành công"
+                    'th_content' => "tạo đơn hàng thành công:  Tổng số sản phẩm: $a,
+                    Tổng số tiền: $b, Số tiền đặt cọc: {$c}, Tổng số bao: $d"
                 ]);
             }
             DB::commit();
@@ -289,33 +294,46 @@ class AdminTransactionController extends Controller
         return view('admin.transaction.view', compact('transaction', 'order', 'total_transport', 'transports'));
     }
 
-    public function getAction($action, $id)
+    public function getAction(Request $request, $action, $id)
     {
         $transaction = Transaction::find($id);
         if ($transaction) {
             if($transaction->tst_status != -1) {
+                $content = '';
                 switch ($action) {
                     case 'process':
                         $transaction->tst_status = 2;
+                        $content = 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển';
                         break;
                     case 'success':
+                        $content = 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao';
                         $transaction->tst_status = 3;
                         break;
                     case 'cancel':
                         $transaction->tst_status = -1;
+                        $content = 'Đã chuyển đơn hàng từ Tiếp nhận -> Đã hủy';
                         DB::beginTransaction();
                         try {
                             $orders = Order::where('od_transaction_id', $id)->get();
                             foreach ($orders as $order) {
                                 Product::where('id',$order->od_product_id)->decrement('pro_pay', $order->od_qty);
-                                // Product::where('id',$order->od_product_id)->decrement('pro_number', $order->od_qty);
                             }
                         } catch (\Exception $e) {
                             DB::rollBack();
                             return redirect()->back();
                         }
                         DB::commit();
+                        $request->session()->flash('toastr', [
+                            'type'      => 'success',
+                            'message'   => 'Cập nhật thành công !'
+                        ]);
                         break;
+                }
+                if(!empty($content)) {
+                    TransactionHistory::create([
+                        'th_transaction_id' => $id,
+                        'th_content' => $content
+                    ]);
                 }
                 $transaction->save();
             }
@@ -413,7 +431,13 @@ class AdminTransactionController extends Controller
         try {
             $transaction = Transaction::findOrfail($id);
             $tst_total_paid_old = $transaction->tst_total_paid;
-
+            if ((int)$request->value + $tst_total_paid_old > $transaction->tst_total_money) {
+                return response([
+                    'code' => 400,
+                    'message' => 'số trả nhiều hơn số nợ!',
+                    'data' => ''
+                ]);
+            }
             $tst_total_money_old = number_format($transaction->tst_total_money,0,',','.');
             $so_tien_no_cuoi_cu = number_format($transaction->tst_total_money - $transaction->tst_total_paid,0,',','.');
             $tst_total_money_new_format = number_format($transaction->tst_total_money - (int)$request->value - $transaction->tst_total_paid,0,',','.');
@@ -438,6 +462,10 @@ class AdminTransactionController extends Controller
                 'data' => ''
             ]);
         }
+        $request->session()->flash('toastr', [
+            'type'      => "success",
+            'message'   => "Update số tiền thành công"
+        ]);
         return response([
             'code' => 200,
             'message' => 'Update số tiền thành công',
@@ -468,6 +496,13 @@ class AdminTransactionController extends Controller
             $so_tien_con_no_format = number_format($total_transport - $tst_total_transport_new,0,',','.');
             $tst_total_transport_new_format = number_format($tst_total_transport_new,0,',','.');
             $value_format = number_format($request->value,0,',','.');
+            if ((int)$request->value > $total_transport - $transaction->total_transport_paid) {
+                return response([
+                    'code' => 400,
+                    'message' => 'số trả nhiều hơn số nợ!',
+                    'data' => ''
+                ]);
+            }
             $transaction->update([
                 'total_transport_paid' => $tst_total_transport_new
             ]);
@@ -488,6 +523,10 @@ class AdminTransactionController extends Controller
                 'data' => ''
             ]);
         }
+        $request->session()->flash('toastr', [
+            'type'      => "success",
+            'message'   => "Update số tiền thành công"
+        ]);
         return response([
             'code' => 200,
             'message' => 'Update số tiền thành công',
@@ -555,9 +594,13 @@ class AdminTransactionController extends Controller
             $transaction->update([
                 'tst_lock' => !$transaction->tst_lock
             ]);
-            TransactionHistory::create([
-                'th_transaction_id' => $id,
-                'th_content' => $transaction->tst_lock == 1 ? "Đã khóa transaction" : "Đã mở khóa transaction"
+//            TransactionHistory::create([
+//                'th_transaction_id' => $id,
+//                'th_content' => $transaction->tst_lock == 1 ? "Đã khóa transaction" : "Đã mở khóa transaction"
+//            ]);
+            $request->session()->flash('toastr', [
+                'type'      => $transaction->tst_lock == 1 ? "success" : "warning",
+                'message'   => $transaction->tst_lock == 1 ? "Đã khóa transaction" : "Đã mở khóa transaction"
             ]);
 
             DB::commit();
