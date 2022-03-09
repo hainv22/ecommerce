@@ -18,4 +18,10 @@
         </td>
     </tr>
     @endforeach
+    <tr>
+        <td></td>
+        <td class="cls_td">
+            <div>{!! $products->appends($query ?? [])->links() !!}</div>
+        </td>
+    </tr>
 @endisset

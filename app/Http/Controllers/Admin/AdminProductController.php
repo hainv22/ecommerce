@@ -49,7 +49,7 @@ class AdminProductController extends Controller
             $products->where('id', $id);
         }
         if ($name = strtolower($this->stripVN($request->name))) {
-            $products->where('pro_name', 'like', '%' . $request->name . '%')->orWhere('pro_price', 'like', '%' . $request->name . '%');
+            $products->where('pro_name', 'like', '%' . $name . '%')->orWhere('pro_price', 'like', '%' . $name . '%');
         }
         if ($idCategory = $request->category) {
             $categorySearch = Category::where('c_parent_id', $parentId = Category::where('id', $idCategory)

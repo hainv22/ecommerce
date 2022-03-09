@@ -380,6 +380,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Modal Header</h4>
+                <input type="text" name="table_search" class="form-control pull-right ajax-search-product" placeholder="name hoặc giá" data-url="{{ route('admin.product.index') }}">
             </div>
             <div class="modal-body" id="data_modal">
                 <div class="box-body table-responsive no-padding">
@@ -802,5 +803,44 @@
                 });
             }
         }
+
+        $(document).ready(function(){
+            $('body').on('click','.pagination a',function(e){
+                e.preventDefault();
+                $('li').removeClass('active');
+                $(this).parent('li').addClass('active');
+                var URL = $(this).attr('href');
+                getPosts(URL);
+            });
+            function getPosts(URL){
+                $.ajax({
+                    url:URL,
+                    type:"GET",
+                    data:{
+                        transaction_get_products: 1
+                    },
+                    success:function(results){
+                        $('#body_list_products').html(results.data);
+                    },
+                    error:function(error){
+                        console.log(error.messages);
+                    }
+                });
+            }
+
+            $(document).on('keyup','.ajax-search-product',function(e){
+                e.preventDefault();
+                var URL = $(this).attr('data-url');
+                var res = $(this).val();
+                $.ajax({
+                    url:URL,
+                    type:"GET",
+                    data:{name:res,transaction_get_products: 1},
+                    success:function(results){
+                        $('#body_list_products').html(results.data);
+                    }
+                });
+            });
+        });
     </script>
 @endsection
