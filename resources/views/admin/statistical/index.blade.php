@@ -26,12 +26,12 @@
                     <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
                      <button type="submit" name="export" value="true" class="btn btn-info">
                         <i class="fa fa-save"> </i> Export
-                    </button> 
+                    </button>
                 </form>
             </div><br> --}}
             <figure class="highcharts-figure">
-                <div id="container2" 
-                data-list-day="{{ $listDay }}" 
+                <div id="container2"
+                data-list-day="{{ $listDay }}"
                 data-money-default="{{ $arrRevenueTransactionMonthDefault }}"
                 data-money-process="{{ $arrRevenueTransactionMonthProcess }}"
                 data-money-success="{{ $arrRevenueTransactionMonthSuccess }}"
@@ -45,7 +45,7 @@
                 <div id="container" data-json="{{ $statusTransaction }}"></div>
             </figure>
         </div>
-    </div> 
+    </div>
     <div class="row" style="margin-bottom: 20px">
         <div class="col-md-7">
             <div class="box box-success">
@@ -62,8 +62,8 @@
                         <span style="color: red">Không chọn gì mặc định lấy các ngày trong tháng và năm hiện tại.</span>
                         <div class="box-title">
                             <form action="" method="GET" class="form-inline">
-                                <input type="date" value="{{Request::get('dateBefore')}}" name="dateBefore" class="form-control" id="validationCustom01">
-                                <input type="date" value="{{Request::get('dateAfter')}}" name="dateAfter" class="form-control {{ $errors->first('dateAfter') ? 'is-valid' : '' }}" id="validationCustom01">
+{{--                                <input type="date" value="{{Request::get('dateBefore')}}" name="dateBefore" class="form-control" id="validationCustom01">--}}
+{{--                                <input type="date" value="{{Request::get('dateAfter')}}" name="dateAfter" class="form-control {{ $errors->first('dateAfter') ? 'is-valid' : '' }}" id="validationCustom01">--}}
                                 @if ($errors->first('dateAfter'))
                                     <span class="text-danger">{{ $errors->first('dateAfter') }}</span>
                                 @endif
@@ -81,8 +81,6 @@
                                 </select>
                                 <select name="year" class="form-control">
                                     <option value="">_ Năm _</option>
-                                    <option value="2019" {{ Request::get('year') == 2019 ? "selected='selected'" : "" }}>Năm 2019</option>
-                                    <option value="2020" {{ Request::get('year') == 2020 ? "selected='selected'" : "" }}>Năm 2020</option>
                                     <option value="2021" {{ Request::get('year') == 2021 ? "selected='selected'" : "" }}>Năm 2021</option>
                                     <option value="2022" {{ Request::get('year') == 2022 ? "selected='selected'" : "" }}>Năm 2022</option>
                                     <option value="2023" {{ Request::get('year') == 2023 ? "selected='selected'" : "" }}>Năm 2023</option>
@@ -107,7 +105,7 @@
                                         <tr>
                                             <td>{{ $item->id }}</td>
                                             <td>{{ number_format($item->totalMoney,0,',','.') }} vnd</td>
-                                            <td> 
+                                            <td>
                                                 @if (!(empty(Request::get('year'))) && empty(Request::get('day')) && empty(Request::get('month')))
                                                     Tháng {{ $item->day }} Năm {{Request::get('year')}}
                                                 @else
@@ -159,6 +157,8 @@
                                                     <li>Email: {{ $item->user->email }}</li>
                                                     <li>Phone: {{ $item->user->phone }}</li>
                                                     <li>Address: {{ $item->user->address }}</li>
+                                                    <a href="{{ route('admin.user.detail',$item->user->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
+
                                                 </ul>
                                             </td>
                                             <td>{{ number_format($item->totalMoney , 0, ',', '.') }} vnđ</td>
@@ -170,7 +170,7 @@
                     </div>
                 </div>
                 {{-- <div class="box-footer clearfix" style="">
-                     <a href="{{ route('admin.transaction.index') }}" class="btn btn-sm btn-info btn-flat pull-right">Danh Sách</a> 
+                     <a href="{{ route('admin.transaction.index') }}" class="btn btn-sm btn-info btn-flat pull-right">Danh Sách</a>
                 </div> --}}
             </div>
         </div>
@@ -338,4 +338,4 @@
             ]
         });
     </script>
-@endsection 
+@endsection

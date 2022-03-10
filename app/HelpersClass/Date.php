@@ -4,11 +4,11 @@ namespace App\HelpersClass;
 
 class Date
 {
-    public static function getListDayInMonth($month)
+    public static function getListDayInMonth($month, $year)
     {
         $arrayDay = [];
         $month = $month;
-        $year = date('Y');
+        $year = $year;
 
         // lay tat ca cac ngay trong thang
         for ($day = 1; $day <= 31; $day++) {
