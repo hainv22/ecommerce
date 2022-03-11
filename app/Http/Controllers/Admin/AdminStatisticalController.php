@@ -130,7 +130,7 @@ class AdminStatisticalController extends Controller
         $transactionCancel = 0;
 
 
-
+        $productsTop = Order::with('product');
 
 
         $revenueTransactionMonthDefault = Transaction::query();
@@ -163,6 +163,7 @@ class AdminStatisticalController extends Controller
         $year = date('Y');
 
         if ($request->month) {
+            $productsTop->whereMonth('created_at', (int) $request->month);
             // doanh thu moi tiep nhan
             $revenueTransactionMonthDefault->whereMonth('tst_order_date', (int) $request->month);
             // doanh thu Đang vận chuyển
@@ -183,6 +184,7 @@ class AdminStatisticalController extends Controller
             $mt = $month . ' năm ' . $year;
         }
         if($request->year){
+            $productsTop->whereMonth('created_at', (int) $request->year);
             // doanh thu moi tiep nhan
             $revenueTransactionMonthDefault->whereYear('tst_order_date', (int) $request->year);
             // doanh thu Đang vận chuyển
@@ -205,6 +207,7 @@ class AdminStatisticalController extends Controller
         if(!($request->year) && !($request->month)){
             $month = date('m');
             $year = date('Y');
+            $productsTop->whereMonth('created_at', (int) $month)->whereYear('created_at', (int) $year);
             // doanh thu moi tiep nhan
             $revenueTransactionMonthDefault->whereMonth('tst_order_date', date('m'))->whereYear('tst_order_date', (int) $year);
             // doanh thu Đang vận chuyển
@@ -320,8 +323,7 @@ class AdminStatisticalController extends Controller
         // ->groupBy('day')
         // ->get();
         // top product t7
-        $productsT7 = Order::with('product')->whereMonth('created_at', 7)
-            ->select(DB::raw('sum(od_qty) as total, od_product_id'))
+        $productsTop = $productsTop->select(DB::raw('sum(od_qty) as total, od_product_id'))
             ->groupBy('od_product_id')
             ->orderBy('total', 'DESC')
             ->take(5)
@@ -350,7 +352,7 @@ class AdminStatisticalController extends Controller
             'arrRevenueTransactionMonthProcess' => json_encode($arrRevenueTransactionMonthProcess),
             'arrRevenueTransactionMonthSuccess' => json_encode($arrRevenueTransactionMonthSuccess),
             'arrRevenueTransactionMonthCancel' => json_encode($arrRevenueTransactionMonthCancel),
-            'productsT7' => $productsT7,
+            'productsT7' => $productsTop,
         ];
         return view('admin.statistical.index', $viewData);
     }
