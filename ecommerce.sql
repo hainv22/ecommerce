@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: mysql:3306
--- Thời gian đã tạo: Th3 11, 2022 lúc 03:18 PM
+-- Thời gian đã tạo: Th3 14, 2022 lúc 02:29 PM
 -- Phiên bản máy phục vụ: 5.7.36
 -- Phiên bản PHP: 7.4.20
 
@@ -74,7 +74,8 @@ CREATE TABLE `categories` (
 
 INSERT INTO `categories` (`id`, `c_name`, `c_parent_id`, `c_avatar`, `c_description`, `c_hot`, `c_status`, `created_at`, `updated_at`) VALUES
 (1, 'Túi Xách Nữ', 0, NULL, NULL, 0, 1, '2022-03-11 20:31:32', '2022-03-11 20:33:05'),
-(3, 'Ví Nhỏ Nữ', 0, NULL, NULL, 0, 1, '2022-03-11 20:32:29', '2022-03-11 20:33:17');
+(3, 'Ví Nhỏ Nữ', 0, NULL, NULL, 0, 1, '2022-03-11 20:32:29', '2022-03-11 20:33:17'),
+(4, 'Balo Học Sinh', 0, NULL, NULL, 0, 1, '2022-03-14 20:39:05', '2022-03-14 20:39:05');
 
 -- --------------------------------------------------------
 
@@ -170,7 +171,7 @@ INSERT INTO `orders` (`id`, `od_transaction_id`, `od_product_id`, `od_sale`, `od
 (2, 1, 5, 0, 30, 123500, '2022-03-11 21:46:12', '2022-03-11 21:46:12', NULL),
 (3, 1, 3, 0, 25, 201000, '2022-03-11 21:46:12', '2022-03-11 21:46:12', NULL),
 (4, 1, 2, 0, 30, 127000, '2022-03-11 21:46:12', '2022-03-11 21:46:12', NULL),
-(5, 1, 1, 0, 25, 115000, '2022-03-11 21:46:12', '2022-03-11 21:46:12', NULL),
+(5, 1, 1, 0, 25, 115500, '2022-03-11 21:46:12', '2022-03-11 21:46:12', NULL),
 (6, 1, 7, 0, 30, 71500, '2022-03-11 21:46:12', '2022-03-11 21:46:12', NULL),
 (7, 1, 9, 0, 20, 71500, '2022-03-11 21:46:12', '2022-03-11 21:46:12', NULL),
 (8, 1, 11, 0, 30, 71500, '2022-03-11 21:46:12', '2022-03-11 21:46:12', NULL),
@@ -178,7 +179,11 @@ INSERT INTO `orders` (`id`, `od_transaction_id`, `od_product_id`, `od_sale`, `od
 (10, 1, 12, 0, 30, 58000, '2022-03-11 21:46:12', '2022-03-11 21:46:12', NULL),
 (11, 1, 8, 0, 30, 58000, '2022-03-11 21:46:12', '2022-03-11 21:46:12', NULL),
 (12, 1, 10, 0, 30, 62000, '2022-03-11 21:46:12', '2022-03-11 21:46:12', NULL),
-(13, 1, 6, 0, 30, 146500, '2022-03-11 21:46:12', '2022-03-11 21:46:12', NULL);
+(13, 1, 6, 0, 30, 146500, '2022-03-11 21:46:12', '2022-03-11 21:46:12', NULL),
+(14, 2, 14, 0, 10, 58500, '2022-03-14 20:44:51', '2022-03-14 20:44:51', NULL),
+(15, 2, 17, 0, 4, 72000, '2022-03-14 20:44:51', '2022-03-14 20:44:51', NULL),
+(16, 2, 16, 0, 9, 152000, '2022-03-14 20:44:51', '2022-03-14 20:44:51', NULL),
+(17, 2, 15, 0, 3, 165000, '2022-03-14 20:44:51', '2022-03-14 20:44:51', NULL);
 
 -- --------------------------------------------------------
 
@@ -240,19 +245,23 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `pro_name`, `pro_category_id`, `pro_user_id`, `pro_price`, `pro_sale`, `pro_avatar`, `pro_hot`, `pro_active`, `pro_pay`, `pro_description`, `pro_content`, `pro_number`, `pro_country`, `created_at`, `updated_at`) VALUES
-(1, 'Túi 1123', 1, 1, 115000, 0, '2022-03-11__59492cc416e7d9b980f6.jpg', 0, 1, 25, '115000', '115000', 999999999, 1, '2022-03-11 20:40:57', '2022-03-11 20:40:57'),
+(1, 'Túi 1123', 1, 1, 115000, 0, '2022-03-11__59492cc416e7d9b980f6.jpg', 0, 1, 25, '115500', '115000', 999999999, 1, '2022-03-11 20:40:57', '2022-03-13 17:36:04'),
 (2, 'Túi 2126', 1, 1, 127000, 0, '2022-03-11__7e58dec3e4e02bbe72f1.jpg', 0, 1, 30, '127000', '127000', 999999999, 1, '2022-03-11 20:42:55', '2022-03-11 20:42:55'),
 (3, 'Túi 3114', 1, 1, 201000, 0, '2022-03-11__069920021a21d57f8c30.jpg', 0, 1, 25, '201000', '201000', 999999999, 1, '2022-03-11 20:46:48', '2022-03-11 20:46:48'),
 (4, 'Túi 5019', 1, 1, 135000, 0, '2022-03-11__c3d06f78555b9a05c34a.jpg', 0, 1, 43, '135000', '135000', 999999999, 1, '2022-03-11 20:51:29', '2022-03-11 20:51:29'),
 (5, 'Túi 035203', 1, 1, 123500, 0, '2022-03-11__1b8c2838121bdd45840a.jpg', 0, 1, 30, '123500', '123500', 999999999, 1, '2022-03-11 20:53:01', '2022-03-11 20:53:01'),
 (6, 'túi 030459', 1, 1, 146500, 0, '2022-03-11__d9b27db4469789c9d086.jpg', 0, 1, 30, '146500', '146500', 999999999, 1, '2022-03-11 21:04:27', '2022-03-11 21:04:27'),
-(7, 'Ví 63001-003', 3, 1, 71500, 0, '2022-03-11__f81114f79dd4528a0bc5.jpg', 0, 1, 30, '71500', '71500', 999999999, 1, '2022-03-11 21:05:47', '2022-03-11 21:05:47'),
+(7, 'Ví 6301-003', 3, 1, 71500, 0, '2022-03-11__f81114f79dd4528a0bc5.jpg', 0, 1, 30, '71500', '71500', 999999999, 1, '2022-03-11 21:05:47', '2022-03-13 17:19:11'),
 (8, 'ví 86125', 3, 1, 58000, 0, '2022-03-11__ed718d9204b1cbef92a0.jpg', 0, 1, 30, '58000', '58000', 999999999, 1, '2022-03-11 21:06:40', '2022-03-11 21:06:40'),
 (9, 'Ví 3676-247', 3, 1, 71500, 0, '2022-03-11__550ac0f749d4868adfc5.jpg', 0, 1, 20, '71500', '71500', 999999999, 1, '2022-03-11 21:07:36', '2022-03-11 21:07:36'),
 (10, 'ví 1135-003', 3, 1, 62000, 0, '2022-03-11__ebb70e4d876e4830117f.jpg', 0, 1, 30, '62000', '62000', 999999999, 1, '2022-03-11 21:08:53', '2022-03-11 21:08:53'),
 (11, 'ví 3676-242', 3, 1, 71500, 0, '2022-03-11__9efaef09662aa974f03b.jpg', 0, 1, 30, '71500', '71500', 999999999, 1, '2022-03-11 21:09:41', '2022-03-11 21:09:41'),
 (12, 'ví 005', 3, 1, 58000, 0, '2022-03-11__0fd7240cad2f62713b3e.jpg', 0, 1, 30, '58000', '58000', 999999999, 1, '2022-03-11 21:15:03', '2022-03-11 21:15:03'),
-(13, 'ví 9101', 3, 1, 56500, 0, '2022-03-11__0f03945d4c7e8320da6f.jpg', 0, 1, 30, '56500', '56500', 99999999, 1, '2022-03-11 21:19:30', '2022-03-11 21:19:30');
+(13, 'ví 9101', 3, 1, 56500, 0, '2022-03-11__0f03945d4c7e8320da6f.jpg', 0, 1, 30, '56500', '56500', 99999999, 1, '2022-03-11 21:19:30', '2022-03-11 21:19:30'),
+(14, 'balo học sinh lin', 4, 1, 58500, 0, '2022-03-14__ba4c21aa1a90d5ce8c81.jpg', 0, 1, 10, '58500', '58500', 999999999, 1, '2022-03-14 20:40:11', '2022-03-14 20:40:11'),
+(15, 'túi 56-149', 1, 1, 165000, 0, '2022-03-14__76a90f583462fb3ca273.jpg', 0, 1, 3, '165000', '165000', 999999999, 1, '2022-03-14 20:40:55', '2022-03-14 20:40:55'),
+(16, 'túi 9070', 1, 1, 152000, 0, '2022-03-14__51c58520be1a7144280b.jpg', 0, 1, 9, '152000', '152000', 999999999, 1, '2022-03-14 20:41:32', '2022-03-14 20:41:32'),
+(17, 'ví 2856', 3, 1, 72000, 0, '2022-03-14__e72efbdbc0e10fbf56f0.jpg', 0, 1, 4, '72000', '72000', 999999999, 1, '2022-03-14 20:42:20', '2022-03-14 20:42:20');
 
 -- --------------------------------------------------------
 
@@ -284,7 +293,8 @@ CREATE TABLE `transactions` (
 --
 
 INSERT INTO `transactions` (`id`, `tst_user_id`, `tst_total_money`, `tst_total_products`, `tst_note`, `tst_status`, `tst_type`, `created_at`, `updated_at`, `tst_transport_id`, `tst_total_paid`, `total_transport_paid`, `tst_order_date`, `tst_expected_date`, `tst_deposit`, `tst_lock`) VALUES
-(1, 2, 38370000, 383, 'Chành xe\r\n1420 võ văn kiệt -phường 1 -quận 6 -HCM\r\nXe quốc anh \r\n090 9550444', 2, 1, '2022-03-11 21:46:12', '2022-03-11 21:50:34', 1, 0, 0, '2022-03-03', '2022-03-20', 5000000, 1);
+(1, 2, 38382500, 383, 'Chành xe\r\n1420 võ văn kiệt -phường 1 -quận 6 -HCM\r\nXe quốc anh \r\n090 9550444', 2, 1, '2022-03-11 21:46:12', '2022-03-11 21:50:34', 1, 0, 0, '2022-03-03', '2022-03-20', 5000000, 1),
+(2, 3, 2736000, 26, 'đây là khách lấy lẻ.\r\nsố lượng ít.\r\ntổng hóa đơn 2236\r\nlãi 170k', 2, 1, '2022-03-14 20:44:51', '2022-03-14 21:02:51', 1, 500000, 0, '2022-03-21', '2022-03-21', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -307,7 +317,10 @@ CREATE TABLE `transaction_histories` (
 INSERT INTO `transaction_histories` (`id`, `th_transaction_id`, `th_content`, `created_at`, `updated_at`) VALUES
 (1, 1, 'tạo đơn hàng thành công:  Tổng số sản phẩm: 383,\n                    Tổng số tiền: 38.370.000, Số tiền đặt cọc: 5.000.000, Tổng số bao: 0', '2022-03-11 21:46:12', '2022-03-11 21:46:12'),
 (2, 1, 'Cập nhật: \n số lượng bao: 0 -> 3 \n số cân: 0 -> 133 ', '2022-03-11 21:49:34', '2022-03-11 21:49:34'),
-(3, 1, 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển', '2022-03-11 21:50:32', '2022-03-11 21:50:32');
+(3, 1, 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển', '2022-03-11 21:50:32', '2022-03-11 21:50:32'),
+(4, 2, 'tạo đơn hàng thành công:  Tổng số sản phẩm: 26,\n                    Tổng số tiền: 2.736.000, Số tiền đặt cọc: 500.000, Tổng số bao: 0', '2022-03-14 20:44:51', '2022-03-14 20:44:51'),
+(5, 2, 'Convert tiền cọc: \n Tiền cọc: 500.000 đ \n/\n                Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền cọc): 2.736.000 - 500.000 = 2.236.000 /\n                Tổng số tiền hàng đã trả: 500.000\n                (còn nợ tổng: 2.236.000)', '2022-03-14 20:45:13', '2022-03-14 20:45:13'),
+(6, 2, 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển', '2022-03-14 20:45:42', '2022-03-14 20:45:42');
 
 -- --------------------------------------------------------
 
@@ -357,7 +370,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `phone`, `address`, `avatar`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'Admin Supper', 'admin@gmail.com', '2022-03-11 20:29:30', '$2y$10$NaT1P3IMoTRinz2dv5iyDe3YN4m0A1oWMnADabr4TGC0Py7HK7GXe', '0377708868', NULL, NULL, NULL, NULL, NULL),
-(2, 'Minh Tâm Bình Phước', 'minhtam@gmail.com', NULL, '$2y$10$gy6bGnHxPpLkt1uwFF.RwuWVX.yx.swU9tf9A8IS8SX19/czMBWUO', '0946869998', 'Bình Phước', NULL, NULL, '2022-03-11 20:31:09', '2022-03-11 20:31:09');
+(2, 'Minh Tâm Bình Phước', 'minhtam@gmail.com', NULL, '$2y$10$gy6bGnHxPpLkt1uwFF.RwuWVX.yx.swU9tf9A8IS8SX19/czMBWUO', '0946869998', 'Bình Phước', NULL, NULL, '2022-03-11 20:31:09', '2022-03-11 20:31:09'),
+(3, 'linh nguyễn', 'linh@gmail.com', NULL, '$2y$10$CcWdz1hhMp4KLowPodpxte2uXmnScHj5VXejHlxjFZTHm5nJmebti', '0979434820', '133 quang trung phường lê hồng phong thành phố quảng ngãi', NULL, NULL, '2022-03-14 20:43:22', '2022-03-14 20:43:22');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -463,7 +477,7 @@ ALTER TABLE `baos`
 -- AUTO_INCREMENT cho bảng `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `failed_jobs`
@@ -487,7 +501,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT cho bảng `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT cho bảng `personal_access_tokens`
@@ -499,19 +513,19 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT cho bảng `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT cho bảng `transaction_histories`
 --
 ALTER TABLE `transaction_histories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `transports`
@@ -523,7 +537,7 @@ ALTER TABLE `transports`
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
