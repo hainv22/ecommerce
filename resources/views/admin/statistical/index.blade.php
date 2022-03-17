@@ -79,6 +79,7 @@
                                              @else
                                                  {{ date('d-m-Y', strtotime($item->day)) }}
                                              @endif
+                                                 <a target="_blank" href="{{ route('admin.transaction.index') }}?date={{$item->day}}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
                                          </td>
                                      </tr>
                                  @endforeach

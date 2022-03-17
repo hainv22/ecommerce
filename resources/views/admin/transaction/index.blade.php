@@ -32,7 +32,7 @@
                             @endif
                         </select>
                         <input type="text" value="{{ Request::get('phone') }}" class="form-control" name="phone" placeholder="phone">
-
+                        <input type="date" value="{{ Request::get('date') }}" class="form-control" name="date" placeholder="date">
                         <select name="status" class="form-control">
                             <option value="0">__Trạng Thái__</option>
                             <option value="1" {{ Request::get('status') == 1 ? "selected='selected'" : "" }}>Tiếp Nhận</option>
@@ -120,7 +120,8 @@
                                 <td>
                                     <input type="checkbox" data-url-lock="{{route('admin.transaction.update.lock', $item->id)}}" onchange="update_tst_lock(this)" id="js_update_tst_lock" {{$item->tst_lock ==1 ? 'checked' : ''}} data-toggle="toggle" data-onstyle="danger" data-width="50" data-height="40">
                                 </td>
-                                <td>{{ date("d/m/Y H:i:s", strtotime($item->created_at)) }}</td>
+                                <td>Ngày tạo: {{ date("d/m/Y H:i:s", strtotime($item->created_at)) }} <br>
+                                    Ngày đặt hàng: {{date("d/m/Y", strtotime($item->tst_order_date))}}</td>
                                 <td>
                                     <a href="{{ route('admin.transaction.detail',$item->id) }}" class="btn btn-md btn-info js-preview-transaction"><i class="fa fa-eye"></i>View</a>
                                 </td>

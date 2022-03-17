@@ -33,6 +33,10 @@ class AdminTransactionController extends Controller
             });
         }
 
+        if ($date = $request->date) {
+            $transactions->whereDate('tst_order_date', '=', $date);
+        }
+
         if ($status = $request->status) {
             $transactions->where('tst_status', $status);
         }
