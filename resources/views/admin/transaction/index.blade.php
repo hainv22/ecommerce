@@ -94,7 +94,8 @@
                                     ?>
                                         <li>Tiền hàng: {{ number_format($item->tst_total_money,0,',','.') }}</li>
                                         <li>Tiền vận chuyển: {{ number_format($total_transport,0,',','.') }}</li>
-                                    <li>Tổng :
+                                        <li>Tiền lãi: {{ number_format($item->tst_interest_rate,0,',','.') }}</li>
+                                        <li>Tổng :
                                         <span class="label label-success">
                                        {{ number_format($item->tst_total_money + $total_transport,0,',','.') }}
                                     </span></li>

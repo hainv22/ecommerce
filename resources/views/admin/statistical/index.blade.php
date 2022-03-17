@@ -62,15 +62,17 @@
                              <tr>
                                  <th>#</th>
                                  <th>Tổng Tiền</th>
+                                 <th>laix</th>
                                  <th>Ngày</th>
                              </tr>
                              </thead>
                              <tbody>
                              @if(isset($moneyTransaction))
-                                 @foreach ($moneyTransaction as $item)
+                                 @foreach ($moneyTransaction as $key => $item)
                                      <tr>
                                          <td>{{ $item->id }}</td>
                                          <td>{{ number_format($item->totalMoney,0,',','.') }} vnd</td>
+                                         <td>{{ number_format($tien_lai[$key]->totalMoney,0,',','.') }} vnd</td>
                                          <td>
                                              @if (!(empty(Request::get('year'))) && empty(Request::get('day')) && empty(Request::get('month')))
                                                  Tháng {{ $item->day }} Năm {{Request::get('year')}}
@@ -83,6 +85,7 @@
                                  <tr>
                                      <td>Tổng</td>
                                      <td><span style="color: red">{{ number_format($totalMoneyTransaction,0,',','.') }} vnd</span></td>
+                                     <td><span style="color: red">{{ number_format($tien_lai_total,0,',','.') }} vnd</span></td>
                                      <td></td>
                                  </tr>
                              @endif

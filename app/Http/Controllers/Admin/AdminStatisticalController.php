@@ -49,14 +49,17 @@ class AdminStatisticalController extends Controller
             ->get();
 
         $moneyTransaction = Transaction::query();
+        $tien_lai = Transaction::query();
         // dd(!($request->dateAfter > $request->dateBefore));
         if (!($request->dateBefore && $request->dateAfter)) {
             $message = '';
             if ($request->day) {
                 $moneyTransaction->whereDay('tst_order_date', (int) $request->day);
+                $tien_lai->whereDay('tst_order_date', (int) $request->day);
             }
             if ($request->month) {
                 $moneyTransaction->whereMonth('tst_order_date', (int) $request->month);
+                $tien_lai->whereMonth('tst_order_date', (int) $request->month);
             }
             if ($request->year) {
                 if (!($request->day) && !($request->month)) {
@@ -67,11 +70,22 @@ class AdminStatisticalController extends Controller
                         ->groupBy('day')
                         ->distinct()
                         ->get();
+                    $tien_lai = $tien_lai
+                        ->whereYear('tst_order_date', (int) $request->year)
+                        ->select(DB::raw('sum(tst_interest_rate) as totalMoney'), DB::raw('MONTH(tst_order_date) as day'))
+                        ->groupBy('day')
+                        ->distinct()
+                        ->get();
                 } else {
                     //nguoc lai ngay thang co du lieu group theo ngay
                     $moneyTransaction = $moneyTransaction
                         ->whereYear('tst_order_date', (int) $request->year)
                         ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('DATE(tst_order_date) as day'))
+                        ->groupBy('day')
+                        ->get();
+                    $tien_lai = $tien_lai
+                        ->whereYear('tst_order_date', (int) $request->year)
+                        ->select(DB::raw('sum(tst_interest_rate) as totalMoney'), DB::raw('DATE(tst_order_date) as day'))
                         ->groupBy('day')
                         ->get();
                 }
@@ -81,6 +95,10 @@ class AdminStatisticalController extends Controller
                 {
                     $moneyTransaction = $moneyTransaction
                         ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('DATE(tst_order_date) as day'))
+                        ->groupBy('day')
+                        ->get();
+                    $tien_lai = $tien_lai
+                        ->select(DB::raw('sum(tst_interest_rate) as totalMoney'), DB::raw('DATE(tst_order_date) as day'))
                         ->groupBy('day')
                         ->get();
                 }
@@ -93,6 +111,11 @@ class AdminStatisticalController extends Controller
                     ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('DATE(tst_order_date) as day'))
                     ->groupBy('day')
                     ->get();
+                $tien_lai = $tien_lai
+                    ->whereMonth('tst_order_date', date('m'))->whereYear('tst_order_date', date('Y'))
+                    ->select(DB::raw('sum(tst_interest_rate) as totalMoney'), DB::raw('DATE(tst_order_date) as day'))
+                    ->groupBy('day')
+                    ->get();
             }
 
             // $moneyTransaction = $moneyTransaction
@@ -100,6 +123,7 @@ class AdminStatisticalController extends Controller
             //     ->groupBy('day')
             //     ->get();
             $totalMoneyTransaction = $moneyTransaction->sum('totalMoney');
+            $tien_lai_total = $tien_lai->sum('totalMoney');
         } else {
             if ($request->dateAfter >= $request->dateBefore) {
                 $moneyTransaction = $moneyTransaction
@@ -108,6 +132,13 @@ class AdminStatisticalController extends Controller
                     ->groupBy('day')
                     ->get();
                 $totalMoneyTransaction = $moneyTransaction->sum('totalMoney');
+
+                $tien_lai = $tien_lai
+                    ->whereBetween(DB::raw('DATE(tst_order_date)'), [$request->dateBefore, $request->dateAfter])
+                    ->select(DB::raw('sum(tst_interest_rate) as totalMoney'), DB::raw('DATE(tst_order_date) as day'))
+                    ->groupBy('day')
+                    ->get();
+                $tien_lai_total = $tien_lai->sum('totalMoney');
                 // dd($moneyTransaction);
             } else {
                 $request->session()->flash('toastr', [
@@ -345,6 +376,8 @@ class AdminStatisticalController extends Controller
             'userTransaction' => $userTransaction,
             'mt' => $mt,
             'moneyTransaction' => $moneyTransaction,
+            'tien_lai_total' => $tien_lai_total,
+            'tien_lai' => $tien_lai,
             'totalMoneyTransaction' => $totalMoneyTransaction,
             'statusTransaction' => json_encode($statusTransaction),
             'listDay' => json_encode($listDay),

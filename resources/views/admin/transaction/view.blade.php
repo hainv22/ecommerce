@@ -73,6 +73,18 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td>Tiền lãi</td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                                                <input type="number" name="tst_interest_rate" class="form-control" value="{{ $transaction->tst_interest_rate }}">
+                                            </div>
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td>content</td>
                                         <td>
                                             <div class="form-group {{ $errors->first('tst_note') ? 'has-error' : '' }}">

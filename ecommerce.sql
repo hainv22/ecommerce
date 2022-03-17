@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: mysql:3306
--- Thời gian đã tạo: Th3 17, 2022 lúc 01:23 PM
+-- Thời gian đã tạo: Th3 17, 2022 lúc 03:58 PM
 -- Phiên bản máy phục vụ: 5.7.36
 -- Phiên bản PHP: 7.4.20
 
@@ -145,7 +145,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (16, '2022_03_06_212645_add_column_to_transactions_table', 1),
 (17, '2022_03_06_212934_add_b_transport_id_to_baos_table', 1),
 (18, '2022_03_06_215938_add_od_note_to_orders_table', 1),
-(19, '2022_03_08_152509_add_tst_lock_to_transactions_table', 1);
+(19, '2022_03_08_152509_add_tst_lock_to_transactions_table', 1),
+(20, '2022_03_17_202532_add_tst_interest_rate_column_to_transactions_table', 2);
 
 -- --------------------------------------------------------
 
@@ -375,21 +376,22 @@ CREATE TABLE `transactions` (
   `tst_order_date` date NOT NULL DEFAULT '2022-03-11' COMMENT 'ngày đặt hàng',
   `tst_expected_date` date NOT NULL DEFAULT '2022-03-11' COMMENT 'ngày dự kiến giao hàng thành công',
   `tst_deposit` int(11) NOT NULL DEFAULT '0' COMMENT 'số tiền khách đặt cọc',
-  `tst_lock` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1 là khóa, 0 là mở khóa'
+  `tst_lock` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1 là khóa, 0 là mở khóa',
+  `tst_interest_rate` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `transactions`
 --
 
-INSERT INTO `transactions` (`id`, `tst_user_id`, `tst_total_money`, `tst_total_products`, `tst_note`, `tst_status`, `tst_type`, `created_at`, `updated_at`, `tst_transport_id`, `tst_total_paid`, `total_transport_paid`, `tst_order_date`, `tst_expected_date`, `tst_deposit`, `tst_lock`) VALUES
-(1, 2, 38382500, 383, 'Chành xe\r\n1420 võ văn kiệt -phường 1 -quận 6 -HCM\r\nXe quốc anh \r\n090 9550444', 2, 1, '2022-03-11 21:46:12', '2022-03-11 21:50:34', 1, 0, 0, '2022-03-03', '2022-03-20', 5000000, 1),
-(2, 3, 2736000, 26, 'đây là khách lấy lẻ.\r\nsố lượng ít.\r\ntổng hóa đơn 2236\r\nlãi 170k', 2, 1, '2022-03-14 20:44:51', '2022-03-14 21:02:51', 1, 500000, 0, '2022-03-21', '2022-03-21', 0, 1),
-(3, 4, 3330000, 22, 'lãi 225', 2, 1, '2022-03-15 13:03:21', '2022-03-15 13:13:56', 1, 300000, 0, '2022-03-22', '2022-03-22', 0, 1),
-(4, 5, 12501000, 116, 'lai 700k', 2, 1, '2022-03-15 20:15:08', '2022-03-15 20:19:27', 1, 500000, 0, '2022-03-22', '2022-03-22', 0, 1),
-(5, 6, 7546000, 43, 'lãi 330', 2, 1, '2022-03-16 14:27:23', '2022-03-16 14:29:43', 1, 500000, 0, '2022-03-23', '2022-03-23', 0, 1),
-(6, 7, 3523000, 27, 'lai 250k', 2, 1, '2022-03-16 15:14:16', '2022-03-16 15:18:03', 1, 300000, 0, '2022-03-23', '2022-03-23', 0, 1),
-(7, 8, 7749000, 41, 'lai 360k', 2, 1, '2022-03-17 19:41:47', '2022-03-17 19:58:54', 1, 500000, 0, '2022-03-24', '2022-03-24', 0, 1);
+INSERT INTO `transactions` (`id`, `tst_user_id`, `tst_total_money`, `tst_total_products`, `tst_note`, `tst_status`, `tst_type`, `created_at`, `updated_at`, `tst_transport_id`, `tst_total_paid`, `total_transport_paid`, `tst_order_date`, `tst_expected_date`, `tst_deposit`, `tst_lock`, `tst_interest_rate`) VALUES
+(1, 2, 38382500, 383, 'Chành xe\r\n1420 võ văn kiệt -phường 1 -quận 6 -HCM\r\nXe quốc anh \r\n090 9550444', 2, 1, '2022-03-11 21:46:12', '2022-03-17 22:55:58', 1, 0, 0, '2022-03-03', '2022-03-20', 5000000, 1, 1500000),
+(2, 3, 2736000, 26, 'đây là khách lấy lẻ.\r\nsố lượng ít.', 2, 1, '2022-03-14 20:44:51', '2022-03-17 22:56:26', 1, 500000, 0, '2022-03-14', '2022-03-21', 0, 1, 170000),
+(3, 4, 3330000, 22, NULL, 2, 1, '2022-03-15 13:03:21', '2022-03-17 22:56:35', 1, 300000, 0, '2022-03-15', '2022-03-22', 0, 1, 225000),
+(4, 5, 12501000, 116, NULL, 2, 1, '2022-03-15 20:15:08', '2022-03-17 22:57:40', 1, 500000, 0, '2022-03-15', '2022-03-22', 0, 1, 700000),
+(5, 6, 7546000, 43, NULL, 2, 1, '2022-03-16 14:27:23', '2022-03-17 22:57:51', 1, 500000, 0, '2022-03-16', '2022-03-23', 0, 1, 330000),
+(6, 7, 3523000, 27, NULL, 2, 1, '2022-03-16 15:14:16', '2022-03-17 22:57:10', 1, 300000, 0, '2022-03-15', '2022-03-23', 0, 1, 250000),
+(7, 8, 7749000, 41, NULL, 2, 1, '2022-03-17 19:41:47', '2022-03-17 22:57:24', 1, 500000, 0, '2022-03-17', '2022-03-24', 0, 1, 360000);
 
 -- --------------------------------------------------------
 
@@ -611,7 +613,7 @@ ALTER TABLE `images`
 -- AUTO_INCREMENT cho bảng `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT cho bảng `orders`

@@ -79,6 +79,7 @@ class AdminTransactionController extends Controller
                 'tst_order_date' => $data['tst_order_date'],
                 'tst_expected_date' => $data['tst_expected_date'],
                 'tst_deposit' => $data['tst_deposit'],
+                'tst_interest_rate' => 0,
             ]);
 
             foreach ($data['txt_id_product'] as $key => $idProduct) {
@@ -249,11 +250,12 @@ class AdminTransactionController extends Controller
                     'th_content' => "Cập nhật: \n số lượng bao: {$count_bao_old} -> {$total_bao} \n số cân: {$sum_old} -> $weight_total "
                 ]);
             }
-            if (array_key_exists('tst_order_date', $data) || array_key_exists('tst_expected_date', $data) || array_key_exists('tst_note', $data)) {
+            if (array_key_exists('tst_order_date', $data) || array_key_exists('tst_expected_date', $data) || array_key_exists('tst_note', $data) || array_key_exists('tst_interest_rate', $data)) {
                 $transaction->update([
-                    'tst_order_date' => empty($data['tst_order_date']) ? $transaction->tst_expected_date : $data['tst_order_date'],
+                    'tst_order_date' => empty($data['tst_order_date']) ? $transaction->tst_order_date : $data['tst_order_date'],
                     'tst_expected_date' => empty($data['tst_expected_date']) ? $transaction->tst_expected_date : $data['tst_expected_date'],
-                    'tst_note' => $data['tst_note']
+                    'tst_note' => $data['tst_note'],
+                    'tst_interest_rate' => $data['tst_interest_rate']
                 ]);
             }
             DB::commit();
