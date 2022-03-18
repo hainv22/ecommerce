@@ -215,7 +215,7 @@ class AdminStatisticalController extends Controller
             $mt = $month . ' năm ' . $year;
         }
         if($request->year){
-            $productsTop->whereMonth('created_at', (int) $request->year);
+            $productsTop->whereYear('created_at', (int) $request->year);
             // doanh thu moi tiep nhan
             $revenueTransactionMonthDefault->whereYear('tst_order_date', (int) $request->year);
             // doanh thu Đang vận chuyển
@@ -233,7 +233,7 @@ class AdminStatisticalController extends Controller
             // cancel
             $transactionCancel->whereYear('tst_order_date', (int) $request->year);
             $year = (int) $request->year;
-            $mt = $month . ' năm ' . $year;
+            $mt = ' năm ' . $year;
         }
         if(!($request->year) && !($request->month)){
             $month = date('m');
