@@ -334,7 +334,7 @@
                 text: 'Biểu đồ doanh số các ngày trong tháng ' + mt
             },
             subtitle: {
-                text: 'Shop Hải Anh'
+                text: 'Hải Anh Shop'
             },
             xAxis: {
                 categories: listday

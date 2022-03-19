@@ -233,7 +233,7 @@ class AdminStatisticalController extends Controller
             // cancel
             $transactionCancel->whereYear('tst_order_date', (int) $request->year);
             $year = (int) $request->year;
-            $mt = ' năm ' . $year;
+            $mt = empty($request->month)? ' năm ' . $year : $request->month . ' năm ' . $year;;
         }
         if(!($request->year) && !($request->month)){
             $month = date('m');
@@ -260,26 +260,47 @@ class AdminStatisticalController extends Controller
         }
 
 
-
-        $revenueTransactionMonthDefault = $revenueTransactionMonthDefault
-            ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('DATE(tst_order_date) day'))
-            ->groupBy('day')
-            ->get()->toArray();
-        // doanh thu Đang vận chuyển
-        $revenueTransactionMonthProcess = $revenueTransactionMonthProcess
-            ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('DATE(tst_order_date) day'))
-            ->groupBy('day')
-            ->get()->toArray();
-        //doanh thu theo thang da xu ly
-        $revenueTransactionMonthSuccess = $revenueTransactionMonthSuccess
-            ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('DATE(tst_order_date) day'))
-            ->groupBy('day')
-            ->get()->toArray();
-        // doanh thu đã hủy bỏ
-        $revenueTransactionMonthCancel = $revenueTransactionMonthCancel
-            ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('DATE(tst_order_date) day'))
-            ->groupBy('day')
-            ->get()->toArray();
+        if(!empty($request->year) && empty($request->month)){
+            $revenueTransactionMonthDefault = $revenueTransactionMonthDefault
+                ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('MONTH(tst_order_date) day'))
+                ->groupBy('day')
+                ->get()->toArray();
+            // doanh thu Đang vận chuyển
+            $revenueTransactionMonthProcess = $revenueTransactionMonthProcess
+                ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('MONTH(tst_order_date) day'))
+                ->groupBy('day')
+                ->get()->toArray();
+            //doanh thu theo thang da xu ly
+            $revenueTransactionMonthSuccess = $revenueTransactionMonthSuccess
+                ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('MONTH(tst_order_date) day'))
+                ->groupBy('day')
+                ->get()->toArray();
+            // doanh thu đã hủy bỏ
+            $revenueTransactionMonthCancel = $revenueTransactionMonthCancel
+                ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('MONTH(tst_order_date) day'))
+                ->groupBy('day')
+                ->get()->toArray();
+        } else {
+            $revenueTransactionMonthDefault = $revenueTransactionMonthDefault
+                ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('DATE(tst_order_date) day'))
+                ->groupBy('day')
+                ->get()->toArray();
+            // doanh thu Đang vận chuyển
+            $revenueTransactionMonthProcess = $revenueTransactionMonthProcess
+                ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('DATE(tst_order_date) day'))
+                ->groupBy('day')
+                ->get()->toArray();
+            //doanh thu theo thang da xu ly
+            $revenueTransactionMonthSuccess = $revenueTransactionMonthSuccess
+                ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('DATE(tst_order_date) day'))
+                ->groupBy('day')
+                ->get()->toArray();
+            // doanh thu đã hủy bỏ
+            $revenueTransactionMonthCancel = $revenueTransactionMonthCancel
+                ->select(DB::raw('sum(tst_total_money) as totalMoney'), DB::raw('DATE(tst_order_date) day'))
+                ->groupBy('day')
+                ->get()->toArray();
+        }
         $transactionDefault = $transactionDefault->select('id')->count();
         //dang van chuyen
         $transactionProcess = $transactionProcess->select('id')->count();
@@ -304,7 +325,11 @@ class AdminStatisticalController extends Controller
 
 
 
-        $listDay = Date::getListDayInMonth($month, $year);
+        if(!empty($request->year) && empty($request->month)){
+            $listDay = Date::getListDayInMonth(null, $year, null);
+        } else {
+            $listDay = Date::getListDayInMonth($month, $year, null);
+        }
         $arrRevenueTransactionMonthDefault = [];
         $arrRevenueTransactionMonthProcess = [];
         $arrRevenueTransactionMonthSuccess = [];
@@ -346,6 +371,9 @@ class AdminStatisticalController extends Controller
                 }
             }
             $arrRevenueTransactionMonthCancel[] = (int) $total;
+        }
+        if(!empty($request->year) && empty($request->month)){
+            $listDay = Date::getListDayInMonth($month, $year, 1);
         }
         // dd($arrRevenueTransactionMonthDefault);
         // $moneyTransaction = $moneyTransaction
