@@ -98,6 +98,12 @@ class AdminProductController extends Controller
                     break;
             }
         }
+
+        if($request->ajax()) {
+            if ($search = strtolower($this->stripVN($request->search))) {
+                $products->where('pro_name', 'like', '%' . $search . '%');
+            }
+        }
         if (!($request->sort && $request->sort_pay)) {
             $products->orderByDesc('id');
 
