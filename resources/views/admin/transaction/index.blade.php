@@ -103,7 +103,7 @@
                                 </td>
                                 <td>
                                         @if($check_money && $check_money_transport)
-                                            <span class="label label-info">
+                                            <span class="label label-success">
                                                 Đã thanh toán hết
                                             </span>
                                         @else
