@@ -149,6 +149,7 @@
                                     <tr>
                                         <th >ID SảnPhẩm</th>
                                         <th >image</th>
+                                        <th >gia + name</th>
                                         <th>Số lượng<span style="color: red; ">*</span></th>
                                         <th>Chú ý ********</th>
                                         <th>Thao tác</th>
@@ -163,6 +164,10 @@
                                         </td>
                                         <td class="cls_td col-sm-4" >
                                             <img src="{{ pare_url_file(null) }}" alt="" width="150px" height="100px">
+                                        </td>
+                                        <td class="cls_td col-sm-2">
+                                            <span>Giá: </span> <br>
+                                            <span>Name: </span>
                                         </td>
                                         <td class="cls_td col-sm-2">
                                             <input type="number" name="txt_quantity_product[]" class="form-control txt_quantity" value="" min="1" placeholder="SL" required>
@@ -262,17 +267,20 @@
             let $this = $(this);
             let ID = $this.attr('data-id-product');
             let SRC = $this.attr('data-url-image');
+            let NAME = $this.attr('data-name');
+            let PRICE = $this.attr('data-price');
             $data_this.val(ID)
             $data_this.next().val(ID)
             $data_this.css("border", "1px solid red")
             $data_this.css("font-size", "15px")
             $data_this.css("color", "red")
             $data_this.parent().next().children().attr("src", SRC);
+            $data_this.parent().next().next().html("<span>"+ PRICE +"</span> <br><span>"+ NAME +"</span>");
             $('#myModal').modal('toggle');
         });
 
         $(".add_item_order").on("click", function() {
-            var row_infor = '<tr> <td class="cls_td col-sm-1" > <input type="button" value="CLICK" id="get_products" data-url-products="{{route('admin.product.index')}}"> <input type="hidden" name="txt_id_product[]" value="" > </td><td class="cls_td col-sm-4" ><img src="{{ pare_url_file(null) }}" alt="" width="150px" height="100px"></td><td class="cls_td col-sm-2"><input type="number" name="txt_quantity_product[]" class="form-control txt_quantity" value="" min="1" placeholder="SL" required></td><td class="cls_td col-sm-4"><textarea class="form-control" value="" name="od_note[]" rows="3" placeholder="Enter ..." ></textarea></td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
+            var row_infor = '<tr> <td class="cls_td col-sm-1" > <input type="button" value="CLICK" id="get_products" data-url-products="{{route('admin.product.index')}}"> <input type="hidden" name="txt_id_product[]" value="" > </td><td class="cls_td col-sm-4" ><img src="{{ pare_url_file(null) }}" alt="" width="150px" height="100px"></td><td class="cls_td col-sm-2"> <span>Giá: </span> <br><span>Name: </span></td><td class="cls_td col-sm-2"><input type="number" name="txt_quantity_product[]" class="form-control txt_quantity" value="" min="1" placeholder="SL" required></td><td class="cls_td col-sm-4"><textarea class="form-control" value="" name="od_note[]" rows="3" placeholder="Enter ..." ></textarea></td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
             $(".tbl_add_orderext tbody").append(row_infor);
             return false;
         });
