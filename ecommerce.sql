@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: mysql:3306
--- Thời gian đã tạo: Th3 27, 2022 lúc 05:41 AM
+-- Thời gian đã tạo: Th3 30, 2022 lúc 12:04 PM
 -- Phiên bản máy phục vụ: 5.7.36
 -- Phiên bản PHP: 7.4.20
 
@@ -314,7 +314,8 @@ INSERT INTO `orders` (`id`, `od_transaction_id`, `od_product_id`, `od_sale`, `od
 (132, 16, 66, 0, 2, 185000, '2022-03-27 12:34:56', '2022-03-27 12:34:56', NULL),
 (133, 16, 94, 0, 8, 150000, '2022-03-27 12:34:56', '2022-03-27 12:34:56', NULL),
 (134, 16, 38, 0, 10, 60000, '2022-03-27 12:34:56', '2022-03-27 12:34:56', NULL),
-(135, 16, 51, 0, 2, 140000, '2022-03-27 12:34:56', '2022-03-27 12:34:56', NULL);
+(135, 16, 51, 0, 2, 140000, '2022-03-27 12:34:56', '2022-03-27 12:34:56', NULL),
+(136, 17, 95, 0, 39, 72000, '2022-03-30 18:57:07', '2022-03-30 18:57:07', NULL);
 
 -- --------------------------------------------------------
 
@@ -469,7 +470,8 @@ INSERT INTO `products` (`id`, `pro_name`, `pro_category_id`, `pro_user_id`, `pro
 (91, 'balo 1085', 4, 1, 98000, 0, '2022-03-26__35799af0de43111d4852.jpg', 0, 1, 1, 'balo 1085', 'balo 1085', 999999999, 1, '2022-03-26 14:17:48', '2022-03-26 14:17:48'),
 (92, 'balo 1852', 4, 1, 103000, 0, '2022-03-26__971ac08e813d4e63172c.jpg', 0, 1, 3, 'balo 1852', 'balo 1852', 999999999, 1, '2022-03-26 14:18:45', '2022-03-26 14:18:45'),
 (93, 'balo 2020', 5, 1, 143000, 0, '2022-03-26__e5de9e5444e28bbcd2f3.jpg', 0, 1, 1, 'balo 2020', 'balo 2020', 989898989, 1, '2022-03-26 14:23:05', '2022-03-26 14:23:05'),
-(94, 'balo da (le xinh shop)', 5, 1, 150000, 0, '2022-03-27__232f5cc02379ec27b568.jpg', 0, 1, 8, 'balo da (le xinh shop)', 'balo da (le xinh shop)', 999999999, 1, '2022-03-27 12:30:11', '2022-03-27 12:30:11');
+(94, 'balo da (le xinh shop)', 5, 1, 150000, 0, '2022-03-27__232f5cc02379ec27b568.jpg', 0, 1, 8, 'balo da (le xinh shop)', 'balo da (le xinh shop)', 999999999, 1, '2022-03-27 12:30:11', '2022-03-27 12:30:11'),
+(95, 'vi (trang store)', 1, 1, 72000, 0, '2022-03-30__a3a05957-9a0d-469d-9ec8-ade1e6e0fe30.jpeg', 0, 1, 39, 'vi (trang store)', 'vi (trang store)', 99999999, 1, '2022-03-30 18:56:55', '2022-03-30 18:56:55');
 
 -- --------------------------------------------------------
 
@@ -515,9 +517,10 @@ INSERT INTO `transactions` (`id`, `tst_user_id`, `tst_total_money`, `tst_total_p
 (11, 11, 3340000, 31, NULL, 3, 1, '2022-03-21 23:45:42', '2022-03-24 17:14:38', 1, 500000, 0, '2022-03-21', '2022-03-28', 0, 1, 230000),
 (12, 5, 1360000, 11, NULL, 3, 1, '2022-03-23 19:46:13', '2022-03-26 22:26:29', 1, 0, 0, '2022-03-23', '2022-03-30', 0, 1, 90000),
 (13, 9, 3212000, 26, NULL, 3, 1, '2022-03-23 20:37:17', '2022-03-27 12:36:36', 1, 500000, 0, '2022-03-23', '2022-03-30', 0, 1, 250000),
-(14, 6, 4130000, 33, NULL, 2, 1, '2022-03-24 19:21:50', '2022-03-24 19:23:50', 1, 0, 0, '2022-03-24', '2022-03-31', 0, 1, 330000),
-(15, 9, 4299000, 32, NULL, 2, 1, '2022-03-26 14:26:21', '2022-03-26 14:38:46', 1, 500000, 0, '2022-03-26', '2022-04-02', 0, 1, 335000),
-(16, 4, 3075000, 27, NULL, 2, 1, '2022-03-27 12:34:56', '2022-03-27 12:36:59', 1, 300000, 0, '2022-03-27', '2022-04-03', 0, 1, 220000);
+(14, 6, 4130000, 33, NULL, 3, 1, '2022-03-24 19:21:50', '2022-03-29 15:49:28', 1, 0, 0, '2022-03-24', '2022-03-31', 0, 1, 330000),
+(15, 9, 4299000, 32, NULL, 3, 1, '2022-03-26 14:26:21', '2022-03-29 16:35:38', 1, 500000, 0, '2022-03-26', '2022-04-02', 0, 1, 335000),
+(16, 4, 3075000, 27, NULL, 2, 1, '2022-03-27 12:34:56', '2022-03-28 11:15:45', 1, 300000, 0, '2022-03-27', '2022-04-03', 0, 1, 220000),
+(17, 8, 2808000, 39, NULL, 2, 1, '2022-03-30 18:57:07', '2022-03-30 18:57:39', 1, 0, 0, '2022-03-30', '2022-04-06', 0, 1, 270000);
 
 -- --------------------------------------------------------
 
@@ -607,7 +610,11 @@ INSERT INTO `transaction_histories` (`id`, `th_transaction_id`, `th_content`, `c
 (67, 16, 'tạo đơn hàng thành công:  Tổng số sản phẩm: 27,\n                    Tổng số tiền: 3.075.000, Số tiền đặt cọc: 300.000, Tổng số bao: 0', '2022-03-27 12:34:56', '2022-03-27 12:34:56'),
 (68, 16, 'Convert tiền cọc: \n Tiền cọc: 300.000 đ \n/\n                Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền cọc): 3.075.000 - 300.000 = 2.775.000 /\n                Tổng số tiền hàng đã trả: 300.000\n                (còn nợ tổng: 2.775.000)', '2022-03-27 12:35:18', '2022-03-27 12:35:18'),
 (69, 16, 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển', '2022-03-27 12:36:00', '2022-03-27 12:36:00'),
-(70, 13, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-03-27 12:36:35', '2022-03-27 12:36:35');
+(70, 13, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-03-27 12:36:35', '2022-03-27 12:36:35'),
+(71, 14, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-03-29 15:49:27', '2022-03-29 15:49:27'),
+(72, 15, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-03-29 16:35:36', '2022-03-29 16:35:36'),
+(73, 17, 'tạo đơn hàng thành công:  Tổng số sản phẩm: 39,\n                    Tổng số tiền: 2.808.000, Số tiền đặt cọc: 0, Tổng số bao: 0', '2022-03-30 18:57:07', '2022-03-30 18:57:07'),
+(74, 17, 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển', '2022-03-30 18:57:37', '2022-03-30 18:57:37');
 
 -- --------------------------------------------------------
 
@@ -796,7 +803,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT cho bảng `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
 
 --
 -- AUTO_INCREMENT cho bảng `personal_access_tokens`
@@ -808,19 +815,19 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT cho bảng `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT cho bảng `transaction_histories`
 --
 ALTER TABLE `transaction_histories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT cho bảng `transports`
