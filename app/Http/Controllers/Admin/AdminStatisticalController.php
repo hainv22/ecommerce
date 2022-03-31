@@ -37,7 +37,7 @@ class AdminStatisticalController extends Controller
 //         $topViewProducts = Product::orderByDesc('pro_view')->limit(5)->get();
 
         //san pham mua nhieu
-         $proPayProducts = Product::orderByDesc('pro_pay')->limit(5)->get();
+         $proPayProducts = Product::orderByDesc('pro_pay')->limit(10)->get();
 
         //user mua nhieu nhat
         $userTransaction = TransacTion::query()
