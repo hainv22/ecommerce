@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: mysql:3306
--- Thời gian đã tạo: Th3 30, 2022 lúc 12:04 PM
+-- Thời gian đã tạo: Th4 01, 2022 lúc 02:26 PM
 -- Phiên bản máy phục vụ: 5.7.36
 -- Phiên bản PHP: 7.4.20
 
@@ -315,7 +315,10 @@ INSERT INTO `orders` (`id`, `od_transaction_id`, `od_product_id`, `od_sale`, `od
 (133, 16, 94, 0, 8, 150000, '2022-03-27 12:34:56', '2022-03-27 12:34:56', NULL),
 (134, 16, 38, 0, 10, 60000, '2022-03-27 12:34:56', '2022-03-27 12:34:56', NULL),
 (135, 16, 51, 0, 2, 140000, '2022-03-27 12:34:56', '2022-03-27 12:34:56', NULL),
-(136, 17, 95, 0, 39, 72000, '2022-03-30 18:57:07', '2022-03-30 18:57:07', NULL);
+(136, 17, 95, 0, 39, 72000, '2022-03-30 18:57:07', '2022-03-30 18:57:07', NULL),
+(137, 18, 96, 0, 10, 173000, '2022-04-01 21:25:22', '2022-04-01 21:25:22', NULL),
+(138, 18, 97, 0, 15, 110000, '2022-04-01 21:25:22', '2022-04-01 21:25:22', NULL),
+(139, 18, 98, 0, 15, 100000, '2022-04-01 21:25:22', '2022-04-01 21:25:22', NULL);
 
 -- --------------------------------------------------------
 
@@ -471,7 +474,10 @@ INSERT INTO `products` (`id`, `pro_name`, `pro_category_id`, `pro_user_id`, `pro
 (92, 'balo 1852', 4, 1, 103000, 0, '2022-03-26__971ac08e813d4e63172c.jpg', 0, 1, 3, 'balo 1852', 'balo 1852', 999999999, 1, '2022-03-26 14:18:45', '2022-03-26 14:18:45'),
 (93, 'balo 2020', 5, 1, 143000, 0, '2022-03-26__e5de9e5444e28bbcd2f3.jpg', 0, 1, 1, 'balo 2020', 'balo 2020', 989898989, 1, '2022-03-26 14:23:05', '2022-03-26 14:23:05'),
 (94, 'balo da (le xinh shop)', 5, 1, 150000, 0, '2022-03-27__232f5cc02379ec27b568.jpg', 0, 1, 8, 'balo da (le xinh shop)', 'balo da (le xinh shop)', 999999999, 1, '2022-03-27 12:30:11', '2022-03-27 12:30:11'),
-(95, 'vi (trang store)', 1, 1, 72000, 0, '2022-03-30__a3a05957-9a0d-469d-9ec8-ade1e6e0fe30.jpeg', 0, 1, 39, 'vi (trang store)', 'vi (trang store)', 99999999, 1, '2022-03-30 18:56:55', '2022-03-30 18:56:55');
+(95, 'vi (trang store)', 1, 1, 72000, 0, '2022-03-30__a3a05957-9a0d-469d-9ec8-ade1e6e0fe30.jpeg', 0, 1, 39, 'vi (trang store)', 'vi (trang store)', 99999999, 1, '2022-03-30 18:56:55', '2022-03-30 18:56:55'),
+(96, 'túi du lịch 227-21', 7, 1, 173000, 0, '2022-04-01__8f9e6af5-1843-4c93-ab9b-fadffed84b96.jpeg', 0, 1, 10, 'túi du lịch 227-21', 'túi du lịch 227-21', 999999999, 1, '2022-04-01 21:23:41', '2022-04-01 21:23:41'),
+(97, 'balo 205 to (pham ha)', 5, 1, 110000, 0, '2022-04-01__e995559b-feb1-4c9e-9682-b685580526e1.jpeg', 0, 1, 15, 'balo 205 to (pham ha)', 'balo 205 to (pham ha)', 999999999, 1, '2022-04-01 21:24:20', '2022-04-01 21:24:20'),
+(98, 'balo 175 (pham ha)', 5, 1, 100000, 0, '2022-04-01__a70944c0-ed0c-4444-b0f3-a51c0178b9c3.jpeg', 0, 1, 15, 'balo 175 (pham ha)', 'balo 175 (pham ha)', 999999999, 1, '2022-04-01 21:24:52', '2022-04-01 21:24:52');
 
 -- --------------------------------------------------------
 
@@ -520,7 +526,8 @@ INSERT INTO `transactions` (`id`, `tst_user_id`, `tst_total_money`, `tst_total_p
 (14, 6, 4130000, 33, NULL, 3, 1, '2022-03-24 19:21:50', '2022-03-29 15:49:28', 1, 0, 0, '2022-03-24', '2022-03-31', 0, 1, 330000),
 (15, 9, 4299000, 32, NULL, 3, 1, '2022-03-26 14:26:21', '2022-03-29 16:35:38', 1, 500000, 0, '2022-03-26', '2022-04-02', 0, 1, 335000),
 (16, 4, 3075000, 27, NULL, 2, 1, '2022-03-27 12:34:56', '2022-03-28 11:15:45', 1, 300000, 0, '2022-03-27', '2022-04-03', 0, 1, 220000),
-(17, 8, 2808000, 39, NULL, 2, 1, '2022-03-30 18:57:07', '2022-03-30 18:57:39', 1, 0, 0, '2022-03-30', '2022-04-06', 0, 1, 270000);
+(17, 8, 2808000, 39, NULL, 2, 1, '2022-03-30 18:57:07', '2022-03-30 18:57:39', 1, 0, 0, '2022-03-30', '2022-04-06', 0, 1, 270000),
+(18, 12, 4880000, 40, NULL, 2, 1, '2022-04-01 21:25:22', '2022-04-01 21:25:38', 1, 300000, 0, '2022-04-01', '2022-04-08', 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -614,7 +621,10 @@ INSERT INTO `transaction_histories` (`id`, `th_transaction_id`, `th_content`, `c
 (71, 14, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-03-29 15:49:27', '2022-03-29 15:49:27'),
 (72, 15, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-03-29 16:35:36', '2022-03-29 16:35:36'),
 (73, 17, 'tạo đơn hàng thành công:  Tổng số sản phẩm: 39,\n                    Tổng số tiền: 2.808.000, Số tiền đặt cọc: 0, Tổng số bao: 0', '2022-03-30 18:57:07', '2022-03-30 18:57:07'),
-(74, 17, 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển', '2022-03-30 18:57:37', '2022-03-30 18:57:37');
+(74, 17, 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển', '2022-03-30 18:57:37', '2022-03-30 18:57:37'),
+(75, 18, 'tạo đơn hàng thành công:  Tổng số sản phẩm: 40,\n                    Tổng số tiền: 4.880.000, Số tiền đặt cọc: 300.000, Tổng số bao: 0', '2022-04-01 21:25:22', '2022-04-01 21:25:22'),
+(76, 18, 'Convert tiền cọc: \n Tiền cọc: 300.000 đ \n/\n                Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền cọc): 4.880.000 - 300.000 = 4.580.000 /\n                Tổng số tiền hàng đã trả: 300.000\n                (còn nợ tổng: 4.580.000)', '2022-04-01 21:25:30', '2022-04-01 21:25:30'),
+(77, 18, 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển', '2022-04-01 21:25:35', '2022-04-01 21:25:35');
 
 -- --------------------------------------------------------
 
@@ -673,7 +683,8 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `ph
 (8, 'trang store', 'trang-store@gmail.com', NULL, '$2y$10$BbJh/HM6tCAXcE5Qod7Ycu6OOj7V9nnJzCNVirUwMznUs8Xx9imUu', '0387003545', '137 lê huân - thành phố huế', NULL, NULL, '2022-03-17 19:40:35', '2022-03-17 19:40:35'),
 (9, 'nguyễn bảo', 'nguyenbao@gmail.com', NULL, '$2y$10$rf5rEVgxW63pbqetVcm8u.LJchsbebQQYN8xybot.vk3NeQ7zzyZ2', '0393973372', 'Cửa hàng thế giới Decan.Đường Đinh Tiên Hoàng.Bãi Giếng Bắc.Cam Đức.Cam Lâm.Khánh Hoà', NULL, NULL, '2022-03-18 12:45:31', '2022-03-18 12:45:31'),
 (10, 'Shop Nguyễn An', 'shopnguyenan@gmail.com', NULL, '$2y$10$YeiY.tFTyJGsNyqvggkp.ONjxlwllLjq6VvAler/oyN6xFD8lEVjK', '0969472997', '90 Nguyễn Đình Chiểu. Vĩnh thọ . Nha Trang. Khánh Hòa.', NULL, NULL, '2022-03-19 10:07:10', '2022-03-19 10:07:10'),
-(11, 'Kiều diễm (nana)', 'kieudiem-nana@gmail.com', NULL, '$2y$10$ALDUZXFZFToN9vRykPX1nuaS1in1ZKxeDTkxbD8MXB3OJIZiMWa8K', '0989490407', 'Số 370 trần phú, tam quan, hoài nhơn, bình định', NULL, NULL, '2022-03-21 23:44:35', '2022-03-21 23:44:35');
+(11, 'Kiều diễm (nana)', 'kieudiem-nana@gmail.com', NULL, '$2y$10$ALDUZXFZFToN9vRykPX1nuaS1in1ZKxeDTkxbD8MXB3OJIZiMWa8K', '0989490407', 'Số 370 trần phú, tam quan, hoài nhơn, bình định', NULL, NULL, '2022-03-21 23:44:35', '2022-03-21 23:44:35'),
+(12, 'Phạm Hà', 'phamha@gmail.com', NULL, '$2y$10$JlEOtzqS9zr6nMYU6lg/5ef64j3oIhAS1kXCquJN19oNIxPpApHjC', '0396374607', '18 Đồng Xuân,Q. Hoàn Kiếm, HN', NULL, NULL, '2022-04-01 21:20:37', '2022-04-01 21:20:37');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -803,7 +814,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT cho bảng `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
 
 --
 -- AUTO_INCREMENT cho bảng `personal_access_tokens`
@@ -815,19 +826,19 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT cho bảng `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT cho bảng `transaction_histories`
 --
 ALTER TABLE `transaction_histories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT cho bảng `transports`
@@ -839,7 +850,7 @@ ALTER TABLE `transports`
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
