@@ -47,7 +47,6 @@
                                  </select>
                                  <select name="year" class="form-control">
                                      <option value="">_ Năm _</option>
-                                     <option value="2021" {{ Request::get('year') == 2021 ? "selected='selected'" : "" }}>Năm 2021</option>
                                      <option value="2022" {{ Request::get('year') == 2022 ? "selected='selected'" : "" }}>Năm 2022</option>
                                      <option value="2023" {{ Request::get('year') == 2023 ? "selected='selected'" : "" }}>Năm 2023</option>
                                  </select>
