@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: mysql:3306
--- Thời gian đã tạo: Th4 13, 2022 lúc 12:52 PM
+-- Thời gian đã tạo: Th4 24, 2022 lúc 05:21 PM
 -- Phiên bản máy phục vụ: 5.7.36
 -- Phiên bản PHP: 7.4.20
 
@@ -374,7 +374,9 @@ INSERT INTO `orders` (`id`, `od_transaction_id`, `od_product_id`, `od_sale`, `od
 (189, 25, 75, 0, 1, 185000, '2022-04-13 19:29:35', '2022-04-13 19:29:35', NULL),
 (190, 25, 113, 0, 2, 160000, '2022-04-13 19:29:35', '2022-04-13 19:29:35', NULL),
 (191, 25, 31, 0, 2, 160000, '2022-04-13 19:29:35', '2022-04-13 19:29:35', NULL),
-(192, 25, 123, 0, 16, 170000, '2022-04-13 19:29:35', '2022-04-13 19:29:35', NULL);
+(192, 25, 123, 0, 16, 170000, '2022-04-13 19:29:35', '2022-04-13 19:29:35', NULL),
+(193, 26, 124, 0, 30, 220000, '2022-04-24 20:21:56', '2022-04-24 20:21:56', NULL),
+(194, 26, 125, 0, 26, 150000, '2022-04-24 20:21:56', '2022-04-24 20:21:56', NULL);
 
 -- --------------------------------------------------------
 
@@ -558,7 +560,9 @@ INSERT INTO `products` (`id`, `pro_name`, `pro_category_id`, `pro_user_id`, `pro
 (120, 'tui cheo 1357', 8, 1, 65000, 0, '2022-04-12__86c3df88-6b02-4a79-8c40-d1de80dca311.jpeg', 0, 1, 8, 'tui cheo 1357', 'tui cheo 1357', 999999999, 1, '2022-04-12 19:36:47', '2022-04-12 19:36:47'),
 (121, 'tui dien thoai 122-16', 1, 1, 108000, 0, '2022-04-12__6efce171-b1c6-41e5-8ba9-e2322340441f.jpeg', 0, 1, 95, 'tui dien thoai 122-16', 'tui dien thoai 122-16', 999999999, 1, '2022-04-12 19:46:27', '2022-04-12 19:46:27'),
 (122, 'tui 89989', 1, 1, 185000, 0, '2022-04-13__e69fb5cc-4da1-494c-8f16-52bca31b4d68.jpeg', 0, 1, 3, 'tui 89989', 'tui 89989', 999999999, 1, '2022-04-13 19:25:14', '2022-04-13 19:25:14'),
-(123, 'tui 5360778', 1, 1, 170000, 0, '2022-04-13__6598ba6a-6397-4abd-8688-9990e9eff1e0.jpeg', 0, 1, 16, 'tui 5360778', 'tui 5360778', 999999999, 1, '2022-04-13 19:28:16', '2022-04-13 19:28:16');
+(123, 'tui 5360778', 1, 1, 170000, 0, '2022-04-13__6598ba6a-6397-4abd-8688-9990e9eff1e0.jpeg', 0, 1, 16, 'tui 5360778', 'tui 5360778', 999999999, 1, '2022-04-13 19:28:16', '2022-04-13 19:28:16'),
+(124, 'tui 16650', 1, 1, 220000, 0, '2022-04-24__6aca265a-8365-46db-8ec7-a2bb626fff2f.jpeg', 0, 1, 30, 'tui 16650', 'tui 16650', 999999999, 1, '2022-04-24 20:21:02', '2022-04-24 20:21:02'),
+(125, 'tui 19092', 1, 1, 150000, 0, '2022-04-24__b84a16b2-b01f-4b15-897e-b0adfad5fd44.jpeg', 0, 1, 26, 'tui 19092', 'tui 19092', 999999999, 1, '2022-04-24 20:21:24', '2022-04-24 20:21:24');
 
 -- --------------------------------------------------------
 
@@ -612,10 +616,11 @@ INSERT INTO `transactions` (`id`, `tst_user_id`, `tst_total_money`, `tst_total_p
 (19, 10, 10363000, 108, NULL, 3, 1, '2022-04-07 20:03:22', '2022-04-13 00:47:16', 1, 10363000, 0, '2022-04-07', '2022-04-12', 0, 1, 800000),
 (20, 5, 3402000, 39, NULL, 3, 1, '2022-04-07 20:34:07', '2022-04-09 22:35:07', 1, 3402000, 0, '2022-04-07', '2022-04-12', 0, 1, 230000),
 (21, 8, 4230000, 28, NULL, 3, 1, '2022-04-08 22:31:13', '2022-04-11 18:48:51', 1, 4230000, 0, '2022-04-08', '2022-04-13', 0, 1, 280000),
-(22, 4, 2915000, 23, NULL, 2, 1, '2022-04-11 17:05:55', '2022-04-11 17:07:33', 1, 300000, 0, '2022-04-11', '2022-04-16', 0, 1, 150000),
+(22, 4, 2915000, 23, NULL, 3, 1, '2022-04-11 17:05:55', '2022-04-18 11:42:52', 1, 2915000, 0, '2022-04-11', '2022-04-16', 0, 1, 150000),
 (23, 12, 14660000, 145, NULL, 3, 1, '2022-04-12 19:41:36', '2022-04-13 19:30:33', 1, 14660000, 0, '2022-04-12', '2022-04-14', 0, 1, 1300000),
-(24, 13, 10260000, 95, NULL, 2, 1, '2022-04-12 19:46:52', '2022-04-12 20:11:06', 1, 1000000, 0, '2022-04-12', '2022-04-16', 0, 1, 700000),
-(25, 8, 4100000, 24, NULL, 2, 1, '2022-04-13 19:29:35', '2022-04-13 19:30:12', 1, 0, 0, '2022-04-13', '2022-04-18', 0, 1, 240000);
+(24, 13, 10260000, 95, NULL, 3, 1, '2022-04-12 19:46:52', '2022-04-17 22:49:33', 1, 10260000, 0, '2022-04-12', '2022-04-16', 0, 1, 700000),
+(25, 8, 4100000, 24, NULL, 3, 1, '2022-04-13 19:29:35', '2022-04-16 15:38:33', 1, 4100000, 0, '2022-04-13', '2022-04-18', 0, 1, 240000),
+(26, 8, 10500000, 56, NULL, 2, 1, '2022-04-24 20:21:56', '2022-04-24 20:22:13', 1, 0, 0, '2022-04-24', '2022-04-28', 0, 1, 710000);
 
 -- --------------------------------------------------------
 
@@ -753,7 +758,15 @@ INSERT INTO `transaction_histories` (`id`, `th_transaction_id`, `th_content`, `c
 (115, 19, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-04-13 00:47:14', '2022-04-13 00:47:14'),
 (116, 25, 'tạo đơn hàng thành công:  Tổng số sản phẩm: 24,\n                    Tổng số tiền: 4.100.000, Số tiền đặt cọc: 0, Tổng số bao: 0', '2022-04-13 19:29:35', '2022-04-13 19:29:35'),
 (117, 25, 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển', '2022-04-13 19:29:57', '2022-04-13 19:29:57'),
-(118, 23, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-04-13 19:30:31', '2022-04-13 19:30:31');
+(118, 23, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-04-13 19:30:31', '2022-04-13 19:30:31'),
+(119, 25, 'Cập nhật Tiền hàng: \n Trả: 4.100.000 đ \n/ Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền trả lần này): 4.100.000 - 4.100.000 = 0 /\n                Tổng số tiền hàng đã trả: 4.100.000\n                (còn nợ tổng: 0)', '2022-04-16 15:38:28', '2022-04-16 15:38:28'),
+(120, 25, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-04-16 15:38:31', '2022-04-16 15:38:31'),
+(121, 24, 'Cập nhật Tiền hàng: \n Trả: 9.260.000 đ \n/ Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền trả lần này): 9.260.000 - 9.260.000 = 0 /\n                Tổng số tiền hàng đã trả: 10.260.000\n                (còn nợ tổng: 0)', '2022-04-17 22:49:27', '2022-04-17 22:49:27'),
+(122, 24, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-04-17 22:49:31', '2022-04-17 22:49:31'),
+(123, 22, 'Cập nhật Tiền hàng: \n Trả: 2.615.000 đ \n/ Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền trả lần này): 2.615.000 - 2.615.000 = 0 /\n                Tổng số tiền hàng đã trả: 2.915.000\n                (còn nợ tổng: 0)', '2022-04-18 11:42:47', '2022-04-18 11:42:47'),
+(124, 22, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-04-18 11:42:51', '2022-04-18 11:42:51'),
+(125, 26, 'tạo đơn hàng thành công:  Tổng số sản phẩm: 56,\n                    Tổng số tiền: 10.500.000, Số tiền đặt cọc: 0, Tổng số bao: 0', '2022-04-24 20:21:56', '2022-04-24 20:21:56'),
+(126, 26, 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển', '2022-04-24 20:22:03', '2022-04-24 20:22:03');
 
 -- --------------------------------------------------------
 
@@ -809,7 +822,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `ph
 (5, 'Phương Gấu', 'phuong@gmail.com', NULL, '$2y$10$U4.gYsFY4eMAsdNfa2NEM.YYAjniL6gK2OjPfvDGmWbr2ZfNpzave', '0877239336', 'Sn24/ngõ 29 Hùng vương.  Đồng Tâm. Vĩnh Yên. Vĩnh Phúc', NULL, NULL, '2022-03-15 18:13:45', '2022-03-15 18:13:45'),
 (6, 'huyền phú thọ', 'huyenpt@gmail.com', NULL, '$2y$10$wSHRXG24fe2fn88/ScNAEegPFnZaS9YAx0dijOiC.JC.0zpIfvVoy', '0326261062', 'khu 3 sông lô, việt trì, phú thọ', NULL, NULL, '2022-03-16 14:20:37', '2022-03-16 14:20:51'),
 (7, 'Thanh thủy', 'thanhthuy1@gmail.com', NULL, '$2y$10$1d1Ipm4aecgQ22Itb0r2COEhFvS2eQfKQ51VpXnXkZHwXFqM6otXy', '0937604675', 'số 382 đương dt 766 thôn 2 đức hạnh đức linh bình thuận', NULL, NULL, '2022-03-16 14:50:04', '2022-03-16 14:50:04'),
-(8, 'trang store', 'trang-store@gmail.com', NULL, '$2y$10$BbJh/HM6tCAXcE5Qod7Ycu6OOj7V9nnJzCNVirUwMznUs8Xx9imUu', '0387003545', '137 lê huân - thành phố huế', NULL, NULL, '2022-03-17 19:40:35', '2022-03-17 19:40:35'),
+(8, 'Trắng Store', 'trang-store@gmail.com', NULL, '$2y$10$BbJh/HM6tCAXcE5Qod7Ycu6OOj7V9nnJzCNVirUwMznUs8Xx9imUu', '0387003545', '137 lê huân - thành phố huế', NULL, NULL, '2022-03-17 19:40:35', '2022-04-24 20:29:08'),
 (9, 'nguyễn bảo', 'nguyenbao@gmail.com', NULL, '$2y$10$rf5rEVgxW63pbqetVcm8u.LJchsbebQQYN8xybot.vk3NeQ7zzyZ2', '0393973372', 'Cửa hàng thế giới Decan.Đường Đinh Tiên Hoàng.Bãi Giếng Bắc.Cam Đức.Cam Lâm.Khánh Hoà', NULL, NULL, '2022-03-18 12:45:31', '2022-03-18 12:45:31'),
 (10, 'Shop Nguyễn An', 'shopnguyenan@gmail.com', NULL, '$2y$10$YeiY.tFTyJGsNyqvggkp.ONjxlwllLjq6VvAler/oyN6xFD8lEVjK', '0969472997', '90 Nguyễn Đình Chiểu. Vĩnh thọ . Nha Trang. Khánh Hòa.', NULL, NULL, '2022-03-19 10:07:10', '2022-03-19 10:07:10'),
 (11, 'Kiều diễm (nana)', 'kieudiem-nana@gmail.com', NULL, '$2y$10$ALDUZXFZFToN9vRykPX1nuaS1in1ZKxeDTkxbD8MXB3OJIZiMWa8K', '0989490407', 'Số 370 trần phú, tam quan, hoài nhơn, bình định', NULL, NULL, '2022-03-21 23:44:35', '2022-03-21 23:44:35'),
@@ -944,7 +957,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT cho bảng `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=193;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=195;
 
 --
 -- AUTO_INCREMENT cho bảng `personal_access_tokens`
@@ -956,19 +969,19 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
 
 --
 -- AUTO_INCREMENT cho bảng `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT cho bảng `transaction_histories`
 --
 ALTER TABLE `transaction_histories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
 
 --
 -- AUTO_INCREMENT cho bảng `transports`
