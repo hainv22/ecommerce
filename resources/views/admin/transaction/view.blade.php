@@ -172,8 +172,10 @@
                                             (Tiền hàng nợ + Tiền vận chuyển nợ:)
                                             <br>
                                             <span class="label label-danger js_total_money_verb" style="font-size: 15px">
-                                                {{number_format(($transaction->tst_total_money - $transaction->tst_total_paid - $transaction->tst_deposit) + ($total_transport - $transaction->total_transport_paid), 0,',','.')}} đ
-                                            </span> đ
+                                                {{number_format(($transaction->tst_total_money - $transaction->tst_total_paid) + ($total_transport - $transaction->total_transport_paid), 0,',','.')}} đ
+                                            </span> đ <br>
+                                            trừ đi cọc nữa = {{number_format(($transaction->tst_total_money - $transaction->tst_total_paid - $transaction->tst_deposit) + ($total_transport - $transaction->total_transport_paid), 0,',','.')}} đ
+
                                         </td>
                                     </tr>
                                     <tr>
