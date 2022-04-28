@@ -253,11 +253,11 @@
 @endsection
 
  @section('script')
-    <link rel="stylesheet" href="https://code.highcharts.com/css/highcharts.css">
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <link rel="stylesheet" href="{{ asset('admin/do/highcharts.css') }}">
+    <script src="{{ asset('admin/do/highcharts.js') }}"></script>
+    <script src="{{ asset('admin/do/exporting.js') }}"></script>
+    <script src="{{ asset('admin/do/export-data.js') }}"></script>
+    <script src="{{ asset('admin/do/accessibility.js') }}"></script>
     <script>
         let dataTransaction = $('#container').attr('data-json');
         dataTransaction = JSON.parse(dataTransaction);

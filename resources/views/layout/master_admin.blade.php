@@ -13,7 +13,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
-    <link rel="stylesheet" href="https://codeseven.github.io/toastr/build/toastr.min.css">
+    <link rel="stylesheet" href="{{ asset('admin/do/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('admin/bower_components/font-awesome/css/font-awesome.min.css') }}">
@@ -37,8 +37,8 @@
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <link rel="stylesheet" href="{{ asset('admin/bower_components/select2/dist/css/select2.min.css') }}">
     <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="{{ asset('admin/do/html5shiv.min.js') }}"></script>
+    <script src="{{ asset('admin/do/respond.min.js') }}"></script>
     <![endif]-->
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -383,10 +383,10 @@
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('admin/dist/js/demo.js') }}"></script>
     <script src="{{ asset('admin/bower_components/select2/dist/js/select2.min.js') }}"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-    <script src="https://codeseven.github.io/toastr/build/toastr.min.js"></script>
-    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('admin/do/jquery-confirm.min.css') }}">
+    <script src="{{ asset('admin/do/jquery-confirm.min.js') }}"></script>
+    <script src="{{ asset('admin/do/toastr.min.js') }}"></script>
+    <script src="{{ asset('admin/do/pusher.min.js') }}"></script>
     <script>
         if(typeof TYPE_MESSAGE != "undefined"){
             switch(TYPE_MESSAGE){
