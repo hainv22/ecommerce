@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: mysql:3306
--- Thời gian đã tạo: Th4 27, 2022 lúc 03:02 AM
+-- Thời gian đã tạo: Th4 28, 2022 lúc 09:36 AM
 -- Phiên bản máy phục vụ: 5.7.36
 -- Phiên bản PHP: 7.4.20
 
@@ -608,7 +608,7 @@ CREATE TABLE `transactions` (
 --
 
 INSERT INTO `transactions` (`id`, `tst_user_id`, `tst_total_money`, `tst_total_products`, `tst_note`, `tst_status`, `tst_type`, `created_at`, `updated_at`, `tst_transport_id`, `tst_total_paid`, `total_transport_paid`, `tst_order_date`, `tst_expected_date`, `tst_deposit`, `tst_lock`, `tst_interest_rate`) VALUES
-(1, 2, 38382500, 383, 'Chành xe\r\n1420 võ văn kiệt -phường 1 -quận 6 -HCM\r\nXe quốc anh \r\n090 9550444', 2, 1, '2022-03-11 21:46:12', '2022-03-17 22:55:58', 1, 0, 0, '2022-03-03', '2022-03-20', 5000000, 1, 1500000),
+(1, 2, 38382500, 383, 'Chành xe\r\n1420 võ văn kiệt -phường 1 -quận 6 -HCM\r\nXe quốc anh \r\n090 9550444', 2, 1, '2022-03-11 21:46:12', '2022-04-28 16:34:34', 1, 20000000, 0, '2022-03-03', '2022-03-20', 5000000, 1, 1500000),
 (2, 3, 2736000, 26, 'đây là khách lấy lẻ.\r\nsố lượng ít.', 3, 1, '2022-03-14 20:44:51', '2022-03-24 20:09:46', 1, 2736000, 0, '2022-03-14', '2022-03-21', 0, 1, 170000),
 (3, 4, 3330000, 22, NULL, 3, 1, '2022-03-15 13:03:21', '2022-03-24 20:10:47', 1, 3330000, 0, '2022-03-15', '2022-03-22', 0, 1, 225000),
 (4, 5, 12501000, 116, NULL, 3, 1, '2022-03-15 20:15:08', '2022-03-24 20:11:12', 1, 12501000, 0, '2022-03-15', '2022-03-22', 0, 1, 700000),
@@ -786,7 +786,8 @@ INSERT INTO `transaction_histories` (`id`, `th_transaction_id`, `th_content`, `c
 (128, 27, 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển', '2022-04-25 20:45:19', '2022-04-25 20:45:19'),
 (129, 28, 'tạo đơn hàng thành công:  Tổng số sản phẩm: 24,\n                    Tổng số tiền: 2.320.000, Số tiền đặt cọc: 300.000, Tổng số bao: 0', '2022-04-26 21:14:16', '2022-04-26 21:14:16'),
 (130, 28, 'Convert tiền cọc: \n Tiền cọc: 300.000 đ \n/\n                Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền cọc): 2.320.000 - 300.000 = 2.020.000 /\n                Tổng số tiền hàng đã trả: 300.000\n                (còn nợ tổng: 2.020.000)', '2022-04-26 21:14:29', '2022-04-26 21:14:29'),
-(131, 28, 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển', '2022-04-26 21:14:34', '2022-04-26 21:14:34');
+(131, 28, 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển', '2022-04-26 21:14:34', '2022-04-26 21:14:34'),
+(132, 1, 'Cập nhật Tiền hàng: \n Trả: 20.000.000 đ \n/ Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền trả lần này): 38.382.500 - 20.000.000 = 18.382.500 /\n                Tổng số tiền hàng đã trả: 20.000.000\n                (còn nợ tổng: 18.382.500)', '2022-04-28 16:34:33', '2022-04-28 16:34:33');
 
 -- --------------------------------------------------------
 
@@ -1001,7 +1002,7 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT cho bảng `transaction_histories`
 --
 ALTER TABLE `transaction_histories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
 
 --
 -- AUTO_INCREMENT cho bảng `transports`
