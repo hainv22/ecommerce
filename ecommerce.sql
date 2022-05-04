@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: mysql:3306
--- Thời gian đã tạo: Th5 03, 2022 lúc 04:30 PM
+-- Thời gian đã tạo: Th5 04, 2022 lúc 07:27 AM
 -- Phiên bản máy phục vụ: 5.7.36
 -- Phiên bản PHP: 7.4.20
 
@@ -48,7 +48,7 @@ CREATE TABLE `baos` (
 INSERT INTO `baos` (`id`, `b_name`, `b_weight`, `b_fee`, `b_status`, `b_note`, `b_transaction_id`, `b_success_date`, `created_at`, `updated_at`, `b_transport_id`) VALUES
 (1, 'bao 1', 45, NULL, 1, 'túi: 5019, 035203', 1, NULL, '2022-03-11 21:49:34', '2022-03-11 21:49:34', 1),
 (2, 'bao 2', 40, NULL, 1, 'túi: 3114, 2126, 1123', 1, NULL, '2022-03-11 21:49:34', '2022-03-11 21:49:34', 1),
-(3, 'bao 3', 48, NULL, 1, 'có 1 loại túi + tất cả ví', 1, NULL, '2022-03-11 21:49:34', '2022-03-11 21:49:34', 1);
+(3, 'bao 3', 48, 27000, 1, 'có 1 loại túi + tất cả ví', 1, '2022-05-04 14:25:16', '2022-03-11 21:49:34', '2022-05-04 14:25:16', 1);
 
 -- --------------------------------------------------------
 
@@ -613,7 +613,7 @@ CREATE TABLE `transactions` (
 --
 
 INSERT INTO `transactions` (`id`, `tst_user_id`, `tst_total_money`, `tst_total_products`, `tst_note`, `tst_status`, `tst_type`, `created_at`, `updated_at`, `tst_transport_id`, `tst_total_paid`, `total_transport_paid`, `tst_order_date`, `tst_expected_date`, `tst_deposit`, `tst_lock`, `tst_interest_rate`) VALUES
-(1, 2, 38382500, 383, 'Chành xe\r\n1420 võ văn kiệt -phường 1 -quận 6 -HCM\r\nXe quốc anh \r\n090 9550444', 2, 1, '2022-03-11 21:46:12', '2022-04-28 16:34:34', 1, 20000000, 0, '2022-03-03', '2022-03-20', 5000000, 1, 1500000),
+(1, 2, 38382500, 383, 'Chành xe\r\n1420 võ văn kiệt -phường 1 -quận 6 -HCM\r\nXe quốc anh \r\n090 9550444', 2, 1, '2022-03-11 21:46:12', '2022-05-04 14:25:20', 1, 20000000, 0, '2022-03-03', '2022-03-20', 5000000, 1, 1500000),
 (2, 3, 2736000, 26, 'đây là khách lấy lẻ.\r\nsố lượng ít.', 3, 1, '2022-03-14 20:44:51', '2022-03-24 20:09:46', 1, 2736000, 0, '2022-03-14', '2022-03-21', 0, 1, 170000),
 (3, 4, 3330000, 22, NULL, 3, 1, '2022-03-15 13:03:21', '2022-03-24 20:10:47', 1, 3330000, 0, '2022-03-15', '2022-03-22', 0, 1, 225000),
 (4, 5, 12501000, 116, NULL, 3, 1, '2022-03-15 20:15:08', '2022-03-24 20:11:12', 1, 12501000, 0, '2022-03-15', '2022-03-22', 0, 1, 700000),
@@ -641,7 +641,7 @@ INSERT INTO `transactions` (`id`, `tst_user_id`, `tst_total_money`, `tst_total_p
 (26, 8, 10500000, 56, NULL, 3, 1, '2022-04-24 20:21:56', '2022-04-28 21:01:17', 1, 10500000, 0, '2022-04-24', '2022-04-28', 0, 1, 710000),
 (27, 5, 4305000, 37, NULL, 3, 1, '2022-04-25 20:42:03', '2022-04-28 21:01:41', 1, 4305000, 0, '2022-04-25', '2022-04-28', 0, 1, 290000),
 (28, 3, 2320000, 24, NULL, 3, 1, '2022-04-26 21:14:16', '2022-05-03 23:27:33', 1, 2320000, 0, '2022-04-26', '2022-05-01', 0, 1, 180000),
-(29, 14, 7860000, 44, NULL, 2, 1, '2022-04-28 20:59:27', '2022-04-28 21:00:32', 1, 500000, 0, '2022-04-28', '2022-05-03', 0, 1, 440000),
+(29, 14, 7860000, 44, NULL, 3, 1, '2022-04-28 20:59:27', '2022-05-04 14:24:39', 1, 7860000, 0, '2022-04-28', '2022-05-03', 0, 1, 440000),
 (30, 15, 1200000, 10, NULL, 2, 1, '2022-05-03 22:36:42', '2022-05-03 22:39:37', 1, 200000, 0, '2022-05-01', '2022-05-08', 0, 1, 100000);
 
 -- --------------------------------------------------------
@@ -806,7 +806,9 @@ INSERT INTO `transaction_histories` (`id`, `th_transaction_id`, `th_content`, `c
 (141, 30, 'Đã chuyển đơn hàng từ Tiếp nhận -> Đang vận chuyển', '2022-05-03 22:36:59', '2022-05-03 22:36:59'),
 (142, 30, 'Convert tiền cọc: \n Tiền cọc: 200.000 đ \n/\n                Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền cọc): 1.200.000 - 200.000 = 1.000.000 /\n                Tổng số tiền hàng đã trả: 200.000\n                (còn nợ tổng: 1.000.000)', '2022-05-03 22:37:03', '2022-05-03 22:37:03'),
 (143, 28, 'Cập nhật Tiền hàng: \n Trả: 2.020.000 đ \n/ Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền trả lần này): 2.020.000 - 2.020.000 = 0 /\n                Tổng số tiền hàng đã trả: 2.320.000\n                (còn nợ tổng: 0)', '2022-05-03 23:27:21', '2022-05-03 23:27:21'),
-(144, 28, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-05-03 23:27:31', '2022-05-03 23:27:31');
+(144, 28, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-05-03 23:27:31', '2022-05-03 23:27:31'),
+(145, 29, 'Cập nhật Tiền hàng: \n Trả: 7.360.000 đ \n/ Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền trả lần này): 7.360.000 - 7.360.000 = 0 /\n                Tổng số tiền hàng đã trả: 7.860.000\n                (còn nợ tổng: 0)', '2022-05-04 14:24:34', '2022-05-04 14:24:34'),
+(146, 29, 'Đã chuyển đơn hàng từ Đang vận chuyển -> Đã bàn giao', '2022-05-04 14:24:38', '2022-05-04 14:24:38');
 
 -- --------------------------------------------------------
 
@@ -869,7 +871,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `ph
 (12, 'Phạm Hà', 'phamha@gmail.com', NULL, '$2y$10$JlEOtzqS9zr6nMYU6lg/5ef64j3oIhAS1kXCquJN19oNIxPpApHjC', '0396374607', '18 Đồng Xuân,Q. Hoàn Kiếm, HN', NULL, NULL, '2022-04-01 21:20:37', '2022-04-01 21:20:37'),
 (13, 'thảo mai', 'thaomai@gmail.com', NULL, '$2y$10$FwRVjngN65aS/jqDL4lAQOycE0YAQCeQK6bwAE1BHTRSQ7AyVEDj.', '0968446213', 'Thôn 1 xã an phú pleiku gia lai', NULL, NULL, '2022-04-12 19:43:09', '2022-04-12 19:43:09'),
 (14, 'Túi Xách Vũ An', 'tuixachvuan@gmail.com', NULL, '$2y$10$Wbd3ZBjitom9/ErbogXDFO5p.IrLh6bT66.5Tsqz5kgqQEMyH4qVO', '0976297995, 0977705757', 'Trung tâm thương mại long hoa huyện hòa thành tỉnh tây ninh', NULL, NULL, '2022-04-28 20:58:57', '2022-04-28 20:58:57'),
-(15, 'Huỳnh Kiều', 'huynhkieu@gmail.com', NULL, '$2y$10$nMlTXxQlVXGr43OmerxdiOSv3XBtcd4VHfMILp.wWRAALriduP/N2', '0988394492', 'ấp Long Hoà, xã Long An, tx Tân Châu, An Giang', NULL, NULL, '2022-05-03 22:35:14', '2022-05-03 22:35:14');
+(15, 'Huỳnh Kiều (đặng quanh thịnh)', 'huynhkieu@gmail.com', NULL, '$2y$10$nMlTXxQlVXGr43OmerxdiOSv3XBtcd4VHfMILp.wWRAALriduP/N2', '0988394492', 'ấp Long Hoà, xã Long An, tx Tân Châu, An Giang', NULL, NULL, '2022-05-03 22:35:14', '2022-05-04 14:24:13');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -1023,7 +1025,7 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT cho bảng `transaction_histories`
 --
 ALTER TABLE `transaction_histories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=147;
 
 --
 -- AUTO_INCREMENT cho bảng `transports`
