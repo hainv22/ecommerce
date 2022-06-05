@@ -97,7 +97,7 @@
                             </div>
                             <div class="form-group col-sm-6 {{ $errors->first('pro_number') ? 'has-error' : '' }}">
                                 <label>Số Lượng</label>
-                                <input type="number" name="pro_number" value="{{ old('pro_number') }}" class="form-control" placeholder="0">
+                                <input type="number" name="pro_number" value="999999999" class="form-control" placeholder="0">
                                 @if ($errors->first('pro_number'))
                                     <span class="text-danger">{{ $errors->first('pro_number') }}</span>
                                 @endif
