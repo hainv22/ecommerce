@@ -174,7 +174,7 @@ class AdminProductController extends Controller
 
     public function edit($id)
     {
-        $product = Product::with('images')->findOrfail($id);
+        $product = Product::with('images', 'orders.transaction')->findOrfail($id);
         $categorys = Category::select('id', 'c_name', 'c_parent_id')->get();
 
         $viewData = [

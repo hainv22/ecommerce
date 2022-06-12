@@ -90,7 +90,19 @@
                             </div>
                         </div>
                     </div>
-
+                    <div class="box box-warning">
+                        <div class="box-header">
+                            <h3 class="box-title">Transaction</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group col-sm-6">
+                                @foreach($product->orders as $value)
+                                    <label><a href="{{route('admin.transaction.detail', $value->transaction->id)}}">Đơn - {{$value->transaction->id}}</a></label>
+                                    <br>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="col-md-5">
