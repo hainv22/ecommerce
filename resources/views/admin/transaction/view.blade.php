@@ -223,7 +223,7 @@
                                                     <span style="color: red; font-size: 15px">{{ $item->product->id }}</span>
                                                     <input type="hidden" name="txt_id_product[]" value="{{ $item->product->id }}" >
                                                 </td>
-                                                <td>{{ $item->product->pro_name ?? "[N\A]" }}</td>
+                                                <td><a href="{{ route('admin.product.update',$item->product->id) }}">{{ $item->product->pro_name ?? "[N\A]" }}</a></td>
                                                 <td class="cls_td " >
                                                     <img src="{{ pare_url_file($item->product->pro_avatar) }}" alt="" width="120px" height="100px">
                                                 </td>
