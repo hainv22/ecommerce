@@ -129,6 +129,14 @@
                                             <span class="js_tst_money_verb">{{number_format($total_transport - $total_money_transport_paid, 0,',','.')}} đ</span>
                                         </td>
                                     </tr>
+
+                                    <tr>
+                                        <td>Tiền lãi sơ bộ</td>
+                                        <td>
+                                            <span class="js_tst_money">{{number_format($tst_interest_rate,0,',','.') }}</span> đ
+                                        </td>
+                                    </tr>
+
                                     </tbody>
                                 </table>
                             </form>

@@ -129,6 +129,7 @@ class AdminUserController extends Controller
         $transactions = Transaction::where('tst_user_id', $id)->get();
         $total_transport_success = 0;
         $total_transport = 0;
+        $tst_interest_rate = Transaction::where('tst_user_id', $id)->sum('tst_interest_rate');
         foreach ($transactions as $transaction) {
             $transport_success = Bao::where('b_transaction_id', $transaction->id)->whereNotNull('b_success_date')->get();
             foreach ($transport_success as $item) {
@@ -147,7 +148,8 @@ class AdminUserController extends Controller
             'total_money_user' => $total_money_user,
             'total_money_paid' => $total_money_paid,
             'total_money_transport_paid' => $total_money_transport_paid,
-            'total_transport' => $total_transport
+            'total_transport' => $total_transport,
+            'tst_interest_rate' => $tst_interest_rate
         ];
         return view('admin.user.detail', $viewData);
     }
