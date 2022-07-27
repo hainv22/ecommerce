@@ -4,9 +4,9 @@
         <tr>
           <th>STT -- ID</th>
           <th>Name</th>
-          <th>SL - còn = đã bán</th>
-            <th>Price</th>
             <th>Avatar</th>
+            <th>Price</th>
+            <th>SL - còn = đã bán</th>
             <th>Category</th>
           <th>Hot</th>
           <th>Status</th>
@@ -21,7 +21,7 @@
                 <tr>
                     <td>{{ ++$i . ' -- ' .  $item->id}}</td>
                     <td>{{ $item->pro_name }}</td>
-                    <td>{{ $item->pro_number }} - {{ ($item->pro_number-$item->pro_pay) }} = <span style="font-size: 17px;color: orangered">{{ $item->pro_pay }}</span></td>
+                    <td><img src="{{ pare_url_file($item->pro_avatar) }}" alt="" width="150px" height="100px"> </td>
                     <td>
                         @if ($item->pro_sale)
                             <span class="label label-default" style="text-decoration: line-through;">{{ number_format($item->pro_price,0,',','.') }} VND</span><br>
@@ -34,7 +34,7 @@
                             <span class="label label-success" style="font-size: 13px">{{ number_format($item->pro_price,0,',','.') }} VND</span>
                         @endif
                     </td>
-                    <td><img src="{{ pare_url_file($item->pro_avatar) }}" alt="" width="150px" height="100px"> </td>
+                    <td>{{ $item->pro_number }} - {{ ($item->pro_number-$item->pro_pay) }} = <span style="font-size: 17px;color: orangered">{{ $item->pro_pay }}</span></td>
                     <td><span class="label label-warning">{{ $item->category->c_name ?? "[N\A]" }}</span></td>
                     <td>
                         @if ($item->pro_hot==1)
