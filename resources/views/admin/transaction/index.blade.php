@@ -40,6 +40,7 @@
                             <option value="3" {{ Request::get('status') == 3 ? "selected='selected'" : "" }}>Đã Bàn Giao</option>
                             <option value="-1" {{ Request::get('status') == -1 ? "selected='selected'" : "" }}>Hủy Bỏ</option>
                         </select>
+                        <input type="text" value="{{ Request::get('kg') }}" class="form-control" name="kg" placeholder="kg">
                         <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
                     </form>
                 </div><br>
@@ -99,6 +100,10 @@
                                         <span class="label label-success">
                                        {{ number_format($item->tst_total_money + $total_transport,0,',','.') }}
                                     </span></li>
+                                        số cân:
+                                        @foreach($item->baos as $bao)
+                                            - {{$bao->b_weight}} -
+                                        @endforeach
                                     </ul>
                                 </td>
                                 <td>

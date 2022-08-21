@@ -40,6 +40,14 @@ class AdminTransactionController extends Controller
         if ($status = $request->status) {
             $transactions->where('tst_status', $status);
         }
+
+
+        if ($kg = $request->kg) {
+            $transactions->whereHas('baos', function ($query) use ($kg) {
+                $query->where('b_weight', $kg);
+            });
+        }
+
         $transactions = $transactions->orderByDesc('id')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
         $viewData = [
             'transactions'  =>  $transactions,
