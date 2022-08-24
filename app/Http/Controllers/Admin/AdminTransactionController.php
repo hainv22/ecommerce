@@ -107,6 +107,7 @@ class AdminTransactionController extends Controller
                     ->increment('pro_pay', $data['txt_quantity_product'][$key]);
             }
             $total_bao = 0;
+            $total_b_weight = 0;
 
             if (!empty($data['b_weight'])) {
                 foreach ($data['b_weight'] as $key => $value) {
@@ -120,18 +121,20 @@ class AdminTransactionController extends Controller
                         'b_transport_id' => $data['b_transport_id'][$key]
                     ]);
                     $total_bao += 1;
+                    $total_b_weight += $data['b_weight'][$key];
                 }
             }
             $a = number_format($total_products,0,',','.');
             $b = number_format($total_money,0,',','.');
             $c = number_format($data['tst_deposit'],0,',','.');
             $d = number_format($total_bao,0,',','.');
+            $e = number_format($total_b_weight,0,',','.');
 
             if ($transaction) {
                 TransactionHistory::create([
                     'th_transaction_id' => $transaction->id,
-                    'th_content' => "tạo đơn hàng thành công:  Tổng số sản phẩm: $a,
-                    Tổng số tiền: $b, Số tiền đặt cọc: {$c}, Tổng số bao: $d"
+                    'th_content' => "Tạo đơn hàng thành công:  Tổng số sản phẩm: $a,
+                    Tổng số tiền: $b, Số tiền đặt cọc: {$c}, Tổng số bao: $d, Tổng số cân: $e"
                 ]);
             }
             DB::commit();
