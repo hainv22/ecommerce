@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Transaction;
+use App\Models\TransactionHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\HelpersClass\Date;
@@ -77,6 +78,7 @@ class AdminHomeController extends Controller
                 ->get();
         }
 
+        $transactionHistories = TransactionHistory::with('transaction.user')->orderBy('id', 'DESC')->paginate(50);
 
 
 
@@ -151,6 +153,7 @@ class AdminHomeController extends Controller
             // 'listDay'                               => json_encode($listDay),
             // 'arrRevenueTransactionMonth'            => json_encode($arrRevenueTransactionMonth),
             // 'arrRevenueTransactionMonthDefault'     => json_encode($arrRevenueTransactionMonthDefault),
+            'transactionHistories' => $transactionHistories,
         ];
         return view('admin.index', $viewData);
     }
