@@ -96,14 +96,14 @@
              </div>
          </div>
 
-        <div class="col-sm-4">
+        <div class="col-md-4">
             <figure class="highcharts-figure">
                 <div id="container" data-json="{{ $statusTransaction }}"></div>
             </figure>
         </div>
     </div>
     <div class="row" style="margin-bottom: 20px">
-        <div class="col-sm-8">
+        <div class="col-md-8">
             {{-- <div class="box-title">
                 <form action="" method="GET" class="form-inline">
                     <select name="mt" class="form-control">
