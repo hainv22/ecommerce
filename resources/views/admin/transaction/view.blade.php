@@ -175,7 +175,18 @@
                                                 {{number_format(($transaction->tst_total_money - $transaction->tst_total_paid) + ($total_transport - $transaction->total_transport_paid), 0,',','.')}} đ
                                             </span> đ <br>
                                             trừ đi cọc nữa = {{number_format(($transaction->tst_total_money - $transaction->tst_total_paid - $transaction->tst_deposit) + ($total_transport - $transaction->total_transport_paid), 0,',','.')}} đ
-
+                                            <br>
+                                            <?php
+                                            $total_transport = 0;
+                                            foreach ($transaction->baos as $bao) {
+                                                if(!empty($bao->b_success_date)) {
+                                                    $total_transport += ($bao->b_weight * $bao->b_fee);
+                                                } else {
+                                                    $total_transport += ($bao->b_weight * $bao->transport->tp_fee);
+                                                }
+                                            }
+                                            ?>
+                                            Tổng: {{ number_format($transaction->tst_total_money + $total_transport,0,',','.') }}
                                         </td>
                                     </tr>
                                     <tr>
