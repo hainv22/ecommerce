@@ -150,7 +150,7 @@ class AdminTransactionController extends Controller
             'type'      => 'success',
             'message'   => 'Tạo đơn hàng thành công !'
         ]);
-        return redirect()->back();
+        return redirect()->route('admin.transaction.detail', $transaction->id);
     }
 
     public function update(Request $request, $id)
