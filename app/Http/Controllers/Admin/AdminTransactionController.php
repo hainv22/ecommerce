@@ -662,4 +662,24 @@ class AdminTransactionController extends Controller
     //     }
     //     $transaction->save();
     // }
+
+    public function printTransaction(Request $request, $id)
+    {
+        $transaction = Transaction::query()->with(['baos', 'transaction_histories', 'transport'])->findOrFail($id);
+        $order = Order::with('product:id,pro_name,pro_avatar')
+            ->where('od_transaction_id', $id)
+            ->get();
+        $transport_success = Bao::where('b_transaction_id', $id)->whereNotNull('b_success_date')->get();
+        $total_transport_success = 0;
+        foreach ($transport_success as $item) {
+            $total_transport_success += ($item->b_weight * $item->b_fee);
+        }
+        $total_transport = 0;
+        $transport_pending = Bao::with('transport')->where('b_transaction_id', $id)->whereNull('b_success_date')->get();
+        foreach ($transport_pending as $item) {
+            $total_transport += ($item->b_weight * $item->transport->tp_fee);
+        }
+        $total_transport +=$total_transport_success;
+        return view('admin.transaction.print', compact('transaction', 'order', 'total_transport'));
+    }
 }

@@ -3,6 +3,7 @@
 <section class="content-header">
     <h1>
       View Detai Transaction
+        <a target="_blank" href="{{ route('admin.transaction.view.print',$transaction->id) }}" class="btn btn-primary"><i class="fa fa-download"></i>Print</a>
     </h1>
     <ol class="breadcrumb">
       <li><a href="{{ route('admin.index') }}"><i class="fa fa-dashboard"></i> Home</a></li>

@@ -72,6 +72,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('delete/{id}', [AdminTransactionController::class, 'delete'])->name('admin.transaction.delete');
             Route::get('view/{id}', [AdminTransactionController::class, 'getTransactionDetail'])->name('admin.transaction.detail');
             Route::post('view/{id}', [AdminTransactionController::class, 'update'])->name('admin.transaction.update');
+            Route::get('view/{id}/print', [AdminTransactionController::class, 'printTransaction'])->name('admin.transaction.view.print');
             Route::get('update-money/{id}', [AdminTransactionController::class, 'updateMoney'])->name('admin.transaction.update.money');
             Route::get('update-money-transport/{id}', [AdminTransactionController::class, 'updateMoneyTransport'])->name('admin.transaction.update.money.transport');
             Route::get('update-success-date/{id}', [AdminTransactionController::class, 'updateSuccessDate'])->name('admin.transaction.update.success.date');
