@@ -69,7 +69,7 @@
             width:50%;
             color:#000;
             float:left;
-            font-size: 12px;
+            font-size: 13px;
             bottom:1px;
         }
         .footer-right {
@@ -80,7 +80,7 @@
             height: 150px;
             width:50%;
             color:#000;
-            font-size: 12px;
+            font-size: 13px;
             float:right;
             bottom:1px;
         }
@@ -219,6 +219,16 @@
             <tr>
                 <td colspan="4" class="tong">Tổng (tiền hàng + tiền vận chuyển)</td>
                 <td class="cotSo" style="color: red;font-size: 15px;">{{number_format($total_transport + $transaction->tst_total_money,0,',','.') }} đ</td>
+            </tr>
+        @endif
+        @if($transaction->tst_total_paid > 0)
+            <tr>
+                <td colspan="4" class="tong">Đã trả</td>
+                <td class="cotSo" style="color: red;font-size: 15px;">{{number_format($transaction->tst_total_paid + $transaction->total_transport_paid,0,',','.') }} đ</td>
+            </tr>
+            <tr>
+                <td colspan="4" class="tong">Còn Nợ</td>
+                <td class="cotSo" style="color: red;font-size: 15px;">{{number_format(($transaction->tst_total_money - $transaction->tst_total_paid) + ($total_transport - $transaction->total_transport_paid), 0,',','.')}} đ</td>
             </tr>
         @endif
     </table>
