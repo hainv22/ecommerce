@@ -69,7 +69,9 @@
                                         <li>Email: {{ $item->user->email }}</li>
                                         <li>Phone: {{ $item->user->phone }}</li>
                                         <li>Address: {{ $item->user->address }}</li>
-                                        <a href="{{ route('admin.user.detail',$item->user->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
+                                        <a target="_blank" href="{{ route('admin.user.detail',$item->user->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-user-circle"></i>User</a>
+                                        <a target="_blank" href="{{ route('admin.transaction.view.print',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-download"></i>Print</a>
+                                        <a target="_blank" href="{{ route('admin.transaction.detail',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
                                     </ul>
                                 </td>
 
