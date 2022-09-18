@@ -41,6 +41,7 @@
                             <option value="-1" {{ Request::get('status') == -1 ? "selected='selected'" : "" }}>Hủy Bỏ</option>
                         </select>
                         <input type="text" value="{{ Request::get('kg') }}" class="form-control" name="kg" placeholder="kg">
+                        <input type="text" value="{{ Request::get('code_order') }}" class="form-control" name="code_order" placeholder="Mã đơn bên thứ 3">
                         <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
                     </form>
                 </div><br>
@@ -69,6 +70,7 @@
                                         <li>Email: {{ $item->user->email }}</li>
                                         <li>Phone: {{ $item->user->phone }}</li>
                                         <li>Address: {{ $item->user->address }}</li>
+                                        <li>Mã đơn bên 3: {{ $item->tst_code_order }}</li>
                                         <a target="_blank" href="{{ route('admin.user.detail',$item->user->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-user-circle"></i>User</a>
                                         <a target="_blank" href="{{ route('admin.transaction.view.print',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-download"></i>Print</a>
                                         <a target="_blank" href="{{ route('admin.transaction.detail',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>

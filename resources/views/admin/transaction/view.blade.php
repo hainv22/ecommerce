@@ -85,6 +85,19 @@
 
                                         </td>
                                     </tr>
+
+                                    <tr>
+                                        <td>Mã vận đơn bên thứ 3 </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                                                <input type="text" name="tst_code_order" class="form-control" value="{{ $transaction->tst_code_order }}">
+                                            </div>
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td>content</td>
                                         <td>

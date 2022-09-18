@@ -60,6 +60,17 @@
                             @endif
                         </div>
 
+                        <div class="form-group {{ $errors->first('tst_code_order') ? 'has-error' : '' }}" >
+                            <label for="pro_price">Mã vận đơn bên thứ 3 </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                                <input type="text" name="tst_code_order" class="form-control" value="{{ old('tst_code_order') }}">
+                            </div>
+                            @if ($errors->first('tst_code_order'))
+                                <span class="text-danger">{{ $errors->first('tst_code_order') }}</span>
+                            @endif
+                        </div>
+
                         <div class="form-group {{ $errors->first('tst_order_date') ? 'has-error' : '' }} col-md-6" >
                             <label for="pro_price">Ngày đặt hàng</label>
                             <div class="input-group">
