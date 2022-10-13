@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Dashboard</title>
+    <title>HaiAnh | Store</title>
     @if (session('toastr'))
         <script>
             var TYPE_MESSAGE = "{{ session('toastr.type') }}";
@@ -18,6 +18,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('admin/bower_components/font-awesome/css/font-awesome.min.css') }}">
     <!-- Ionicons -->
+    <link rel="shortcut icon" type="image/png" href="{{ asset('admin/favicon.jpg') }}"/>
     <link rel="stylesheet" href="{{ asset('admin/bower_components/Ionicons/css/ionicons.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('admin/dist/css/AdminLTE.min.css') }}">
