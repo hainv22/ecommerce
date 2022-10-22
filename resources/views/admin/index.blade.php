@@ -12,91 +12,93 @@
   </ol>
 </section>
 <section class="content">
-    <div class="row">
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+    @if(\Auth::user()->role == \App\Models\User::ADMIN)
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
 
-            <div class="info-box-content">
-              <span class="info-box-text">Tổng Số Đơn Hàng</span>
-               <span class="info-box-number">{{ $totalTransactions }} <small><a href="{{ route('admin.transaction.index') }}">(Chi Tiết)</a></small></span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Thành Viên</span>
-               <span class="info-box-number">{{ $totalUsers }} <small><a href="{{ route('admin.user.index') }}">(Chi Tiết)</a></small></span>
-            </div>
-          </div>
-        </div>
-        <div class="clearfix visible-sm-block"></div>
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
-            <div class="info-box-content">
-              <span class="info-box-text">Sản Phẩm</span>
-               <span class="info-box-number">{{ $totalProducts }} <small><a href="{{ route('admin.product.index') }}">(Chi Tiết)</a></small></span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Fix Bug</span>
-              <span class="info-box-number">++</span>
-            </div>
-          </div>
-        </div>
-    </div>
-    <div class="row">
-
-    <div class="col-md-7">
-        <div class="box box-success">
-            <div class="box-header with-border">
-                <h3 class="box-title">Lịch sử xử lý đơn hàng</h3>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Tổng Số Đơn Hàng</span>
+                        <span class="info-box-number">{{ $totalTransactions }} <small><a href="{{ route('admin.transaction.index') }}">(Chi Tiết)</a></small></span>
+                    </div>
                 </div>
             </div>
-            <div class="box-body" style="">
-                <div class="table-responsive">
-                    <table class="table no-margin">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Nội dung</th>
-                            <th>Created</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @if(isset($transactionHistories))
-                            @foreach ($transactionHistories as $key => $item)
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Thành Viên</span>
+                        <span class="info-box-number">{{ $totalUsers }} <small><a href="{{ route('admin.user.index') }}">(Chi Tiết)</a></small></span>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix visible-sm-block"></div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Sản Phẩm</span>
+                        <span class="info-box-number">{{ $totalProducts }} <small><a href="{{ route('admin.product.index') }}">(Chi Tiết)</a></small></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Fix Bug</span>
+                        <span class="info-box-number">++</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-md-7">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Lịch sử xử lý đơn hàng</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body" style="">
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
                                 <tr>
-                                    <td>{{ $item->id }}</td>
-                                    <td>{{ $item->th_content }} <br> <br><span class="label label-success" style="font-size: 15px;"> {{ $item->transaction->user->name }} </span> </td>
-                                    <td>{{ $item->created_at }}</td>
-                                    <td>
-                                        <a target="_blank" href="{{ route('admin.transaction.detail',$item->th_transaction_id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
-                                    </td>
+                                    <th>#</th>
+                                    <th>Nội dung</th>
+                                    <th>Created</th>
+                                    <th>Action</th>
                                 </tr>
-                            @endforeach
-                        @endif
-                        </tbody>
-                    </table>
+                                </thead>
+                                <tbody>
+                                @if(isset($transactionHistories))
+                                    @foreach ($transactionHistories as $key => $item)
+                                        <tr>
+                                            <td>{{ $item->id }}</td>
+                                            <td>{{ $item->th_content }} <br> <br><span class="label label-success" style="font-size: 15px;"> {{ $item->transaction->user->name }} </span> </td>
+                                            <td>{{ $item->created_at }}</td>
+                                            <td>
+                                                <a target="_blank" href="{{ route('admin.transaction.detail',$item->th_transaction_id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    </div>
+    @endif
 
 
      {{-- <div class="row" style="margin-bottom: 20px">

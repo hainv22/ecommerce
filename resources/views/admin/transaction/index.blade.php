@@ -71,7 +71,9 @@
                                         <li>Phone: {{ $item->user->phone }}</li>
                                         <li>Address: {{ $item->user->address }}</li>
                                         <li>Mã đơn bên 3: {{ $item->tst_code_order }}</li>
+                                        @if(\Auth::user()->role == \App\Models\User::ADMIN)
                                         <a target="_blank" href="{{ route('admin.user.detail',$item->user->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-user-circle"></i>User</a>
+                                        @endif
                                         <a target="_blank" href="{{ route('admin.transaction.view.print',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-download"></i>Print</a>
                                         <a target="_blank" href="{{ route('admin.transaction.detail',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
                                     </ul>
@@ -99,7 +101,9 @@
                                     ?>
                                         <li>Tiền hàng: {{ number_format($item->tst_total_money,0,',','.') }}</li>
                                         <li>Tiền vận chuyển: {{ number_format($total_transport,0,',','.') }}</li>
+                                        @if(\Auth::user()->role == \App\Models\User::ADMIN)
                                         <li>Tiền lãi: {{ number_format($item->tst_interest_rate,0,',','.') }}</li>
+                                        @endif
                                         <li>Tổng :
                                         <span class="label label-success">
                                        {{ number_format($item->tst_total_money + $total_transport,0,',','.') }}

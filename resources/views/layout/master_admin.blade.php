@@ -281,17 +281,20 @@
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
-            <li class="{{ Request::is('admin-ecommerce') ? 'active' : '' }}">
-                <a href="{{ route('admin.index') }}">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                </a>
-            </li>
+
+            @if(\Auth::user()->role == \App\Models\User::ADMIN)
+              <li class="{{ Request::is('admin-ecommerce') ? 'active' : '' }}">
+                  <a href="{{ route('admin.index') }}">
+                      <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                  </a>
+              </li>
 
             <li class="{{ Request::is('admin-ecommerce/category*') ? 'active' : '' }}">
                 <a href="{{ route('admin.category.index') }}">
                     <i class="fa fa-edit"></i> <span>Category</span>
                 </a>
             </li>
+              @endif
 
             <li class="{{ Request::is('admin-ecommerce/product*') ? 'active' : '' }}">
                 <a href="{{ route('admin.product.index') }}">
@@ -306,6 +309,7 @@
             </li>
 
               <li class="header">Hệ Thống</li>
+              @if(\Auth::user()->role == \App\Models\User::ADMIN)
 
             <li class="{{ Request::is('admin-ecommerce/statistical*') ? 'active' : '' }}">
               <a href="{{ route('admin.statistical.index') }}">
@@ -322,6 +326,7 @@
                       <i class="fa fa-car"></i> <span>Transports</span>
                   </a>
               </li>
+                  @endif
           </ul>
         </section>
         <!-- /.sidebar -->

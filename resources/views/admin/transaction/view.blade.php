@@ -35,7 +35,9 @@
                                     <tr>
                                         <td>Tên KH</td>
                                         <td><span >{{ $transaction->user->name }}</span> <br>
+                                            @if(\Auth::user()->role == \App\Models\User::ADMIN)
                                             <a href="{{ route('admin.user.detail',$transaction->user->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
+                                            @endif
                                         </td>
                                     </tr>
                                     <tr>
@@ -73,6 +75,7 @@
 
                                         </td>
                                     </tr>
+                                    @if(\Auth::user()->role == \App\Models\User::ADMIN)
                                     <tr>
                                         <td>Tiền lãi</td>
                                         <td>
@@ -85,7 +88,7 @@
 
                                         </td>
                                     </tr>
-
+                                    @endif
                                     <tr>
                                         <td>Mã vận đơn bên thứ 3 </td>
                                         <td>
