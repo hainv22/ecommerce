@@ -27,7 +27,7 @@
                             <option value="0">__ Chọn Khách Hàng __</option>
                             @if (isset($users))
                                 @foreach($users as $user)
-                                    <option value="{{$user->id}}" {{ Request::get('user_id') == $user->id ? "selected='selected'" : "" }}>{{$user->name}} - {{$user->phone}}</option>
+                                    <option value="{{$user->id}}" {{ Request::get('user_id') == $user->id ? "selected='selected'" : "" }}>{{$user->name}} - @if(\Auth::user()->role == \App\Models\User::ADMIN) {{$user->phone}} @endif</option>
                                 @endforeach
                             @endif
                         </select>
@@ -68,7 +68,7 @@
                                     <ul>
                                         <li>Name: {{ $item->user->name }}</li>
                                         <li>Email: {{ $item->user->email }}</li>
-                                        <li>Phone: {{ $item->user->phone }}</li>
+                                        @if(\Auth::user()->role == \App\Models\User::ADMIN) <li>Phone: {{ $item->user->phone }} </li> @endif
                                         <li>Address: {{ $item->user->address }}</li>
                                         <li>Mã đơn bên 3: {{ $item->tst_code_order }}</li>
                                         @if(\Auth::user()->role == \App\Models\User::ADMIN)
@@ -108,10 +108,7 @@
                                         <span class="label label-success">
                                        {{ number_format($item->tst_total_money + $total_transport,0,',','.') }}
                                     </span></li>
-                                        số cân:
-                                        @foreach($item->baos as $bao)
-                                            - {{$bao->b_weight}} -
-                                        @endforeach
+                                        @if(\Auth::user()->role == \App\Models\User::ADMIN) số cân: @foreach($item->baos as $bao) - {{$bao->b_weight}} - @endforeach @endif
                                     </ul>
                                 </td>
                                 <td>

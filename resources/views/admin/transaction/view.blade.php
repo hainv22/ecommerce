@@ -44,10 +44,12 @@
                                         <td>Email KH</td>
                                         <td><span >{{ $transaction->user->email }}</span></td>
                                     </tr>
+                                    @if(\Auth::user()->role == \App\Models\User::ADMIN)
                                     <tr>
                                         <td>Phone KH</td>
                                         <td><span >{{ $transaction->user->phone }}</span></td>
                                     </tr>
+                                    @endif
                                     <tr>
                                         <td>Địa Chỉ KH</td>
                                         <td><span >{{ $transaction->user->address }}</span></td>

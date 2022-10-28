@@ -13,6 +13,7 @@ use App\Models\Transport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AdminTransactionController extends Controller
@@ -21,6 +22,9 @@ class AdminTransactionController extends Controller
     {
         $users = User::all();
         $transactions = Transaction::query();
+        if (Auth::user()->role != User::ADMIN) {
+            $transactions = $transactions->where('tst_transaction_role', Transaction::CHUNG);
+        }
         if ($user_id = $request->user_id) {
             $transactions->whereHas('user', function ($query) use ($user_id) {
                 $query->where('id', $user_id);
@@ -97,6 +101,7 @@ class AdminTransactionController extends Controller
                 'tst_deposit' => $data['tst_deposit'],
                 'tst_interest_rate' => 0,
                 'tst_code_order' => $data['tst_code_order'],
+                'tst_transaction_role' => $data['tst_transaction_role'],
             ]);
 
             foreach ($data['txt_id_product'] as $key => $idProduct) {
@@ -275,7 +280,7 @@ class AdminTransactionController extends Controller
                     'tst_order_date' => empty($data['tst_order_date']) ? $transaction->tst_order_date : $data['tst_order_date'],
                     'tst_expected_date' => empty($data['tst_expected_date']) ? $transaction->tst_expected_date : $data['tst_expected_date'],
                     'tst_note' => $data['tst_note'],
-                    'tst_interest_rate' => $data['tst_interest_rate'],
+                    'tst_interest_rate' => empty($data['tst_interest_rate']) ? $transaction->tst_interest_rate : $data['tst_interest_rate'],
                     'tst_code_order' => $data['tst_code_order']
                 ]);
             }

@@ -10,6 +10,8 @@ class Transaction extends Model
 {
     use HasFactory;
     protected $guarded = [''];
+    const ADMIN = 1;
+    const CHUNG = 2;
 
     protected $status = [
         '1' => [

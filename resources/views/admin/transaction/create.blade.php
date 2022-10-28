@@ -39,7 +39,8 @@
                             <select name="tst_user_id" class="form-control">
                             @if (isset($users))
                                     @foreach($users as $user)
-                                        <option value="{{$user->id}}">{{$user->name}} - {{$user->phone}}</option>
+                                        <option value="{{$user->id}}">{{$user->name}} - @if(\Auth::user()->role == \App\Models\User::ADMIN) {{$user->phone}} @endif
+                                            </option>
                                     @endforeach
                                 @endif
                             </select>
@@ -92,6 +93,21 @@
                             <small id="emailHelp" class="form-text text-muted "></small>
                             @if ($errors->first('tst_expected_date'))
                                 <span class="text-danger">{{ $errors->first('tst_expected_date') }}</span>
+                            @endif
+                        </div>
+                        <div class="form-group {{ $errors->first('tst_transaction_role') ? 'has-error' : '' }}" >
+                            <label for="pro_price"> Loại </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                                <select name="tst_transaction_role" class="form-control">
+                                    @if(\Auth::user()->role == \App\Models\User::ADMIN)
+                                        <option value="1" >Admin - Của Tôi</option>
+                                    @endif
+                                    <option value="2" >Chung</option>
+                                </select>
+                            </div>
+                            @if ($errors->first('tst_transaction_role'))
+                                <span class="text-danger">{{ $errors->first('tst_transaction_role') }}</span>
                             @endif
                         </div>
 
