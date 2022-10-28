@@ -175,7 +175,7 @@
             </div>
         </div>
 
-
+        @if(\Auth::user()->role == \App\Models\User::ADMIN)
         <div class="col-md-6">
             <div class="box box-info">
                 <div class="box-header with-border">
@@ -268,7 +268,7 @@
                 </div> --}}
             </div>
         </div>
-
+        @endif
     </div>
 </section>
 @endsection

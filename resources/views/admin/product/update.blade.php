@@ -90,6 +90,7 @@
                             </div>
                         </div>
                     </div>
+                    @if(\Auth::user()->role == \App\Models\User::ADMIN)
                     <div class="box box-warning">
                         <div class="box-header">
                             <h3 class="box-title">Transaction</h3>
@@ -103,7 +104,7 @@
                             </div>
                         </div>
                     </div>
-
+                    @endif
                 </div>
                 <div class="col-md-5">
                     {{--  <div class="box box-warning">

@@ -309,13 +309,12 @@
             </li>
 
               <li class="header">Hệ Thống</li>
+              <li class="{{ Request::is('admin-ecommerce/statistical*') ? 'active' : '' }}">
+                  <a href="{{ route('admin.statistical.index') }}">
+                      <i class="fa fa-circle-o text-red"></i> <span>Thống Kê</span>
+                  </a>
+              </li>
               @if(\Auth::user()->role == \App\Models\User::ADMIN)
-
-            <li class="{{ Request::is('admin-ecommerce/statistical*') ? 'active' : '' }}">
-              <a href="{{ route('admin.statistical.index') }}">
-                  <i class="fa fa-circle-o text-red"></i> <span>Thống Kê</span>
-              </a>
-            </li>
             <li class="{{ Request::is('admin-ecommerce/user*') ? 'active' : '' }}">
               <a href="{{ route('admin.user.index') }}">
                   <i class="fa fa-users"></i> <span>User</span>

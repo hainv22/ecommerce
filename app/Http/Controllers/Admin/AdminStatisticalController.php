@@ -9,7 +9,9 @@ use App\Models\Product;
 // use App\Http\Requests\AdminStatisticalRequest;
 // use App\Models\Product;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AdminStatisticalController extends Controller
@@ -49,7 +51,13 @@ class AdminStatisticalController extends Controller
             ->get();
 
         $moneyTransaction = Transaction::query();
+        if (Auth::user()->role != User::ADMIN) {
+            $moneyTransaction = $moneyTransaction->where('tst_transaction_role', Transaction::CHUNG);
+        }
         $tien_lai = Transaction::query();
+        if (Auth::user()->role != User::ADMIN) {
+            $tien_lai = $tien_lai->where('tst_transaction_role', Transaction::CHUNG);
+        }
         // dd(!($request->dateAfter > $request->dateBefore));
         if (!($request->dateBefore && $request->dateAfter)) {
             $message = '';
@@ -162,13 +170,21 @@ class AdminStatisticalController extends Controller
 
 
         $productsTop = Order::with('product');
-
+        if (Auth::user()->role != User::ADMIN) {
+            $productsTop = $productsTop->whereIn('od_transaction_id', Transaction::query()->where('tst_transaction_role', Transaction::CHUNG)->pluck('id')->toArray());
+        }
 
         $revenueTransactionMonthDefault = Transaction::query();
         $revenueTransactionMonthProcess = Transaction::query();
         $revenueTransactionMonthSuccess = Transaction::query();
         $revenueTransactionMonthCancel = Transaction::query();
 
+        if (Auth::user()->role != User::ADMIN) {
+            $revenueTransactionMonthDefault = $revenueTransactionMonthDefault->where('tst_transaction_role', Transaction::CHUNG);
+            $revenueTransactionMonthProcess = $revenueTransactionMonthProcess->where('tst_transaction_role', Transaction::CHUNG);
+            $revenueTransactionMonthSuccess = $revenueTransactionMonthSuccess->where('tst_transaction_role', Transaction::CHUNG);
+            $revenueTransactionMonthCancel = $revenueTransactionMonthCancel->where('tst_transaction_role', Transaction::CHUNG);
+        }
 
         $revenueTransactionMonthDefault = $revenueTransactionMonthDefault->where('tst_status', (int) $transactionStatusDefault);
         // doanh thu Đang vận chuyển
@@ -184,7 +200,12 @@ class AdminStatisticalController extends Controller
         $transactionSuccess = Transaction::where('tst_status', (int) $transactionStatusSuccess);
         // cancel
         $transactionCancel = Transaction::where('tst_status', (int) $transactionStatusCancel);
-
+        if (Auth::user()->role != User::ADMIN) {
+            $transactionDefault = $transactionDefault->where('tst_transaction_role', Transaction::CHUNG);
+            $transactionProcess = $transactionProcess->where('tst_transaction_role', Transaction::CHUNG);
+            $transactionSuccess = $transactionSuccess->where('tst_transaction_role', Transaction::CHUNG);
+            $transactionCancel = $transactionCancel->where('tst_transaction_role', Transaction::CHUNG);
+        }
 
 
 
