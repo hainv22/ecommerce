@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\AdminTransactionController;
 use App\Http\Controllers\Admin\AdminTransportController;
 use App\Http\Controllers\Admin\AdminTypeProductController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\OwnerChinaController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'admin'], function () {
@@ -105,6 +106,12 @@ Route::middleware(['auth'])->group(function () {
 
         Route::group(['prefix' => 'statistical'], function () {
             Route::get('/', [AdminStatisticalController::class, 'index'])->name('admin.statistical.index');
+        });
+
+        Route::group(['prefix' => 'owner-china'], function () {
+            Route::get('/', [OwnerChinaController::class, 'index'])->name('admin.owner-china.index');
+            Route::get('/detail/{id}', [OwnerChinaController::class, 'detail'])->name('admin.owner-china.detail');
+            Route::get('/paid-owner/{id}', [OwnerChinaController::class, 'paidOwner'])->name('admin.owner-china.paid-owner');
         });
     });
 });

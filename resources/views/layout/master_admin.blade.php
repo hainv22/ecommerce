@@ -326,6 +326,12 @@
                   </a>
               </li>
                   @endif
+              <li class="header">China</li>
+              <li class="{{ Request::is('admin-ecommerce/owner-china*') ? 'active' : '' }}">
+                  <a href="{{ route('admin.owner-china.index') }}">
+                      <i class="fa fa-users"></i> <span>Owner China</span>
+                  </a>
+              </li>
           </ul>
         </section>
         <!-- /.sidebar -->
