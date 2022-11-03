@@ -14,12 +14,12 @@
                 {{ number_format($product->pro_price,0,',','.') }} VND
             </td>
             <td class="cls_td">
-                {{ number_format($product->pro_money_yuan,0,',','.') }} NDT
+                {{ $product->pro_money_yuan }} NDT
             </td>
             <td class="cls_td">
                 <input type="button" class="btn btn-primary" value="Chọn Sản Phẩm" data-id-product="{{$product->id}}"
                        data-name="{{$product->pro_name}}" data-price="{{ number_format($product->pro_price,0,',','.') }}"
-                       data-url-image="{{ pare_url_file($product->pro_avatar) }}" data-price-yuan="{{ number_format($product->pro_money_yuan,0,',','.') }}" id="click_get_id_product">
+                       data-url-image="{{ pare_url_file($product->pro_avatar) }}" data-price-yuan="{{$product->pro_money_yuan}}" id="click_get_id_product">
             </td>
         </tr>
     @endforeach

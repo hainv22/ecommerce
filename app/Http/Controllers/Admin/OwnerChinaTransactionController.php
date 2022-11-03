@@ -128,7 +128,8 @@ class OwnerChinaTransactionController extends Controller
                     'cmh_money_after' => $owner->oc_total_money + $total_money,
                     'cmh_yuan' => 0,
                     'cmh_content' => "Sinh ra khi tao đơn id = {$transaction->id}",
-                    'cmh_owner_transaction_id' => $transaction->id
+                    'cmh_owner_transaction_id' => $transaction->id,
+                    'cmh_money_before' => $owner->oc_total_money
                 ]);
                 $owner->update([
                     'oc_total_money' => $owner->oc_total_money + $total_money
@@ -256,7 +257,8 @@ class OwnerChinaTransactionController extends Controller
                     'cmh_money_after' => $owner->oc_total_money+($total_money-$transaction->ot_total_money),
                     'cmh_yuan' => 0,
                     'cmh_content' => "do cap nhat transaction id={$transaction->id}, Cập nhật: \n số lượng sp: {$transaction->ot_total_products} -> {$total_products} \n / Tiền: {$tst_total_money_old_format} -> $tst_total_money_new_format (la so tien cua don hang)",
-                    'cmh_owner_transaction_id' => $transaction->id
+                    'cmh_owner_transaction_id' => $transaction->id,
+                    'cmh_money_before' => $owner->oc_total_money
                 ]);
                 $owner->update([
                     'oc_total_money' => $owner->oc_total_money+($total_money-$transaction->ot_total_money)

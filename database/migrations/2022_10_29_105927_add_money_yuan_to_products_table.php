@@ -14,7 +14,7 @@ class AddMoneyYuanToProductsTable extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->integer('pro_money_yuan')->default(0)->comment('gia tien trung');
+            $table->float('pro_money_yuan')->default(0)->comment('gia tien trung');
         });
     }
 

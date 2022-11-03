@@ -233,6 +233,8 @@
                 let NAME = $this.attr('data-name');
                 let PRICE = $this.attr('data-price');
                 let PRICE_YUAN = $this.attr('data-price-yuan');
+                console.log($this.data())
+                console.log(PRICE_YUAN)
                 $data_this.val(ID)
                 $data_this.next().val(ID)
                 $data_this.css("border", "1px solid red")

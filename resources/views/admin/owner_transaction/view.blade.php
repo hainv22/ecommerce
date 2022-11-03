@@ -158,7 +158,7 @@
                                         <td class="cls_td " >
                                             <img src="{{ pare_url_file($item->product->pro_avatar) }}" alt="" width="120px" height="100px">
                                         </td>
-                                        <td>{{ number_format($item->otd_price,0,',','.') }} NDT</td>
+                                        <td>{{ number_format($item->otd_price,2,',','.') }} NDT</td>
                                         <td class="cls_td col-sm-2">
                                             <input type="number" name="txt_quantity_product[]" class="form-control txt_quantity" value="{{ $item->otd_qty }}" min="1" placeholder="SL" required>
                                         </td>

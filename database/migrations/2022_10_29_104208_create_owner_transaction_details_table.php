@@ -18,7 +18,7 @@ class CreateOwnerTransactionDetailsTable extends Migration
             $table->unsignedBigInteger('otd_owner_transaction_id');
             $table->unsignedBigInteger('otd_product_id');
             $table->integer('otd_qty')->default(0);
-            $table->integer('otd_price')->default(0);
+            $table->float('otd_price')->default(0);
             $table->text('otd_note')->nullable();
             $table->timestamps();
         });

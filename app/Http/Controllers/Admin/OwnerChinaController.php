@@ -62,7 +62,8 @@ class OwnerChinaController extends Controller
                 'cmh_money' => -(int)$request->money_paid,
                 'cmh_money_after' => $oc_total_money_after,
                 'cmh_yuan' => (int)$request->yuan_paid,
-                'cmh_content' => $request->content_paid
+                'cmh_content' => $request->content_paid,
+                'cmh_money_before' => $oc_total_money_old
             ]);
             DB::commit();
         } catch (\Exception $e) {
