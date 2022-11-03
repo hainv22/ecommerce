@@ -194,6 +194,100 @@ class OwnerChinaTransactionController extends Controller
         }
     }
 
+    public function update(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $total_money = 0;
+            $total_products = 0;
+            $data = $request->all();
+            $transaction = OwnerTransaction::findOrFail($id);
+            $check = true;
+            foreach ($transaction->detail as $key => $value) {
+                if($value->otd_status == 2) {
+                    $check = false;
+                    break;
+                }
+            }
+            if (!$check) {
+                $request->session()->flash('toastr', [
+                    'type'      => 'error',
+                    'message'   => 'bo tich hang da ve se tru so luong'
+                ]);
+                return redirect()->back();
+            }
+
+            if(array_key_exists('txt_id_product', $data)) {
+                $order_old = OwnerTransactionDetail::where('otd_owner_transaction_id', $id)->pluck('id')->toArray();
+                $array_diff = array_diff($order_old, $data['product_ids']);
+                $orders_delete = OwnerTransactionDetail::where('otd_owner_transaction_id', $id)->whereIn('id', $array_diff)->get();
+                foreach($orders_delete as $order_delete) {
+                    $order_delete->delete();
+                }
+                $orders = OwnerTransactionDetail::where('otd_owner_transaction_id', $id)->whereIn('id', $data['product_ids'])->get();
+                foreach ($orders as $key => $item) {
+                    $item->update([
+                        'otd_qty' => $data['txt_quantity_product'][$key],
+                        'otd_note' => $data['otd_note'][$key],
+                    ]);
+                    $total_money += ($item->otd_price * $data['txt_quantity_product'][$key]);
+                    $total_products += $data['txt_quantity_product'][$key];
+                }
+                if(count($data['txt_id_product']) > count($orders)) {
+                    for ($i = count($orders); $i < count($data['txt_id_product']); $i++) {
+                        OwnerTransactionDetail::create([
+                            'otd_owner_transaction_id' => $transaction->id,
+                            'otd_product_id' => $data['txt_id_product'][$i],
+                            'otd_qty' => $data['txt_quantity_product'][$i],
+                            'otd_price' => Product::find($data['txt_id_product'][$i])->pro_money_yuan,
+                            'otd_note' => $data['otd_note'][$i],
+                            'otd_status' => 1
+                        ]);
+                        $total_money += (Product::find($data['txt_id_product'][$i])->pro_money_yuan * $data['txt_quantity_product'][$i]);
+                        $total_products += $data['txt_quantity_product'][$i];
+                    }
+                }
+                $tst_total_money_old_format = number_format($transaction->ot_total_money,0,',','.');
+                $tst_total_money_new_format = number_format($total_money,0,',','.');
+                $owner = OwnerChina::find($transaction->ot_owner_china_id);
+                ChangeMoneyOwnerHistory::create([
+                    'cmh_owner_china_id' => $transaction->ot_owner_china_id,
+                    'cmh_money' => $total_money-$transaction->ot_total_money,
+                    'cmh_money_after' => $owner->oc_total_money+($total_money-$transaction->ot_total_money),
+                    'cmh_yuan' => 0,
+                    'cmh_content' => "do cap nhat transaction id={$transaction->id}, Cập nhật: \n số lượng sp: {$transaction->ot_total_products} -> {$total_products} \n / Tiền: {$tst_total_money_old_format} -> $tst_total_money_new_format (la so tien cua don hang)",
+                    'cmh_owner_transaction_id' => $transaction->id
+                ]);
+                $owner->update([
+                    'oc_total_money' => $owner->oc_total_money+($total_money-$transaction->ot_total_money)
+                ]);
+                $transaction->update([
+                    'ot_total_products' => $total_products,
+                    'ot_total_money' => $total_money
+                ]);
+            }
+            if (array_key_exists('ot_order_date', $data) || array_key_exists('ot_note', $data)) {
+                $transaction->update([
+                    'ot_order_date' => empty($data['ot_order_date']) ? $transaction->ot_order_date : $data['ot_order_date'],
+                    'ot_note' => $data['ot_note']
+                ]);
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $request->session()->flash('toastr', [
+                'type'      => 'error',
+                'message'   => $e->getMessage()
+            ]);
+            return redirect()->back();
+        }
+        $request->session()->flash('toastr', [
+            'type'      => 'success',
+            'message'   => 'Cập nhật thành công !'
+        ]);
+        return redirect()->back();
+    }
+
     function stripVN($str)
     {
         $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/", 'a', $str);

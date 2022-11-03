@@ -43,7 +43,7 @@
                                         <span >{{ date("d-m-Y", strtotime($transaction->ot_order_date )) }}</span>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-                                            <input type="date" name="tst_order_date" class="form-control" value="{{ old('tst_order_date') }}">
+                                            <input type="date" name="ot_order_date" class="form-control" value="{{ old('ot_order_date') }}">
                                         </div>
                                     </td>
                                 </tr>
@@ -128,7 +128,7 @@
                         <a href="#" class="btn btn-primary  {{$transaction->tst_lock == 1 ? 'js_click_lock' : 'add_item_order'}}">+ Thêm sản phẩm</a>
                     </div>
                     <!-- /.box-header -->
-                    <form role="form" id="frm_action" name="frm_action" method="post" action="{{route('admin.transaction.update', $transaction->id)}}" enctype="multipart/form-data">
+                    <form role="form" id="frm_action" name="frm_action" method="post" action="" enctype="multipart/form-data">
                         @csrf
                         <div class="box-body no-padding table-responsive">
                             <table class="table table-condensed tbl_add_orderext">

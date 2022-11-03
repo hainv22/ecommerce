@@ -122,6 +122,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/create', [OwnerChinaTransactionController::class, 'store'])->name('admin.owner-china-transactions.store');
             Route::get('view/{id}', [OwnerChinaTransactionController::class, 'getOwnerTransactionDetail'])->name('admin.owner-china-transactions.detail');
             Route::get('update-success-date/{id}', [OwnerChinaTransactionController::class, 'updateSuccessDate'])->name('admin.owner-china-transactions.update.success.date');
+            Route::post('view/{id}', [OwnerChinaTransactionController::class, 'update'])->name('admin.owner-china-transactions.update');
         });
     });
 });
