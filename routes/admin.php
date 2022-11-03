@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\AdminTransportController;
 use App\Http\Controllers\Admin\AdminTypeProductController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\OwnerChinaController;
+use App\Http\Controllers\Admin\OwnerChinaTransactionController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'admin'], function () {
@@ -112,6 +113,16 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [OwnerChinaController::class, 'index'])->name('admin.owner-china.index');
             Route::get('/detail/{id}', [OwnerChinaController::class, 'detail'])->name('admin.owner-china.detail');
             Route::get('/paid-owner/{id}', [OwnerChinaController::class, 'paidOwner'])->name('admin.owner-china.paid-owner');
+        });
+
+        Route::group(['prefix' => 'owner-china-transactions'], function () {
+            Route::get('/', [OwnerChinaTransactionController::class, 'index'])->name('admin.owner-china-transactions.index');
+            Route::get('/create', [OwnerChinaTransactionController::class, 'create'])->name('admin.owner-china-transactions.create');
+            Route::get('/products', [OwnerChinaTransactionController::class, 'products'])->name('admin.owner-china-transactions.get.products');
+            Route::post('/create', [OwnerChinaTransactionController::class, 'store'])->name('admin.owner-china-transactions.store');
+            Route::get('view/{id}', [OwnerChinaTransactionController::class, 'getOwnerTransactionDetail'])->name('admin.owner-china-transactions.detail');
+            Route::get('update-success-date/{id}', [OwnerChinaTransactionController::class, 'updateSuccessDate'])->name('admin.owner-china-transactions.update.success.date');
+            Route::post('view/{id}', [OwnerChinaTransactionController::class, 'update'])->name('admin.owner-china-transactions.update');
         });
     });
 });
