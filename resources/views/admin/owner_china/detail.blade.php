@@ -63,7 +63,7 @@
                                     <tr>
                                         <th>ID -- STT</th>
                                         <th>Trước</th>
-                                        <th>Trả</th>
+                                        <th>Trả / Mua</th>
                                         <th>Sau</th>
                                         <th>content</th>
                                         <th>Ngày</th>
@@ -75,8 +75,12 @@
                                         @foreach ($use as $item)
                                             <tr>
                                                 <td>{{ $item->id .'--'.  ++$i}}</td>
-                                                <td>{{number_format(((abs($item->cmh_money)) + abs($item->cmh_money_after)),0,',','.')}} NDT</td>
-                                                <td>{{number_format(abs($item->cmh_money),0,',','.')}} NDT * {{number_format($item->cmh_yuan,0,',','.')}} ({{number_format(abs($item->cmh_money*$item->cmh_yuan),0,',','.') . ' VND'}})</td>
+                                                @if($item->cmh_owner_transaction_id == 9999999999)
+                                                    <td>{{number_format(((abs($item->cmh_money)) + abs($item->cmh_money_after)),0,',','.')}} NDT</td>
+                                                @else
+                                                    <td>{{number_format(((abs($item->cmh_money_after)) - abs($item->cmh_money)),0,',','.')}} NDT</td>
+                                                @endif
+                                                <td>{{number_format($item->cmh_money,0,',','.')}} NDT * {{number_format($item->cmh_yuan,0,',','.')}} ({{number_format(abs($item->cmh_money*$item->cmh_yuan),0,',','.') . ' VND'}})</td>
                                                 <td>{{number_format($item->cmh_money_after,0,',','.')}} NDT</td>
                                                 <td>{{$item->cmh_content}}</td>
                                                 <td>{{ $item->created_at }}</td>

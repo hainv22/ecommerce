@@ -19,6 +19,9 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
+                        <h3 class="box-title"><a href="{{ route('admin.owner-china-transactions.index') }}" class="btn btn-primary">Đơn China </a></h3>
+                    </div>
+                    <div class="box-header">
                         <div class="box-tools">
                             <form action="" method="GET" class="form-inline">
                                 <div class="input-group input-group-sm" style="width: 150px;">

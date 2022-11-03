@@ -10,4 +10,9 @@ class OwnerChina extends Model
     use HasFactory;
     protected $guarded = [''];
     protected $table = 'owner_china';
+
+    public function ownerTransactions()
+    {
+        return $this->hasMany(OwnerTransaction::class, 'ot_owner_china_id');
+    }
 }
