@@ -115,6 +115,9 @@ class AdminTransactionController extends Controller
                 DB::table('products')
                     ->where('id', $idProduct)
                     ->increment('pro_pay', $data['txt_quantity_product'][$key]);
+                DB::table('products')
+                    ->where('id', $idProduct)
+                    ->decrement('pro_number', $data['txt_quantity_product'][$key]);
             }
             $total_bao = 0;
             $total_b_weight = 0;
@@ -179,6 +182,9 @@ class AdminTransactionController extends Controller
                         DB::table('products')
                             ->where('id', $order_delete->od_product_id)
                             ->decrement('pro_pay', $order_delete->od_qty);
+                    DB::table('products')
+                        ->where('id', $order_delete->od_product_id)
+                        ->increment('pro_number', $order_delete->od_qty);
                     $order_delete->delete();
                 }
                 $orders = Order::where('od_transaction_id', $id)->whereIn('id', $data['product_ids'])->get();
@@ -190,7 +196,14 @@ class AdminTransactionController extends Controller
                             ->decrement('pro_pay', $item->od_qty);
                         DB::table('products')
                             ->where('id', $item->od_product_id)
+                            ->increment('pro_number', $item->od_qty);
+
+                        DB::table('products')
+                            ->where('id', $item->od_product_id)
                             ->increment('pro_pay', $data['txt_quantity_product'][$key]);
+                        DB::table('products')
+                            ->where('id', $item->od_product_id)
+                            ->decrement('pro_number', $data['txt_quantity_product'][$key]);
                     }
                     $item->update([
                         'od_qty' => $data['txt_quantity_product'][$key],

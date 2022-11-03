@@ -86,7 +86,7 @@
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Số Lượng</label>
-                                <input type="number" value="{{ $product->pro_number ?? '' }}" name="pro_number" class="form-control" placeholder="0">
+                                <input type="number" value="{{ $product->pro_number ?? '' }}" name="pro_number" class="form-control" placeholder="0" disabled>
                             </div>
                         </div>
                     </div>
@@ -99,6 +99,19 @@
                             <div class="form-group col-sm-6">
                                 @foreach($product->orders as $value)
                                     <label><a href="{{route('admin.transaction.detail', $value->transaction->id)}}">Đơn - {{$value->transaction->id}} - ({{$value->transaction->user->name}})</a></label>
+                                    <br>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box box-warning">
+                        <div class="box-header">
+                            <h3 class="box-title">Owner Transaction</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group col-sm-6">
+                                @foreach($product->ownerTransactionDetail as $value)
+                                    <label><a href="{{route('admin.owner-china-transactions.detail', $value->ownerTransaction->id)}}">Đơn - {{$value->ownerTransaction->id}} - ({{$value->ownerTransaction->ownerChina->oc_name}})</a></label>
                                     <br>
                                 @endforeach
                             </div>

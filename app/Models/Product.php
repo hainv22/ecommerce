@@ -52,4 +52,9 @@ class Product extends Model
     {
         return $this->hasMany(Order::class, 'od_product_id');
     }
+
+    public function ownerTransactionDetail()
+    {
+        return $this->hasMany(OwnerTransactionDetail::class, 'otd_product_id');
+    }
 }

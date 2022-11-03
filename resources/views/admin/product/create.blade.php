@@ -54,6 +54,14 @@
                                 @endif
                             </div>
 
+                              <div class="form-group " >
+                                  <label for="pro_price">Giá Tien Trung</label>
+                                  <div class="input-group">
+                                      <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                                      <input type="text" name="pro_money_yuan" class="form-control" value="{{ old('pro_money_yuan') }}">
+                                  </div>
+                                  <small id="emailHelp" class="form-text text-muted "></small>
+                              </div>
 
                             <div class="form-group {{ $errors->first('pro_description') ? 'has-error' : '' }}">
                                 <label>Description</label>
@@ -95,13 +103,13 @@
                                     <span class="text-danger">{{ $errors->first('pro_country') }}</span>
                                 @endif
                             </div>
-                            <div class="form-group col-sm-6 {{ $errors->first('pro_number') ? 'has-error' : '' }}">
-                                <label>Số Lượng</label>
-                                <input type="number" name="pro_number" value="999999999" class="form-control" placeholder="0">
-                                @if ($errors->first('pro_number'))
-                                    <span class="text-danger">{{ $errors->first('pro_number') }}</span>
-                                @endif
-                            </div>
+{{--                            <div class="form-group col-sm-6 {{ $errors->first('pro_number') ? 'has-error' : '' }}">--}}
+{{--                                <label>Số Lượng</label>--}}
+{{--                                <input type="number" name="pro_number" value="999999999" class="form-control" placeholder="0">--}}
+{{--                                @if ($errors->first('pro_number'))--}}
+{{--                                    <span class="text-danger">{{ $errors->first('pro_number') }}</span>--}}
+{{--                                @endif--}}
+{{--                            </div>--}}
                         </div>
                     </div>
                 </div>

@@ -24,4 +24,8 @@ class OwnerTransaction extends Model
     {
         return $this->hasMany(ChangeMoneyOwnerHistory::class, 'cmh_owner_transaction_id');
     }
+    public function ownerChina()
+    {
+        return $this->belongsTo(OwnerChina::class, 'ot_owner_china_id');
+    }
 }

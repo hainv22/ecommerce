@@ -11,7 +11,7 @@ class OwnerTransactionDetail extends Model
     protected $guarded = [''];
     public function ownerTransaction()
     {
-        return $this->belongsTo(Transaction::class, 'otd_owner_transaction_id');
+        return $this->belongsTo(OwnerTransaction::class, 'otd_owner_transaction_id');
     }
     public function product()
     {

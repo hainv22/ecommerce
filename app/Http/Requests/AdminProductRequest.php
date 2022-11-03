@@ -31,7 +31,6 @@ class AdminProductRequest extends FormRequest
             'pro_content' => 'required',
             'pro_category_id' => 'required',
             'pro_country' => 'required',
-            'pro_number' => 'required',
             'file.*' => 'image',
         ];
     }

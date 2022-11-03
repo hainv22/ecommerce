@@ -114,9 +114,6 @@ class OwnerChinaTransactionController extends Controller
                     'otd_price' => Product::find($idProduct)->pro_money_yuan,
                     'otd_note' => $data['od_note'][$key]
                 ]);
-                DB::table('products')
-                    ->where('id', $idProduct)
-                    ->increment('pro_pay', $data['txt_quantity_product'][$key]);
             }
 
 
