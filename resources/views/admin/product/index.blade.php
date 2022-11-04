@@ -64,6 +64,11 @@
                             <option value="1" {{ Request::get('sort_pay') == 1 ? "selected='selected'" : "" }}>nhiều -> ít</option>
                             <option value="2" {{ Request::get('sort_pay') == 2 ? "selected='selected'" : "" }}>ít -> nhiều</option>
                         </select>
+                        <select name="sort_pro_number" class="form-control" style="margin-bottom: 10px">
+                            <option value="" >Tồn Kho</option>
+                            <option value="1" {{ Request::get('sort_pro_number') == 1 ? "selected='selected'" : "" }}>Nhiều -> Ít</option>
+                            <option value="2" {{ Request::get('sort_pro_number') == 2 ? "selected='selected'" : "" }}>Ít -> Nhiều</option>
+                        </select>
                         <br>
                         <button type="submit" class="btn btn-success" style="margin-bottom: 10px"><i class="fa fa-search"> </i> Search</button>
                         <button type="submit" class="btn btn-danger" style="margin-bottom: 10px">

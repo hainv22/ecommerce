@@ -33,7 +33,7 @@
                             </div>
 
                             <div class="form-group {{ $errors->first('pro_price') ? 'has-error' : '' }}" >
-                                <label for="pro_price">Giá</label>
+                                <label for="pro_price">Giá Viet</label>
                                 <div class="input-group ">
                                     <span class="input-group-addon">$</span>
                                         <input type="number" name="pro_price" value="{{ $product->pro_price }}" class="form-control">
@@ -43,6 +43,18 @@
                                     <span class="text-danger">{{ $errors->first('pro_price') }}</span>
                                 @endif
                             </div>
+
+                              <div class="form-group {{ $errors->first('pro_money_yuan') ? 'has-error' : '' }}" >
+                                  <label for="pro_money_yuan">Giá trung</label>
+                                  <div class="input-group ">
+                                      <span class="input-group-addon">$</span>
+                                      <input type="text" name="pro_money_yuan" value="{{ $product->pro_money_yuan }}" class="form-control">
+                                      <span class="input-group-addon"><i class="fa fa-ambulance"></i></span>
+                                  </div>
+                                  @if ($errors->first('pro_money_yuan'))
+                                      <span class="text-danger">{{ $errors->first('pro_money_yuan') }}</span>
+                                  @endif
+                              </div>
                             <div>
 
                             </div>

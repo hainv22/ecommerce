@@ -99,6 +99,19 @@ class AdminProductController extends Controller
             }
         }
 
+        if ($sort_pro_number = $request->sort_pro_number) {
+            switch ($sort_pro_number) {
+                case 1:
+                    $products = $products->where('pro_number', '>', 0);
+                    $products->orderBy('pro_number', 'DESC');
+                    break;
+                case 2:
+                    $products = $products->where('pro_number', '>', 0);
+                    $products->orderBy('pro_number', 'ASC');
+                    break;
+            }
+        }
+
         if($request->ajax()) {
             if ($search = strtolower($this->stripVN($request->search))) {
                 $products->where('pro_name', 'like', '%' . $search . '%');

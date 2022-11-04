@@ -54,7 +54,7 @@
                                             <ul>
                                                 <li>Name: {{ $item->owner->oc_name }}</li>
                                                 <a target="_blank" href="{{ route('admin.owner-china.detail',$item->owner->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-user-circle"></i>Owner</a>
-                                                <a target="_blank" href="{{ route('admin.transaction.detail',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
+                                                <a target="_blank" href="{{ route('admin.owner-china-transactions.detail',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
                                             </ul>
                                         </td>
 

@@ -166,23 +166,27 @@
                                         <td>
                                             <textarea class="form-control" value="" name="otd_note[]" rows="3" placeholder="Enter ..." >{{$item->otd_note}}</textarea>
                                         </td>
-                                        <td align="center" class="cls_td">
-                                            <input type="checkbox" name="otd_success_date[]" data-url="{{route('admin.owner-china-transactions.update.success.date', $item->id)}}" id="update_success_date_otd" class="form-check-input" {{ $item->otd_status == 1 ? '' : 'checked' }} >
-                                            @if($item->otd_status == 1)
-                                                Chưa giao
-                                            @else
-                                                Đã giao
-                                            @endif
-                                            <a href="#" class="btn_action btn_del {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" onclick="{{$transaction->tst_lock == 1 ? 'js_click_lock' : "deleteItem(this);return false;"}}"><i class="fa fa-trash-o fa_user fa_del"></i></a>
-                                        </td>
+                                        @if(\Auth::user()->role == \App\Models\User::ADMIN)
+                                            <td align="center" class="cls_td">
+                                                <input type="checkbox" name="otd_success_date[]" data-url="{{route('admin.owner-china-transactions.update.success.date', $item->id)}}" id="update_success_date_otd" class="form-check-input" {{ $item->otd_status == 1 ? '' : 'checked' }} >
+                                                @if($item->otd_status == 1)
+                                                    Chưa giao
+                                                @else
+                                                    Đã giao
+                                                @endif
+                                                <a href="#" class="btn_action btn_del {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" onclick="{{$transaction->tst_lock == 1 ? 'js_click_lock' : "deleteItem(this);return false;"}}"><i class="fa fa-trash-o fa_user fa_del"></i></a>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                                 </tbody>
                             </table>
                         </div>
-                        <div class="clear-both text-right">
-                            <button type="submit" class="btn btn-danger {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" onclick=" {{$transaction->tst_lock == 1 ? '' : "return confirm('Bạn muốn cập nhật?')"}} ">Cập nhật sản phẩm</button>
-                        </div>
+                        @if(\Auth::user()->role == \App\Models\User::ADMIN)
+                            <div class="clear-both text-right">
+                                <button type="submit" class="btn btn-danger {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" onclick=" {{$transaction->tst_lock == 1 ? '' : "return confirm('Bạn muốn cập nhật?')"}} ">Cập nhật sản phẩm</button>
+                            </div>
+                        @endif
                     </form>
                 </div>
             </div>
