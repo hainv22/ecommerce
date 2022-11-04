@@ -47,7 +47,7 @@
 
                         </div>
                     </div>
-                    <a href="{{ route('admin.owner-china-transactions.index') }}?user_owner_id={{$owner->id}}" class="btn btn-warning"><i class="fa fa"></i> Click để xem danh sách đơn hàng khác đã đặt</a>
+                    <a href="{{ route('admin.owner-china-transactions.index') }}?user_owner_id={{$owner->id}}" class="btn btn-warning"><i class="fa fa"></i> Click để xem danh sách đơn hàng nha {{$owner->oc_name}}</a>
 
                 </div>
 
@@ -95,7 +95,9 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-warning" id="js_owner_china_paid" data-url-paid-owner="{{route('admin.owner-china.paid-owner', $owner->id	)}}" style="float: right">Paid</button>
+                    @if(\Auth::user()->role == \App\Models\User::ADMIN)
+                        <button type="button" class="btn btn-warning" id="js_owner_china_paid" data-url-paid-owner="{{route('admin.owner-china.paid-owner', $owner->id	)}}" style="float: right">Paid</button>
+                    @endif
                 </div>
 
                 {{--<div class="col-md-12">
