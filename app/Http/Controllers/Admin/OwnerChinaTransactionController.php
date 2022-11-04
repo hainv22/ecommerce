@@ -200,22 +200,22 @@ class OwnerChinaTransactionController extends Controller
             $total_products = 0;
             $data = $request->all();
             $transaction = OwnerTransaction::findOrFail($id);
-            $check = true;
-            foreach ($transaction->detail as $key => $value) {
-                if($value->otd_status == 2) {
-                    $check = false;
-                    break;
-                }
-            }
-            if (!$check) {
-                $request->session()->flash('toastr', [
-                    'type'      => 'error',
-                    'message'   => 'bo tich hang da ve se tru so luong'
-                ]);
-                return redirect()->back();
-            }
 
             if(array_key_exists('txt_id_product', $data)) {
+                $check = true;
+                foreach ($transaction->detail as $key => $value) {
+                    if($value->otd_status == 2) {
+                        $check = false;
+                        break;
+                    }
+                }
+                if (!$check) {
+                    $request->session()->flash('toastr', [
+                        'type'      => 'error',
+                        'message'   => 'bo tich hang da ve se tru so luong'
+                    ]);
+                    return redirect()->back();
+                }
                 $order_old = OwnerTransactionDetail::where('otd_owner_transaction_id', $id)->pluck('id')->toArray();
                 $array_diff = array_diff($order_old, $data['product_ids']);
                 $orders_delete = OwnerTransactionDetail::where('otd_owner_transaction_id', $id)->whereIn('id', $array_diff)->get();

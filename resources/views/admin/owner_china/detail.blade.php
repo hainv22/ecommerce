@@ -47,6 +47,8 @@
 
                         </div>
                     </div>
+                    <a href="{{ route('admin.owner-china-transactions.index') }}?user_owner_id={{$owner->id}}" class="btn btn-warning"><i class="fa fa"></i> Click để xem danh sách đơn hàng khác đã đặt</a>
+
                 </div>
 
 
@@ -78,7 +80,12 @@
                                                 <td>{{number_format($item->cmh_money_before,0,',','.')}} NDT</td>
                                                 <td>{{number_format($item->cmh_money,0,',','.')}} NDT * {{number_format($item->cmh_yuan,0,',','.')}} ({{number_format(abs($item->cmh_money*$item->cmh_yuan),0,',','.') . ' VND'}})</td>
                                                 <td>{{number_format($item->cmh_money_after,0,',','.')}} NDT</td>
-                                                <td>{{$item->cmh_content}}</td>
+                                                <td>
+                                                    {{$item->cmh_content}}
+                                                    @if($item->cmh_owner_transaction_id != 9999999999)
+                                                        <a target="_blank" href="{{route('admin.owner-china-transactions.detail', $item->cmh_owner_transaction_id)}}">(Click)</a>
+                                                    @endif
+                                                </td>
                                                 <td>{{ $item->created_at }}</td>
                                             </tr>
                                         @endforeach
@@ -161,7 +168,7 @@
             let content_paid = $('#js_content_paid_owner').val();
             let yuan_paid = $('#js_yuan_paid_owner').val();
             console.log(money_paid, content_paid, yuan_paid)
-            if(money_paid == '' || money_paid < 0) {
+            if(money_paid == '' || money_paid < 0 || yuan_paid == '' || yuan_paid < 0) {
                 toastr.error('Giá trị phải lớn hơn 1');
                 return false;
             }

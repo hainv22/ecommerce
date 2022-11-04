@@ -228,6 +228,9 @@ class AdminTransactionController extends Controller
                         DB::table('products')
                             ->where('id', $data['txt_id_product'][$i])
                             ->increment('pro_pay', $data['txt_quantity_product'][$i]);
+                        DB::table('products')
+                            ->where('id', $data['txt_id_product'][$i])
+                            ->decrement('pro_number', $data['txt_quantity_product'][$i]);
                     }
                 }
                 $tst_total_money_old_format = number_format($transaction->tst_total_money,0,',','.');
