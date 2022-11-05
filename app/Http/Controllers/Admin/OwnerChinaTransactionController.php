@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminOwnerTransactionRequest;
 use App\Models\Bao;
 use App\Models\ChangeMoneyOwnerHistory;
+use App\Models\Log;
 use App\Models\Order;
 use App\Models\OwnerChina;
 use App\Models\OwnerTransaction;
@@ -24,6 +25,12 @@ class OwnerChinaTransactionController extends Controller
 {
     public function index(Request $request)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'List Transaction Owner China',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         $users = OwnerChina::all();
         $owner_transactions = OwnerTransaction::query()->with(['detail', 'owner']);
         if (Auth::user()->role != User::ADMIN) {
@@ -45,6 +52,12 @@ class OwnerChinaTransactionController extends Controller
 
     public function create(Request $request)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'View Create Transaction Owner China',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         $users = OwnerChina::all();
         $viewData = [
             'users'  =>  $users
@@ -54,6 +67,12 @@ class OwnerChinaTransactionController extends Controller
 
     public function products(Request $request)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Get Product When Create Transaction Owner China',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         try {
             $products = Product::with('category:id,c_name');
             if ($search = strtolower($this->stripVN($request->search))) {
@@ -85,6 +104,12 @@ class OwnerChinaTransactionController extends Controller
 
     public function store(AdminOwnerTransactionRequest $request)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Store Transaction Owner China',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         DB::beginTransaction();
         try {
             $data = $request->all();
@@ -150,6 +175,12 @@ class OwnerChinaTransactionController extends Controller
 
     public function getOwnerTransactionDetail(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'get Detail Transaction Owner China',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         $transaction = OwnerTransaction::query()->with(['detail', 'owner', 'changeMoneyOwnerHistories'])->findOrFail($id);
         $order = OwnerTransactionDetail::with('product:id,pro_name,pro_avatar')
             ->where('otd_owner_transaction_id', $id)
@@ -159,6 +190,12 @@ class OwnerChinaTransactionController extends Controller
 
     public function updateSuccessDate(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Update da ve kho - nguoc lai',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         DB::beginTransaction();
         try {
             $detail = OwnerTransactionDetail::findOrfail($id);
@@ -194,6 +231,12 @@ class OwnerChinaTransactionController extends Controller
 
     public function update(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Update Transaction Owner China',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         DB::beginTransaction();
         try {
             $total_money = 0;

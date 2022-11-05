@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\HelpersClass\Date;
 use App\Http\Controllers\Controller;
+use App\Models\Log;
 use App\Models\Order;
 use App\Models\Product;
 // use App\Http\Requests\AdminStatisticalRequest;
@@ -469,8 +470,20 @@ class AdminStatisticalController extends Controller
         ];
         if($request->check == null)
         {
+            Log::create([
+                'user_id' => Auth::id(),
+                'type' => 'View Màn Thống Kê Tổng',
+                'content' => null,
+                'data' => json_encode($request->all())
+            ]);
             return view('admin.statistical.index', $viewData);
         } else {
+            Log::create([
+                'user_id' => Auth::id(),
+                'type' => 'View Màn Thống Kê Trừ Tiền',
+                'content' => null,
+                'data' => json_encode($request->all())
+            ]);
             $data = UseMoneyHistory::orderByDesc('umh_use_date')->get();
             $viewData = [
                 'data' => $data
@@ -481,6 +494,12 @@ class AdminStatisticalController extends Controller
 
     public function withdraw(Request $request)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Sử dụng Chức Năng Trừ Tiền',
+            'content' => null,
+            'data' => json_encode($request->all())
+        ]);
         DB::beginTransaction();
         try {
             UseMoneyHistory::create([

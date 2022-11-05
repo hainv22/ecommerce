@@ -3,18 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Log;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\TransactionHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\HelpersClass\Date;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AdminHomeController extends Controller
 {
     public function index(Request $request)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'View Home',
+            'content' => null,
+            'data' => json_encode($request->all())
+        ]);
         $transactionStatusDefault = \config('contants.TRANSACTION_GET_STATUS.default');
         $transactionStatusTransported = \config('contants.TRANSACTION_GET_STATUS.transported');
         $transactionStatusSuccess = \config('contants.TRANSACTION_GET_STATUS.success');

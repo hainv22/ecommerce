@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminTransactionRequest;
 use App\Models\Bao;
+use App\Models\Log;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Transaction;
@@ -20,6 +21,12 @@ class AdminTransactionController extends Controller
 {
     public function index(Request $request)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Index Transaction',
+            'content' => null,
+            'data' => json_encode($request->all())
+        ]);
         $users = User::all();
         $transactions = Transaction::query();
         if (Auth::user()->role != User::ADMIN) {
@@ -67,6 +74,12 @@ class AdminTransactionController extends Controller
 
     public function create()
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'View Create Transaction',
+            'content' => null,
+            'data' => null
+        ]);
         $users = User::all();
         $transports = Transport::all();
         $viewData = [
@@ -78,6 +91,12 @@ class AdminTransactionController extends Controller
 
     public function store(AdminTransactionRequest $request)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Store Transaction',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         DB::beginTransaction();
         try {
             $data = $request->all();
@@ -168,6 +187,12 @@ class AdminTransactionController extends Controller
 
     public function update(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Update Transaction',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         DB::beginTransaction();
         try {
             $total_money = 0;
@@ -318,6 +343,12 @@ class AdminTransactionController extends Controller
 
     public function getTransactionDetail(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'View Transaction',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         $transports = Transport::all();
         $transaction = Transaction::query()->with(['baos', 'transaction_histories', 'transport'])->findOrFail($id);
         $order = Order::with('product:id,pro_name,pro_avatar')
@@ -340,6 +371,12 @@ class AdminTransactionController extends Controller
 
     public function getAction(Request $request, $action, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Update Status Transaction',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         $transaction = Transaction::find($id);
         if ($transaction) {
             if($transaction->tst_status != -1) {
@@ -387,6 +424,12 @@ class AdminTransactionController extends Controller
 
     public function order_detail_delete(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Delete order detail',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         $order = Order::findOrfail($id);
         if ($order) {
             // if($order->od_sale){
@@ -408,6 +451,12 @@ class AdminTransactionController extends Controller
 
     public function delete($id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Delete Transaction',
+            'content' => null,
+            'data' =>  null
+        ]);
         $transaction = Transaction::findOrfail($id);
         // $order=Order::query()->where('od_transaction_id',$id)->get();
         if ($transaction) {
@@ -426,6 +475,12 @@ class AdminTransactionController extends Controller
 
     public function updateSuccessDate(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'updateSuccessDate',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         DB::beginTransaction();
         try {
             $bao = Bao::with('transport')->findOrfail($id);
@@ -449,6 +504,12 @@ class AdminTransactionController extends Controller
 
     public function updateTransportIdBao(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'update bao transaction',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         DB::beginTransaction();
         try {
             $bao = Bao::with('transport')->findOrfail($id);
@@ -471,6 +532,12 @@ class AdminTransactionController extends Controller
 
     public function updateMoney(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'update Money transaction',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         DB::beginTransaction();
         try {
             $transaction = Transaction::findOrfail($id);
@@ -519,6 +586,12 @@ class AdminTransactionController extends Controller
 
     public function updateMoneyTransport(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'update Money transport',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         DB::beginTransaction();
         try {
             $transaction = Transaction::findOrfail($id);
@@ -580,6 +653,12 @@ class AdminTransactionController extends Controller
 
     public function convertDeposit(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'convertDeposit',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         DB::beginTransaction();
         try {
             $transaction = Transaction::findOrfail($id);
@@ -631,6 +710,12 @@ class AdminTransactionController extends Controller
 
     public function updateLockTransaction(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'updateLockTransaction',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         DB::beginTransaction();
         try {
             $transaction = Transaction::findOrfail($id);
@@ -692,6 +777,12 @@ class AdminTransactionController extends Controller
 
     public function printTransaction(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'printTransaction',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         $transaction = Transaction::query()->with(['baos', 'transaction_histories', 'transport'])->findOrFail($id);
         $order = Order::with('product:id,pro_name,pro_avatar')
             ->where('od_transaction_id', $id)

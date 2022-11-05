@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminProductRequest;
 use App\Models\Category;
+use App\Models\Log;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,12 @@ class AdminProductController extends Controller
 {
     public function index(Request $request)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'List Product',
+            'content' => null,
+            'data' => json_encode($request->all())
+        ]);
         // $categorysKM = Category::where('id', 2)->first()->delete();
         // $categoryparentsKM = Category::where('c_parent_id', 2)->pluck('id')->all();
         // $typeProducts = TypeProduct::where('tp_category_id', 2)->pluck('id')->all();
@@ -150,6 +157,12 @@ class AdminProductController extends Controller
 
     public function create()
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'View Create Product',
+            'content' => null,
+            'data' => null
+        ]);
         $categorys = Category::select('id', 'c_name', 'c_parent_id')->get();
         $viewData = [
             'categorys'          => $categorys,
@@ -159,6 +172,12 @@ class AdminProductController extends Controller
 
     public function store(AdminProductRequest $request)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Create Product',
+            'content' => null,
+            'data' => json_encode($request->all())
+        ]);
             $data = $request->except('_token', 'pro_avatar', 'file');
             $data['pro_user_id'] = Auth::id();
             $data['pro_slug']   =   Str::slug($request->pro_name);
@@ -187,6 +206,12 @@ class AdminProductController extends Controller
 
     public function edit($id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Edit view Product',
+            'content' => null,
+            'data' => null
+        ]);
         $product = Product::with('images', 'orders.transaction.user', 'ownerTransactionDetail.ownerTransaction.ownerChina')->findOrfail($id);
         $categorys = Category::select('id', 'c_name', 'c_parent_id')->get();
 
@@ -198,6 +223,12 @@ class AdminProductController extends Controller
     }
     public function update(AdminProductRequest $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Update Product',
+            'content' => null,
+            'data' => json_encode($request->all())
+        ]);
         $product = Product::findOrfail($id);
         $data = $request->except('_token', 'pro_avatar', 'attribute', 'file');
 
@@ -220,6 +251,12 @@ class AdminProductController extends Controller
 
     public function delete(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Delete Product',
+            'content' => null,
+            'data' => json_encode($request->all())
+        ]);
         DB::beginTransaction();
         $product = Product::with('images', 'orders')->findOrfail($id);
         if ($product) {
@@ -326,6 +363,12 @@ class AdminProductController extends Controller
     }
     public function deleteImage(Request $request, $imageID)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Delete image',
+            'content' => null,
+            'data' => json_encode($request->all())
+        ]);
         DB::table('images')->where('id', $imageID)->delete();
         $request->session()->flash('toastr', [
             'type'      => 'success',

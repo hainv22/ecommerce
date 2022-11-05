@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminCategoryRequest;
+use App\Models\Log;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
@@ -14,6 +16,12 @@ class AdminCategoryController extends Controller
 {
     public function index(Request $request)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Category Index',
+            'content' => null,
+            'data' => json_encode($request->all())
+        ]);
         $categorys = Category::query()->orderBy('id', 'DESC')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
         if ($request->ajax()) {
             $a = $request->search;
@@ -39,12 +47,24 @@ class AdminCategoryController extends Controller
 
     public function create()
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'view create category',
+            'content' => null,
+            'data' => null
+        ]);
         $categorys = Category::all();
         return view('admin.category.create', compact('categorys'));
     }
 
     public function store(AdminCategoryRequest $request)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Create Category',
+            'content' => null,
+            'data' => json_encode($request->all())
+        ]);
         $data = $request->except('_token', 'c_avatar');
         $data['c_slug']         = Str::slug($request->c_name);
         if ($request->c_avatar) {
@@ -63,6 +83,12 @@ class AdminCategoryController extends Controller
 
     public function edit($id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'View Edit Category',
+            'content' => null,
+            'data' => null
+        ]);
         $categorys = Category::all();
         $category = Category::findOrfail($id);
         return view('admin.category.update', compact('category', 'categorys'));
@@ -70,6 +96,12 @@ class AdminCategoryController extends Controller
 
     public function update(AdminCategoryRequest $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Update Category',
+            'content' => null,
+            'data' => json_encode($request->all())
+        ]);
         $category = Category::findOrfail($id);
         $data = $request->except('_token', 'c_avatar');
         if ($request->c_avatar) {
@@ -88,6 +120,12 @@ class AdminCategoryController extends Controller
 
     public function delete(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Delete Category',
+            'content' => null,
+            'data' => json_encode($request->all())
+        ]);
         $idChildrenCategorys = Category::whereIn('c_parent_id', [$id])->pluck('id')->push((int)$id)->all();
         $products = Product::whereIn('pro_category_id', $idChildrenCategorys)->get();
         if (!empty($products[0])) {
@@ -108,6 +146,12 @@ class AdminCategoryController extends Controller
 
     public function hot(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Update Hot Category',
+            'content' => null,
+            'data' => json_encode($request->all())
+        ]);
         $category           = Category::findOrfail($id);
         $category->c_hot = !$category->c_hot;
         $category->updated_at = Carbon::now();
@@ -127,6 +171,12 @@ class AdminCategoryController extends Controller
 
     public function active(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Update active Category',
+            'content' => null,
+            'data' => json_encode($request->all())
+        ]);
         $idChildrenCategorys = Category::whereIn('c_parent_id', [$id])->pluck('id')->push((int)$id)->all();
         $products = Product::whereIn('pro_category_id', $idChildrenCategorys)->get();
         if (!empty($products[0])) {

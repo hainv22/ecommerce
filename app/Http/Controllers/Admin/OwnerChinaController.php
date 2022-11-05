@@ -4,17 +4,25 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ChangeMoneyOwnerHistory;
+use App\Models\Log;
 use App\Models\OwnerChina;
 use App\Models\Transaction;
 use App\Models\TransactionHistory;
 use App\Models\UseMoneyHistory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OwnerChinaController extends Controller
 {
     public function index(Request $request)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'List Owner China',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         $owner = OwnerChina::query();
         $owner = $owner->orderByDesc('id')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
 
@@ -27,6 +35,12 @@ class OwnerChinaController extends Controller
 
     public function detail(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'detail Owner China',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         $owner = OwnerChina::findOrFail($id);
         $use = ChangeMoneyOwnerHistory::where([
             'cmh_owner_china_id' => $id,
@@ -41,6 +55,12 @@ class OwnerChinaController extends Controller
 
     public function paidOwner(Request $request, $id)
     {
+        Log::create([
+            'user_id' => Auth::id(),
+            'type' => 'Tra Tien Trung Quoc',
+            'content' => null,
+            'data' =>  json_encode($request->all())
+        ]);
         DB::beginTransaction();
         try {
             $owner = OwnerChina::findOrfail($id);
