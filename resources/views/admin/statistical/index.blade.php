@@ -86,7 +86,16 @@
                                      <td>Tổng</td>
                                      <td><span style="color: red">{{ number_format($totalMoneyTransaction,0,',','.') }} vnd</span></td>
                                      <td><span style="color: red">{{ number_format($tien_lai_total,0,',','.') }} vnd</span></td>
-                                     <td></td>
+                                     <td>
+
+
+
+                                         <ul>
+                                             <li>Lãi: {{ number_format($tien_lai_total,0,',','.') }}</li>
+                                             <li><a href="{{route('admin.use-money-history.index')}}?check=1" target="_blank">Tiêu: {{ number_format($useMoneyHistoryTotal,0,',','.') }}</a></li>
+                                             <li>Còn Lại: {{ number_format($tien_lai_total-$useMoneyHistoryTotal,0,',','.') }}</li>
+                                         </ul>
+                                     </td>
                                  </tr>
                              @endif
                              </tbody>

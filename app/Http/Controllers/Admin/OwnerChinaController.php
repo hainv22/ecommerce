@@ -57,13 +57,20 @@ class OwnerChinaController extends Controller
             $owner->update([
                 'oc_total_money' => $oc_total_money_after
             ]);
-            ChangeMoneyOwnerHistory::create([
+            $change_money_owner_history = ChangeMoneyOwnerHistory::create([
                 'cmh_owner_china_id' => $id,
                 'cmh_money' => -(int)$request->money_paid,
                 'cmh_money_after' => $oc_total_money_after,
                 'cmh_yuan' => (int)$request->yuan_paid,
                 'cmh_content' => $request->content_paid,
                 'cmh_money_before' => $oc_total_money_old
+            ]);
+            UseMoneyHistory::create([
+                'umh_money' => (int)$request->money_paid * (int)$request->yuan_paid,
+                'umh_content' => "Trả Trung Quốc với change_history: {$change_money_owner_history->id}",
+                'umh_use_date' => date('Y-m-d'),
+                'umh_change_money_owner_id' => $id,
+                'umh_status' => UseMoneyHistory::TRA_TRUNG_QUOC,
             ]);
             DB::commit();
         } catch (\Exception $e) {

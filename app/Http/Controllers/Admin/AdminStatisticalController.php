@@ -9,6 +9,7 @@ use App\Models\Product;
 // use App\Http\Requests\AdminStatisticalRequest;
 // use App\Models\Product;
 use App\Models\Transaction;
+use App\Models\UseMoneyHistory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,16 +59,19 @@ class AdminStatisticalController extends Controller
         if (Auth::user()->role != User::ADMIN) {
             $tien_lai = $tien_lai->where('tst_transaction_role', Transaction::CHUNG);
         }
+        $useMoneyHistory = UseMoneyHistory::query();
         // dd(!($request->dateAfter > $request->dateBefore));
         if (!($request->dateBefore && $request->dateAfter)) {
             $message = '';
             if ($request->day) {
                 $moneyTransaction->whereDay('tst_order_date', (int) $request->day);
                 $tien_lai->whereDay('tst_order_date', (int) $request->day);
+                $useMoneyHistory->whereDay('umh_use_date', (int)$request->day);
             }
             if ($request->month) {
                 $moneyTransaction->whereMonth('tst_order_date', (int) $request->month);
                 $tien_lai->whereMonth('tst_order_date', (int) $request->month);
+                $useMoneyHistory->whereMonth('umh_use_date', (int)$request->month);
             }
             if ($request->year) {
                 if (!($request->day) && !($request->month)) {
@@ -84,6 +88,13 @@ class AdminStatisticalController extends Controller
                         ->groupBy('day')
                         ->distinct()
                         ->get();
+                    $useMoneyHistory = $useMoneyHistory
+                        ->where('umh_status', UseMoneyHistory::SU_DUNG_TIEN)
+                        ->whereYear('umh_use_date', (int) $request->year)
+                        ->select(DB::raw('sum(umh_money) as totalMoney'), DB::raw('MONTH(umh_use_date) as day'))
+                        ->groupBy('day')
+                        ->distinct()
+                        ->get();
                 } else {
                     //nguoc lai ngay thang co du lieu group theo ngay
                     $moneyTransaction = $moneyTransaction
@@ -94,6 +105,12 @@ class AdminStatisticalController extends Controller
                     $tien_lai = $tien_lai
                         ->whereYear('tst_order_date', (int) $request->year)
                         ->select(DB::raw('sum(tst_interest_rate) as totalMoney'), DB::raw('DATE(tst_order_date) as day'))
+                        ->groupBy('day')
+                        ->get();
+                    $useMoneyHistory = $useMoneyHistory
+                        ->where('umh_status', UseMoneyHistory::SU_DUNG_TIEN)
+                        ->whereYear('umh_use_date', (int) $request->year)
+                        ->select(DB::raw('sum(umh_money) as totalMoney'), DB::raw('DATE(umh_use_date) as day'))
                         ->groupBy('day')
                         ->get();
                 }
@@ -107,6 +124,11 @@ class AdminStatisticalController extends Controller
                         ->get();
                     $tien_lai = $tien_lai
                         ->select(DB::raw('sum(tst_interest_rate) as totalMoney'), DB::raw('DATE(tst_order_date) as day'))
+                        ->groupBy('day')
+                        ->get();
+                    $useMoneyHistory = $useMoneyHistory
+                        ->where('umh_status', UseMoneyHistory::SU_DUNG_TIEN)
+                        ->select(DB::raw('sum(umh_money) as totalMoney'), DB::raw('DATE(umh_use_date) as day'))
                         ->groupBy('day')
                         ->get();
                 }
@@ -124,6 +146,12 @@ class AdminStatisticalController extends Controller
                     ->select(DB::raw('sum(tst_interest_rate) as totalMoney'), DB::raw('DATE(tst_order_date) as day'))
                     ->groupBy('day')
                     ->get();
+                $useMoneyHistory = $useMoneyHistory
+                    ->where('umh_status', UseMoneyHistory::SU_DUNG_TIEN)
+                    ->whereMonth('umh_use_date', date('m'))->whereYear('umh_use_date', date('Y'))
+                    ->select(DB::raw('sum(umh_money) as totalMoney'), DB::raw('DATE(umh_use_date) as day'))
+                    ->groupBy('day')
+                    ->get();
             }
 
             // $moneyTransaction = $moneyTransaction
@@ -132,6 +160,7 @@ class AdminStatisticalController extends Controller
             //     ->get();
             $totalMoneyTransaction = $moneyTransaction->sum('totalMoney');
             $tien_lai_total = $tien_lai->sum('totalMoney');
+            $useMoneyHistoryTotal = $useMoneyHistory->sum('totalMoney');
         } else {
             if ($request->dateAfter >= $request->dateBefore) {
                 $moneyTransaction = $moneyTransaction
@@ -435,7 +464,47 @@ class AdminStatisticalController extends Controller
             'arrRevenueTransactionMonthSuccess' => json_encode($arrRevenueTransactionMonthSuccess),
             'arrRevenueTransactionMonthCancel' => json_encode($arrRevenueTransactionMonthCancel),
             'productsT7' => $productsTop,
+            'useMoneyHistoryTotal' => $useMoneyHistoryTotal,
+            'useMoneyHistory' => $useMoneyHistory,
         ];
-        return view('admin.statistical.index', $viewData);
+        if($request->check == null)
+        {
+            return view('admin.statistical.index', $viewData);
+        } else {
+            $data = UseMoneyHistory::orderByDesc('umh_use_date')->get();
+            $viewData = [
+                'data' => $data
+            ];
+            return view('admin.statistical.use-money-history', $viewData);
+        }
+    }
+
+    public function withdraw(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            UseMoneyHistory::create([
+                'umh_money' => (int)$request->money_withdraw,
+                'umh_content' => $request->content_withdraw,
+                'umh_use_date' => $request->date_withdraw
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response([
+                'code' => 400,
+                'message' => $e->getMessage(),
+                'data' => ''
+            ]);
+        }
+        $request->session()->flash('toastr', [
+            'type'      => "success",
+            'message'   => "Update số tiền thành công"
+        ]);
+        return response([
+            'code' => 200,
+            'message' => 'Update số tiền thành công',
+            'data' => ''
+        ]);
     }
 }

@@ -107,6 +107,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::group(['prefix' => 'statistical'], function () {
             Route::get('/', [AdminStatisticalController::class, 'index'])->name('admin.statistical.index');
+            Route::get('/use-money-history', [AdminStatisticalController::class, 'index'])->name('admin.use-money-history.index');
+            Route::get('/use-money-history/withdraw', [AdminStatisticalController::class, 'withdraw'])->name('admin.use-money-history.withdraw.index');
         });
 
         Route::group(['prefix' => 'owner-china'], function () {
