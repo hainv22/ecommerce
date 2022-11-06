@@ -98,7 +98,7 @@
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Số Lượng</label>
-                                <input type="number" value="{{ $product->pro_number ?? '' }}" name="pro_number" class="form-control" placeholder="0" disabled>
+                                <input type="number" value="{{ $product->pro_number ?? '' }}" name="pro_number" class="form-control" placeholder="0" @if(\Auth::user()->role != \App\Models\User::ADMIN)disabled @endif>
                             </div>
                         </div>
                     </div>
