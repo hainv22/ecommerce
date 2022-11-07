@@ -179,6 +179,7 @@
                                 <th scope="col">image</th>
                                 <th scope="col">price</th>
                                 <th scope="col">Gia Trung</th>
+                                <th scope="col">số lượng</th>
                                 <th scope="col">action</th>
                             </tr>
                             </thead>
@@ -233,15 +234,14 @@
                 let NAME = $this.attr('data-name');
                 let PRICE = $this.attr('data-price');
                 let PRICE_YUAN = $this.attr('data-price-yuan');
-                console.log($this.data())
-                console.log(PRICE_YUAN)
+                let PRO_NUMBER = $this.attr('data-number');
                 $data_this.val(ID)
                 $data_this.next().val(ID)
                 $data_this.css("border", "1px solid red")
                 $data_this.css("font-size", "15px")
                 $data_this.css("color", "red")
                 $data_this.parent().next().children().attr("src", SRC);
-                $data_this.parent().next().next().html("<span> việt: "+ PRICE +"</span>"+"<br><span> trung: "+ PRICE_YUAN +"</span>" + " <br><span>"+ NAME +"</span>");
+                $data_this.parent().next().next().html("<span> việt: "+ PRICE +"</span>"+"<br><span> trung: "+ PRICE_YUAN +"</span>" + " <br><span>"+ NAME +"</span>" + " <br><span>"+ PRO_NUMBER +" Cái</span>");
                 $('#myModal').modal('toggle');
             });
 
