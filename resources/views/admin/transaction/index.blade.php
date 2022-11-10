@@ -100,15 +100,22 @@
                                         }
                                     ?>
                                         <li>Tiền hàng: {{ number_format($item->tst_total_money,0,',','.') }}</li>
-                                        <li>Tiền vận chuyển: {{ number_format($total_transport,0,',','.') }}</li>
-                                        @if(\Auth::user()->role == \App\Models\User::ADMIN)
                                         <li>Tiền lãi: {{ number_format($item->tst_interest_rate,0,',','.') }}</li>
+                                        @if(\Auth::user()->role == \App\Models\User::ADMIN)
+                                            <li>Tiền vận chuyển: {{ number_format($total_transport,0,',','.') }}</li>
                                         @endif
                                         <li>Tổng :
                                         <span class="label label-success">
                                        {{ number_format($item->tst_total_money + $total_transport,0,',','.') }}
                                     </span></li>
-                                        @if(\Auth::user()->role == \App\Models\User::ADMIN) số cân: @foreach($item->baos as $bao) - {{$bao->b_weight}} - @endforeach @endif
+                                        @if(\Auth::user()->role == \App\Models\User::ADMIN)
+                                            số cân: @foreach($item->baos as $bao) - {{$bao->b_weight}} - @endforeach
+                                            @if($item->tst_transaction_role == \App\Models\Transaction::ADMIN)
+                                                <li><span class="label label-success">Riêng</span></li>
+                                            @else
+                                                <li><span class="label label-warning">Chung</span></li>
+                                            @endif
+                                        @endif
                                     </ul>
                                 </td>
                                 <td>

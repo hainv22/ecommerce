@@ -4,6 +4,11 @@
     <h1>
       View Detai Transaction
         <a target="_blank" href="{{ route('admin.transaction.view.print',$transaction->id) }}" class="btn btn-primary"><i class="fa fa-download"></i>Print</a>
+        @if($transaction->tst_transaction_role == \App\Models\Transaction::ADMIN)
+            <span class="label label-success">Riêng</span>
+        @else
+            <span class="label label-warning">Chung</span>
+        @endif
     </h1>
     <ol class="breadcrumb">
       <li><a href="{{ route('admin.index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -77,20 +82,19 @@
 
                                         </td>
                                     </tr>
-                                    @if(\Auth::user()->role == \App\Models\User::ADMIN)
+
                                     <tr>
                                         <td>Tiền lãi</td>
                                         <td>
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-                                                <input type="number" name="tst_interest_rate" class="form-control" value="{{ $transaction->tst_interest_rate }}">
+                                                <input type="number" name="tst_interest_rate" class="form-control" value="{{ $transaction->tst_interest_rate }}"  @if(\Auth::user()->role == \App\Models\User::CHUNG) disabled @endif>
                                             </div>
                                         </td>
                                         <td>
 
                                         </td>
                                     </tr>
-                                    @endif
                                     <tr>
                                         <td>Mã vận đơn bên thứ 3 </td>
                                         <td>
