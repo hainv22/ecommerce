@@ -1,4 +1,5 @@
 @isset($products)
+    @if(count($products) > 0)
     @foreach($products as $product)
         <tr>
             <td class="cls_td">
@@ -25,6 +26,7 @@
                        data-url-image="{{ pare_url_file($product->pro_avatar) }}" data-price-yuan="{{$product->pro_money_yuan}}"
                        data-number="{{ $product->pro_number }}"
                        id="click_get_id_product">
+                <a href="{{ route('admin.product.update',$product->id) }}" target="_blank" class="btn btn-xs btn-warning"><i class="fa fa-pencil"></i> Edit</a>
             </td>
         </tr>
     @endforeach
@@ -34,4 +36,7 @@
             <div>{!! $products->appends($query ?? [])->links() !!}</div>
         </td>
     </tr>
+    @else
+        <a href="{{ route('admin.product.create') }}" target="_blank" class="btn btn-danger"><i class="fa fa-save"></i> Create</a>
+    @endif
 @endisset

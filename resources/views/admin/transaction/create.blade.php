@@ -251,6 +251,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <a href="{{ route('admin.product.create') }}" target="_blank" class="btn btn-danger"><i class="fa fa-save"></i> Create</a>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" id="close_modal">Đóng</button>
             </div>
         </div>
