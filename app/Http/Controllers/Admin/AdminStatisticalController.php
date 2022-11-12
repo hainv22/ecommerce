@@ -484,9 +484,20 @@ class AdminStatisticalController extends Controller
                 'content' => null,
                 'data' => json_encode($request->all())
             ]);
-            $data = UseMoneyHistory::orderByDesc('umh_use_date')->get();
+            $data = UseMoneyHistory::query();
+            if ($type_status = $request->type_use_money)
+            {
+                $data = $data->where('umh_status', $type_status);
+            }
+            if ($year_use_money = $request->year_use_money)
+            {
+                $data = $data->whereYear('umh_use_date', $year_use_money);
+            }
+            $data = $data->orderByDesc('created_at')->get();
+            $total = $data->sum('umh_money');
             $viewData = [
-                'data' => $data
+                'data' => $data,
+                'total' => $total
             ];
             return view('admin.statistical.use-money-history', $viewData);
         }
@@ -505,7 +516,8 @@ class AdminStatisticalController extends Controller
             UseMoneyHistory::create([
                 'umh_money' => (int)$request->money_withdraw,
                 'umh_content' => $request->content_withdraw,
-                'umh_use_date' => $request->date_withdraw
+                'umh_use_date' => $request->date_withdraw,
+                'umh_status' => $request->status
             ]);
             DB::commit();
         } catch (\Exception $e) {

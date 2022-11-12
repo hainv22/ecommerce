@@ -11,4 +11,7 @@ class UseMoneyHistory extends Model
     protected $guarded = [''];
     const SU_DUNG_TIEN = 1;
     const TRA_TRUNG_QUOC = 2;
+    const MUA_BANG_DINH = 3;
+    const MUA_THUNG_GIAY = 4;
+    const TRA_TIEN_DAU_BAO_HN_BN = 5;
 }

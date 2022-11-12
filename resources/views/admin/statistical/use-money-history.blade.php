@@ -25,31 +25,31 @@
                     </div>
                     <div class="box-body" style="">
                         <div class="table-responsive">
-{{--                            <span style="color: red">Không chọn gì mặc định lấy các ngày trong tháng và năm hiện tại.</span>--}}
-{{--                            <div class="box-title">--}}
-{{--                                <form action="" method="GET" class="form-inline">--}}
-{{--                                    @if ($errors->first('dateAfter'))--}}
-{{--                                        <span class="text-danger">{{ $errors->first('dateAfter') }}</span>--}}
-{{--                                    @endif--}}
-{{--                                    <select name="day" class="form-control">--}}
-{{--                                        <option value="" >_ Ngày trong tháng _</option>--}}
-{{--                                        @for ($i = 1; $i <=31; $i++)--}}
-{{--                                            <option value="{{$i}}" {{ Request::get('day') == $i ? "selected='selected'" : "" }}>Ngày {{$i}}</option>--}}
-{{--                                        @endfor--}}
-{{--                                    </select>--}}
-{{--                                    <select name="month" class="form-control">--}}
+                            <span style="color: red">Không chọn gì mặc định lấy các ngày trong tháng và năm hiện tại.</span>
+                            <div class="box-title">
+                                <form action="" method="GET" class="form-inline">
+                                    <input type="text" name="check" value="1" hidden>
+{{--                                    <select name="month_use_money" class="form-control">--}}
 {{--                                        <option value="">_ Tháng trong năm _</option>--}}
 {{--                                        @for ($i = 1; $i <=12; $i++)--}}
-{{--                                            <option value="{{$i}}" {{ Request::get('month') == $i ? "selected='selected'" : "" }}>Tháng {{$i}}</option>--}}
+{{--                                            <option value="{{$i}}" {{ Request::get('month-use-money') == $i ? "selected='selected'" : "" }}>Tháng {{$i}}</option>--}}
 {{--                                        @endfor--}}
 {{--                                    </select>--}}
-{{--                                    <select name="year" class="form-control">--}}
-{{--                                        <option value="">_ Năm _</option>--}}
-{{--                                        <option value="2022" {{ Request::get('year') == 2022 ? "selected='selected'" : "" }}>Năm 2022</option>--}}
-{{--                                        <option value="2023" {{ Request::get('year') == 2023 ? "selected='selected'" : "" }}>Năm 2023</option>--}}
-{{--                                    </select>--}}
-{{--                                    <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>--}}
-{{--                                </form>--}}
+                                    <select name="year_use_money" class="form-control">
+                                        <option value="">_ Năm _</option>
+                                        <option value="2022" {{ Request::get('year_use_money') == 2022 ? "selected='selected'" : "" }}>Năm 2022</option>
+                                        <option value="2023" {{ Request::get('year_use_money') == 2023 ? "selected='selected'" : "" }}>Năm 2023</option>
+                                    </select>
+                                    <select name="type_use_money" class="form-control">
+                                        <option value="">_ Type _</option>
+                                        <option value="1" {{ Request::get('type_use_money') == 1 ? "selected='selected'" : "" }}>Sử dụng tiền chung</option>
+                                        <option value="2" {{ Request::get('type_use_money') == 2 ? "selected='selected'" : "" }} >Trả trung quốc ( cái này tự sinh )</option>
+                                        <option value="3" {{ Request::get('type_use_money') == 3 ? "selected='selected'" : "" }} >Mua băng dính</option>
+                                        <option value="4" {{ Request::get('type_use_money') == 4 ? "selected='selected'" : "" }} >Mua thùng giấy</option>
+                                        <option value="5" {{ Request::get('type_use_money') == 5 ? "selected='selected'" : "" }} >Trả tiền đầu bao HN -> BN</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
+                                </form>
                             </div>
                             <table class="table no-margin">
                                 <thead>
@@ -58,7 +58,8 @@
                                     <th>Type</th>
                                     <th>Số Tiền</th>
                                     <th>Nội dung</th>
-                                    <th>Ngày</th>
+                                    <th>Ngày rút</th>
+                                    <th>Ngày Tạo</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -68,17 +69,36 @@
                                             <td>{{ $item->id }}</td>
                                             <td>
                                                 @if($item->umh_status == \App\Models\UseMoneyHistory::SU_DUNG_TIEN)
-                                                    Tiêu
-                                                @else
-                                                    Trả trung quốc
+                                                    Rút Tiêu Chung
+                                                @elseif($item->umh_status == \App\Models\UseMoneyHistory::TRA_TRUNG_QUOC)
+                                                    Trả Trung Quốc (tự sinh)
+                                                @elseif($item->umh_status == \App\Models\UseMoneyHistory::MUA_BANG_DINH)
+                                                    Mua Băng Dính
+                                                @elseif($item->umh_status == \App\Models\UseMoneyHistory::MUA_THUNG_GIAY)
+                                                    Mua Băng Dính
+                                                @elseif($item->umh_status == \App\Models\UseMoneyHistory::TRA_TIEN_DAU_BAO_HN_BN)
+                                                    Trả Đầu Bao HN -> BN
                                                 @endif
                                             </td>
                                             <td>{{ number_format($item->umh_money,0,',','.') }} vnd</td>
-                                            <td>{{ $item->umh_content }}</td>
+                                            <td>{{ $item->umh_content }}
+                                            @if($item->umh_change_money_owner_id != 9999999999)
+                                                    <a target="_blank" href="{{route('admin.owner-china.detail', $item->umh_change_money_owner_id)}}">(click)</a>
+                                                @endif
+                                            </td>
                                             <td>{{ $item->umh_use_date }}</td>
+                                            <td>{{ $item->created_at }}</td>
                                         </tr>
                                     @endforeach
                                 @endif
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{ number_format($total,0,',','.') }} vnd</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -98,7 +118,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <label for="pro_price">Số Tiền Rút: </label><span id="" style="color: red; font-size: 15px; margin-left:15px"></span>
+                    <label for="pro_price">Số tiền rút: </label><span id="js_money_pay_format" style="color: red; font-size: 15px; margin-left:15px"></span>
                     <input type="number" name="js_money" id="js_money" class="form-control txt_quantity" value="" min="1" placeholder="money" required="">
                 </div>
                 <div class="modal-body">
@@ -106,8 +126,18 @@
                     <input type="text" name="js_content" id="js_content" class="form-control txt_quantity" value="" min="1" placeholder="Nội Dung" required="">
                 </div>
                 <div class="modal-body">
-                    <label for="pro_price">Giá tiền Trung Tại Thời Điểm Này : </label><span id="" style="color: red; font-size: 15px; margin-left:15px"></span>
+                    <label for="pro_price">Ngày sử dụng : </label><span id="" style="color: red; font-size: 15px; margin-left:15px"></span>
                     <input type="date" name="js_date" id="js_date" class="form-control txt_quantity" value="{{date('Y-m-d')}}" required="">
+                </div>
+                <div class="modal-body">
+                    <label for="pro_status_type">Ngày sử dụng : </label><span id="" style="color: red; font-size: 15px; margin-left:15px"></span>
+                    <select name="js_type_status" id="js_type_status" class="form-control">
+                        <option value="1" >Sử dụng tiền chung</option>
+                        <option value="2" >Trả trung quốc ( cái này tự sinh )</option>
+                        <option value="3" >Mua băng dính</option>
+                        <option value="4" >Mua thùng giấy</option>
+                        <option value="5" >Trả tiền đầu bao HN -> BN</option>
+                    </select>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
@@ -134,6 +164,7 @@
             let money_withdraw = $('#js_money').val();
             let content_withdraw = $('#js_content').val();
             let date_withdraw = $('#js_date').val();
+            let status = $('#js_type_status').val();
             console.log(money_withdraw, content_withdraw, date_withdraw)
             if(money_withdraw == '' || money_withdraw < 0) {
                 toastr.error('Giá trị phải lớn hơn 1');
@@ -147,7 +178,8 @@
                     data:{
                         money_withdraw: money_withdraw,
                         content_withdraw: content_withdraw,
-                        date_withdraw: date_withdraw
+                        date_withdraw: date_withdraw,
+                        status: status,
                     },
                     success:function(results){
                         console.log(results)
@@ -167,5 +199,20 @@
                 });
             }
         });
+
+        $(document).on('keyup', '#js_money', function (e) {
+            nStr = $(this).val();
+            decSeperate = '.';
+            groupSeperate = ',';
+            nStr += '';
+            x = nStr.split(decSeperate);
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
+            }
+            $("#js_money_pay_format").text(x1+x2 + ' đ')
+        })
     </script>
 @endsection

@@ -92,7 +92,7 @@
 
                                          <ul>
                                              <li>Lãi: {{ number_format($tien_lai_total,0,',','.') }}</li>
-                                             <li><a href="{{route('admin.use-money-history.index')}}?check=1" target="_blank">Tiêu: {{ number_format($useMoneyHistoryTotal,0,',','.') }}</a></li>
+                                             <li><a href="{{route('admin.use-money-history.index')}}?check=1&type_use_money=1" target="_blank">Tiêu: {{ number_format($useMoneyHistoryTotal,0,',','.') }}</a></li>
                                              <li>Còn Lại: {{ number_format($tien_lai_total-$useMoneyHistoryTotal,0,',','.') }}</li>
                                          </ul>
                                      </td>
