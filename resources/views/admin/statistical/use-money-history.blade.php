@@ -47,6 +47,7 @@
                                         <option value="3" {{ Request::get('type_use_money') == 3 ? "selected='selected'" : "" }} >Mua băng dính</option>
                                         <option value="4" {{ Request::get('type_use_money') == 4 ? "selected='selected'" : "" }} >Mua thùng giấy</option>
                                         <option value="5" {{ Request::get('type_use_money') == 5 ? "selected='selected'" : "" }} >Trả tiền đầu bao HN -> BN</option>
+                                        <option value="6" {{ Request::get('type_use_money') == 6 ? "selected='selected'" : "" }} >Trả Tiền Vận Chuyển Trung Quốc -> Hà Nội</option>
                                     </select>
                                     <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
                                 </form>
@@ -78,6 +79,8 @@
                                                     Mua Băng Dính
                                                 @elseif($item->umh_status == \App\Models\UseMoneyHistory::TRA_TIEN_DAU_BAO_HN_BN)
                                                     Trả Đầu Bao HN -> BN
+                                                @elseif($item->umh_status == \App\Models\UseMoneyHistory::TRA_TIEN_VAN_CHUYEN_TQ_HN)
+                                                    Trả Tiền Vận Chuyển Trung Quốc -> Hà Nội
                                                 @endif
                                             </td>
                                             <td>{{ number_format($item->umh_money,0,',','.') }} vnd</td>
@@ -137,6 +140,7 @@
                         <option value="3" >Mua băng dính</option>
                         <option value="4" >Mua thùng giấy</option>
                         <option value="5" >Trả tiền đầu bao HN -> BN</option>
+                        <option value="6" >Trả Tiền Vận Chuyển Trung Quốc -> Hà Nội</option>
                     </select>
                 </div>
                 <div class="modal-footer">
