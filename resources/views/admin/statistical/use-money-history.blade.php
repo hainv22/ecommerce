@@ -44,8 +44,7 @@
                                         <option value="">_ Type _</option>
                                         <option value="1" {{ Request::get('type_use_money') == 1 ? "selected='selected'" : "" }}>Sử dụng tiền chung</option>
                                         <option value="2" {{ Request::get('type_use_money') == 2 ? "selected='selected'" : "" }} >Trả trung quốc ( cái này tự sinh )</option>
-                                        <option value="3" {{ Request::get('type_use_money') == 3 ? "selected='selected'" : "" }} >Mua băng dính</option>
-                                        <option value="4" {{ Request::get('type_use_money') == 4 ? "selected='selected'" : "" }} >Mua thùng giấy</option>
+                                        <option value="3" {{ Request::get('type_use_money') == 3 ? "selected='selected'" : "" }} >Mua băng dính, Mua thùng, Bút, Kim, Dây ...</option>
                                         <option value="5" {{ Request::get('type_use_money') == 5 ? "selected='selected'" : "" }} >Trả tiền đầu bao HN -> BN</option>
                                         <option value="6" {{ Request::get('type_use_money') == 6 ? "selected='selected'" : "" }} >Trả Tiền Vận Chuyển Trung Quốc -> Hà Nội</option>
                                     </select>
@@ -70,15 +69,13 @@
                                             <td>{{ $item->id }}</td>
                                             <td>
                                                 @if($item->umh_status == \App\Models\UseMoneyHistory::SU_DUNG_TIEN)
-                                                    Rút Tiêu Chung
+                                                    Sử dụng tiền chung
                                                 @elseif($item->umh_status == \App\Models\UseMoneyHistory::TRA_TRUNG_QUOC)
-                                                    Trả Trung Quốc (tự sinh)
+                                                    Trả trung quốc ( cái này tự sinh )
                                                 @elseif($item->umh_status == \App\Models\UseMoneyHistory::MUA_BANG_DINH)
-                                                    Mua Băng Dính
-                                                @elseif($item->umh_status == \App\Models\UseMoneyHistory::MUA_THUNG_GIAY)
-                                                    Mua Băng Dính
+                                                    Mua băng dính, Mua thùng, Bút, Kim, Dây ...
                                                 @elseif($item->umh_status == \App\Models\UseMoneyHistory::TRA_TIEN_DAU_BAO_HN_BN)
-                                                    Trả Đầu Bao HN -> BN
+                                                    Trả tiền đầu bao HN -> BN
                                                 @elseif($item->umh_status == \App\Models\UseMoneyHistory::TRA_TIEN_VAN_CHUYEN_TQ_HN)
                                                     Trả Tiền Vận Chuyển Trung Quốc -> Hà Nội
                                                 @endif
@@ -137,8 +134,7 @@
                     <select name="js_type_status" id="js_type_status" class="form-control">
                         <option value="1" >Sử dụng tiền chung</option>
                         <option value="2" >Trả trung quốc ( cái này tự sinh )</option>
-                        <option value="3" >Mua băng dính</option>
-                        <option value="4" >Mua thùng giấy</option>
+                        <option value="3" >Mua băng dính, Mua thùng, Bút, Kim, Dây ...</option>
                         <option value="5" >Trả tiền đầu bao HN -> BN</option>
                         <option value="6" >Trả Tiền Vận Chuyển Trung Quốc -> Hà Nội</option>
                     </select>

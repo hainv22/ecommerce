@@ -87,7 +87,7 @@ class OwnerChinaController extends Controller
             ]);
             UseMoneyHistory::create([
                 'umh_money' => (int)$request->money_paid * (int)$request->yuan_paid,
-                'umh_content' => "Trả Trung Quốc với change_history: {$change_money_owner_history->id}",
+                'umh_content' => "Trả Trung Quốc với change_history: {$change_money_owner_history->id} ($request->content_paid, số tiền trả: $request->money_paid, giá tiền trung: $request->yuan_paid)",
                 'umh_use_date' => date('Y-m-d'),
                 'umh_change_money_owner_id' => $id,
                 'umh_status' => UseMoneyHistory::TRA_TRUNG_QUOC,
