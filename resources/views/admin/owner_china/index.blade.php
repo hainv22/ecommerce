@@ -60,13 +60,21 @@
                                             </td>
                                         </tr>
                                     @endforeach
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            Tổng: {{number_format($total,0,',','.') }}
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
                                 @endif
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <!-- /.box-body -->
-                    {!! $owner->links() !!}
                     <div></div>
                 </div>
                 <!-- /.box -->

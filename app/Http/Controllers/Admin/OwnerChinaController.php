@@ -24,10 +24,12 @@ class OwnerChinaController extends Controller
             'data' =>  json_encode($request->all())
         ]);
         $owner = OwnerChina::query();
-        $owner = $owner->orderByDesc('id')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
+        $owner = $owner->orderByDesc('id')->get();
+        $total = $owner->sum('oc_total_money');
 
         $viewData = [
             'owner'  => $owner,
+            'total' => $total,
             'query'         =>  $request->query()
         ];
         return view('admin.owner_china.index', $viewData);
