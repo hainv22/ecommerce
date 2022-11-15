@@ -8,6 +8,7 @@ use App\Models\Bao;
 use App\Models\ChangeMoneyOwnerHistory;
 use App\Models\Log;
 use App\Models\Order;
+use App\Models\OwnerBao;
 use App\Models\OwnerChina;
 use App\Models\OwnerTransaction;
 use App\Models\OwnerTransactionDetail;
@@ -32,13 +33,18 @@ class OwnerChinaTransactionController extends Controller
             'data' =>  json_encode($request->all())
         ]);
         $users = OwnerChina::all();
-        $owner_transactions = OwnerTransaction::query()->with(['detail', 'owner']);
+        $owner_transactions = OwnerTransaction::query()->with(['detail', 'owner', 'ownerBaos']);
         if (Auth::user()->role != User::ADMIN) {
             $owner_transactions = $owner_transactions->where('ot_transaction_role', Transaction::CHUNG);
         }
         if ($user_owner_id = $request->user_owner_id) {
             $owner_transactions->whereHas('owner', function ($query) use ($user_owner_id) {
                 $query->where('id', $user_owner_id);
+            });
+        }
+        if ($kg = $request->kg) {
+            $owner_transactions->whereHas('ownerBaos', function ($query) use ($kg) {
+                $query->where('b_weight', $kg);
             });
         }
         $owner_transactions = $owner_transactions->orderByDesc('id')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
@@ -141,6 +147,15 @@ class OwnerChinaTransactionController extends Controller
                 ]);
             }
 
+            if (!empty($data['b_weight'])) {
+                foreach ($data['b_weight'] as $key => $value) {
+                    OwnerBao::create([
+                        'b_weight' => $data['b_weight'][$key],
+                        'b_note' => $data['b_note'][$key],
+                        'b_owner_transaction_id' => $transaction->id
+                    ]);
+                }
+            }
 
             if ($transaction) {
                 $owner = OwnerChina::find($data['ot_user_id']);
@@ -181,7 +196,7 @@ class OwnerChinaTransactionController extends Controller
             'content' => null,
             'data' =>  json_encode($request->all())
         ]);
-        $transaction = OwnerTransaction::query()->with(['detail', 'owner', 'changeMoneyOwnerHistories'])->findOrFail($id);
+        $transaction = OwnerTransaction::query()->with(['detail', 'owner', 'changeMoneyOwnerHistories', 'ownerBaos'])->findOrFail($id);
         $order = OwnerTransactionDetail::with('product:id,pro_name,pro_avatar')
             ->where('otd_owner_transaction_id', $id)
             ->get();
@@ -308,6 +323,32 @@ class OwnerChinaTransactionController extends Controller
                     'ot_total_money' => $total_money
                 ]);
             }
+            if (array_key_exists('b_weight', $data)) {
+                $baos = [];
+                if (array_key_exists('id_bao', $data)) {
+                    $baos_old = OwnerBao::where('b_owner_transaction_id', $id)->pluck('id')->toArray();
+                    $input_array = array_diff($baos_old, $data['id_bao']);
+                    OwnerBao::where('b_owner_transaction_id', $id)->whereIn('id', $input_array)->delete();
+                    $baos = OwnerBao::where('b_owner_transaction_id', $id)->whereIn('id', $data['id_bao'])->get();
+                }
+                foreach ($baos as $key => $item) {
+                    $item->update([
+                        'b_weight' => $data['b_weight'][$key],
+                        'b_note' => $data['b_note'][$key],
+                        'b_owner_transaction_id' => $transaction->id
+                    ]);
+                }
+                if(count($data['b_weight']) > count($baos)) {
+                    for ($i = count($baos); $i < count($data['b_weight']); $i++) {
+                        OwnerBao::create([
+                            'b_weight' => $data['b_weight'][$i],
+                            'b_note' => $data['b_note'][$i],
+                            'b_owner_transaction_id' => $transaction->id
+                        ]);
+                    }
+                }
+            }
+
             if (array_key_exists('ot_order_date', $data) || array_key_exists('ot_note', $data)) {
                 $transaction->update([
                     'ot_order_date' => empty($data['ot_order_date']) ? $transaction->ot_order_date : $data['ot_order_date'],

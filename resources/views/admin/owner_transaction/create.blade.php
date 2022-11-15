@@ -83,6 +83,28 @@
                 </div>
 
                 <div class="col-md-5">
+                    <div class="box box-warning">
+                        <div class="box-header">
+                            <div class="clear-both text-center">
+                                <a href="#" class="btn btn-primary add_item_bao">+ Thêm số bao</a>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="box-body table-responsive no-padding">
+                                <table class="table table-bordered tbl_add_bao">
+                                    <thead>
+                                        <tr>
+                                            <th >Số cân nặng</th>
+                                            <th >Note *********</th>
+                                            <th>Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                     <div class="box box-success">
                         <div class="box-header with-border">
                             <h3 class="box-title">Content</h3>
@@ -253,7 +275,7 @@
             });
 
             $(".add_item_bao").on("click", function() {
-                var row_infor = '<tr> <td class="cls_td col-md-3"> <textarea class="form-control" value="" name="b_name[]" rows="3" placeholder="Enter ..." required=""></textarea></td> <td class="cls_td col-md-2"><input type="number" name="b_weight[]" class="form-control" value="" required=""></td><td class="cls_td col-md-3"><textarea class="form-control" value="" name="b_note[]" rows="3" placeholder="Enter ..."></textarea></td><td class="cls_td col-sm-3"><select name="b_transport_id[]" class="form-control"><?php if(isset($transports)) {  ?><?php foreach($transports as $item) { ?><option value="{{$item->id}}">{{$item->tp_name}}</option><?php } ?><?php } ?></select></td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
+                var row_infor = '<tr> <td class="cls_td col-md-3"><input type="number" name="b_weight[]" class="form-control" value="" required=""></td><td class="cls_td col-md-7"><textarea class="form-control" value="" name="b_note[]" rows="3" placeholder="Enter ..."></textarea></td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
                 $(".tbl_add_bao tbody").append(row_infor);
                 return false;
             });

@@ -28,4 +28,9 @@ class OwnerTransaction extends Model
     {
         return $this->belongsTo(OwnerChina::class, 'ot_owner_china_id');
     }
+
+    public function ownerBaos()
+    {
+        return $this->hasMany(OwnerBao::class, 'b_owner_transaction_id');
+    }
 }

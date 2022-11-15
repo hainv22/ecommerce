@@ -31,6 +31,7 @@
                                     @endforeach
                                 @endif
                             </select>
+                            <input type="text" value="{{ Request::get('kg') }}" class="form-control" name="kg" placeholder="số kg">
                             <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
                         </form>
                     </div><br>
@@ -60,6 +61,7 @@
 
                                         <td>
                                             <li>Tổng tiền trung: {{ number_format($item->ot_total_money,0,',','.') }} NDT</li>
+                                            <li>@foreach($item->ownerBaos as $bao) - {{$bao->b_weight}} - @endforeach</li>
                                         <td>
                                                 <?php
                                                 $check = true;

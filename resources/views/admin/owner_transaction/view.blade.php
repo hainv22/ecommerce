@@ -118,7 +118,56 @@
                     </div>
                 </div>
             </div>
-
+            <div class="col-md-6">
+                <div class="box box-warning">
+                    <div class="box-header">
+                        <div class="clear-both text-center">
+                            <a href="#" class="btn btn-primary add_item_bao">+ Thêm số bao</a>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <form role="form" id="frm_action" name="frm_action" method="post" action="" enctype="multipart/form-data">
+                            @csrf
+                            <div class="box-body table-responsive no-padding">
+                                <table class="table table-bordered tbl_add_bao ">
+                                    <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th >Số cân nặng</th>
+                                        <th >Ghi Chú</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @php
+                                        $i=0;
+                                    @endphp
+                                    @if(!empty($transaction->ownerBaos))
+                                        @foreach ($transaction->ownerBaos as $item)
+                                            <tr>
+                                                <td>{{ ++$i }} <input type="hidden" value="{{$item->id}}" name="id_bao[]"></td>
+                                                <td class="cls_td ">
+                                                    <input type="number" name="b_weight[]" class="form-control" value="{{$item->b_weight}}" required="">
+                                                </td>
+                                                <td class="cls_td ">
+                                                    <textarea class="form-control" value="" name="b_note[]" rows="3" placeholder="Enter ...">{{$item->b_note}}</textarea>
+                                                </td>
+                                                <td align="center" class="cls_td">
+                                                    <a href="#" class="btn_action btn_del" onclick="{{$transaction->tst_lock == 1 ? 'js_click_lock' : "deleteItem(this);return false;"}}"><i class="fa fa-trash-o fa_user fa_del"></i></a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="clear-both text-center">
+                                <button type="submit" class="btn btn-danger {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" onclick="{{$transaction->tst_lock == 1 ? '' : "return confirm('Bạn muốn cập nhật?')"}}">Cập nhật số lượng bao</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div class="col-md-12">
                 <div class="box box-danger">
                     <div class="box-header">
@@ -440,7 +489,7 @@
             });
 
             $(".add_item_bao").on("click", function() {
-                var row_infor = '<tr> <td></td><td class="cls_td "><textarea class="form-control" value="" name="b_name[]" rows="3" placeholder="Enter ..." required="">{{$item->b_name}}</textarea></td><td class="cls_td "><input type="number" name="b_weight[]" class="form-control" value="{{$item->b_weight}}" required=""></td><td class="cls_td "><textarea class="form-control" value="" name="b_note[]" rows="3" placeholder="Enter ...">{{$item->b_note}}</textarea></td><td class="cls_td "><select name="b_transport_id[]" class="form-control" id="js_b_transport_id" data-url-update-transport="{{route('admin.update.transport.id.bao', $item->id)}}"><?php if(isset($transports)) { ?><?php foreach($transports as $transport) { ?><option {{ $item->b_transport_id==$transport->id ? 'selected' :''}} value="{{$transport->id}}">{{$transport->tp_name}}</option><?php } ?><?php } ?></select></td><td class="cls_td "><span></span></td><td class="cls_td "><input type="checkbox" name="b_success_date[]" data-url="{{route('admin.owner-china-transactions.update.success.date', $item->id)}}" id="update_success_date_otd" class="form-check-input" {{ empty($item->b_success_date) == true ? '' : 'checked' }} ></td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
+                var row_infor = '<tr> <td></td><td class="cls_td"><input type="number" name="b_weight[]" class="form-control" value="{{$item->b_weight}}" required="" /></td><td class="cls_td"><textarea class="form-control" value="" name="b_note[]" rows="3" placeholder="Enter ...">{{$item->b_note}}</textarea></td><td align="center" class="cls_td"><a href="#" class="btn_action btn_del" onclick="deleteItem(this);return false;"><i class="fa fa-trash-o fa_user fa_del"></i></a></td></tr>';
                 $(".tbl_add_bao tbody").append(row_infor);
                 return false;
             });
