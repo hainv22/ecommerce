@@ -7,6 +7,7 @@ use App\Models\Log;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\TransactionHistory;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\HelpersClass\Date;
@@ -17,12 +18,6 @@ class AdminHomeController extends Controller
 {
     public function index(Request $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'View Home',
-            'content' => null,
-            'data' => json_encode($request->all())
-        ]);
         $transactionStatusDefault = \config('contants.TRANSACTION_GET_STATUS.default');
         $transactionStatusTransported = \config('contants.TRANSACTION_GET_STATUS.transported');
         $transactionStatusSuccess = \config('contants.TRANSACTION_GET_STATUS.success');
@@ -148,6 +143,22 @@ class AdminHomeController extends Controller
         //     }
         //     $arrRevenueTransactionMonthDefault[] = (int)$total;
         // }
+        $logs = Log::with('user');
+        $users = User::query()
+            ->whereIn(
+                'id',
+                DB::table('logs')->select('user_id')->groupBy('user_id')->pluck('user_id')->toArray()
+            )->get();
+        if ($user_id= $request->user_id) {
+            $logs->where('user_id', $user_id);
+        }
+        if ($date= $request->date) {
+            $logs->whereDate('created_at', $date);
+        }
+        if ($data= $request->data) {
+            $logs->where('data', 'like', '%' . $data . '%');
+        }
+        $logs = $logs->orderByDesc('id')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
 
         $viewData = [
             'totalTransactions' => $totalTransactions,
@@ -162,6 +173,9 @@ class AdminHomeController extends Controller
             // 'arrRevenueTransactionMonth'            => json_encode($arrRevenueTransactionMonth),
             // 'arrRevenueTransactionMonthDefault'     => json_encode($arrRevenueTransactionMonthDefault),
             'transactionHistories' => $transactionHistories,
+            'logs' => $logs,
+            'query'         => $request->query(),
+            'users' => $users
         ];
         return view('admin.index', $viewData);
     }

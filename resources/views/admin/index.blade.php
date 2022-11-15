@@ -57,6 +57,67 @@
         </div>
         <div class="row">
 
+            <div class="col-md-12">
+                <div class="box box-warning">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Log</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body" style="">
+                        <div class="table-responsive">
+                            <div class="box-title">
+                                <form action="" method="GET" class="form-inline">
+                                    <select name="user_id" class="form-control">
+                                        <option value="">-</option>
+                                        @if (isset($users))
+                                            @foreach($users as $user)
+                                                <option {{ Request::get('user_id') == $user->id ? "selected='selected'" : "" }} value="{{$user->id}}">{{$user->name}} - @if(\Auth::user()->role == \App\Models\User::ADMIN) {{$user->phone}} @endif</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <input type="date" value="{{Request::get('date')}}" name="date" class="form-control" id="validationCustom01">
+                                    <input type="text" value="{{Request::get('data')}}" name="data" class="form-control" id="validationCustom01">
+                                    <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
+                                </form>
+                            </div>
+                            <table class="table no-margin">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>User</th>
+                                    <th width="100px">Data</th>
+                                    <th>Action</th>
+                                    <th>Nội dung</th>
+                                    <th>Created</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if(isset($logs))
+                                    @foreach ($logs as $key => $item)
+                                        <tr>
+                                            <td>{{ $item->id }}</td>
+                                            <td><span class="label label-success" style="font-size: 15px;"> {{ $item->user->name }} </span> </td>
+                                            <td>{{ $item->data }}</td>
+                                            <td>{{ $item->type }}</td>
+                                            <td>{{ $item->content }}</td>
+                                            <td>{{ $item->created_at }}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                                </tbody>
+                            </table>
+                        </div>
+                        {!! $logs->appends($query ?? [])->links() !!}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
             <div class="col-md-7">
                 <div class="box box-success">
                     <div class="box-header with-border">
