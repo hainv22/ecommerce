@@ -24,7 +24,7 @@
                         <div class="input-group input-group-sm" style="width: 150px;">
                             <input type="text" name="table_search" class="form-control pull-right ajax-search-table" placeholder="Search" data-url="{{ route('admin.product.index') }}">
                             <div class="input-group-btn">
-                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                <button type="button" class="btn btn-default" id="icon-search-js-pr" data-url="{{ route('admin.product.index') }}"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </div>
@@ -127,6 +127,24 @@
                 }
             });
         }
+
+        $(document).on('click',"#icon-search-js-pr",function(e){
+            e.preventDefault();
+            var URL = $(this).attr('data-url');
+            console.log(URL);
+            var res = $(".ajax-search-table").val();
+            console.log(res);
+            $.ajax({
+                url:URL,
+                type:"GET",
+                data:{search:res},
+                success:function(results){
+                    if(results.data){
+                        $("#js-data").html(results.data);
+                    }
+                }
+            });
+        });
 
   });
   </script>
