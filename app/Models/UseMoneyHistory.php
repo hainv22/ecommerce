@@ -15,4 +15,5 @@ class UseMoneyHistory extends Model
     const MUA_THUNG_GIAY = 4;
     const TRA_TIEN_DAU_BAO_HN_BN = 5;
     const TRA_TIEN_VAN_CHUYEN_TQ_HN = 6;
+    const TIEN_VE = 7;
 }

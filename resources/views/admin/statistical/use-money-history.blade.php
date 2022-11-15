@@ -47,6 +47,9 @@
                                         <option value="3" {{ Request::get('type_use_money') == 3 ? "selected='selected'" : "" }} >Mua băng dính, Mua thùng, Bút, Kim, Dây ...</option>
                                         <option value="5" {{ Request::get('type_use_money') == 5 ? "selected='selected'" : "" }} >Trả tiền đầu bao HN -> BN</option>
                                         <option value="6" {{ Request::get('type_use_money') == 6 ? "selected='selected'" : "" }} >Trả Tiền Vận Chuyển Trung Quốc -> Hà Nội</option>
+                                        @if(\Illuminate\Support\Facades\Auth::user()->role == \App\Models\User::ADMIN)
+                                            <option value="7" {{ Request::get('type_use_money') == 7 ? "selected='selected'" : "" }} >Tiền Về</option>
+                                        @endif
                                     </select>
                                     <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
                                 </form>
@@ -78,6 +81,8 @@
                                                     Trả tiền đầu bao HN -> BN
                                                 @elseif($item->umh_status == \App\Models\UseMoneyHistory::TRA_TIEN_VAN_CHUYEN_TQ_HN)
                                                     Trả Tiền Vận Chuyển Trung Quốc -> Hà Nội
+                                                @elseif($item->umh_status == \App\Models\UseMoneyHistory::TIEN_VE)
+                                                    Tiền Về
                                                 @endif
                                             </td>
                                             <td>{{ number_format($item->umh_money,0,',','.') }} vnd</td>
@@ -137,6 +142,9 @@
                         <option value="3" >Mua băng dính, Mua thùng, Bút, Kim, Dây ...</option>
                         <option value="5" >Trả tiền đầu bao HN -> BN</option>
                         <option value="6" >Trả Tiền Vận Chuyển Trung Quốc -> Hà Nội</option>
+                        @if(\Illuminate\Support\Facades\Auth::user()->role == \App\Models\User::ADMIN)
+                            <option value="7" >Tiền Về</option>
+                        @endif
                     </select>
                 </div>
                 <div class="modal-footer">

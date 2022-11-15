@@ -488,6 +488,14 @@ class AdminStatisticalController extends Controller
             if ($type_status = $request->type_use_money)
             {
                 $data = $data->where('umh_status', $type_status);
+            } else {
+                $data = $data->whereIn('umh_status', [
+                    UseMoneyHistory::SU_DUNG_TIEN,
+                    UseMoneyHistory::TRA_TRUNG_QUOC,
+                    UseMoneyHistory::MUA_BANG_DINH,
+                    UseMoneyHistory::TRA_TIEN_DAU_BAO_HN_BN,
+                    UseMoneyHistory::TRA_TIEN_VAN_CHUYEN_TQ_HN
+                ]);
             }
             if ($year_use_money = $request->year_use_money)
             {
