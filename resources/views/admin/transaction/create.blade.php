@@ -36,7 +36,7 @@
 
                         <div class="form-group {{ $errors->first('pro_category_id') ? 'has-error' : '' }}">
                             <label for="pro_name">Người Mua Hàng</label>
-                            <select name="tst_user_id" class="form-control">
+                            <select name="tst_user_id" class="js-example-basic-single form-control">
                             @if (isset($users))
                                     @foreach($users as $user)
                                         <option value="{{$user->id}}">{{$user->name}} - @if(\Auth::user()->role == \App\Models\User::ADMIN) {{$user->phone}} @endif
