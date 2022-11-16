@@ -107,8 +107,10 @@
                                 </tbody>
                             </table>
                         </div>
-                    <button type="button" class="btn btn-warning" id="js_withdraw" data-url-paid-owner="{{route('admin.use-money-history.withdraw.index')}}" style="float: right">Rút</button>
-                </div>
+                        @if(\Auth::user()->role == \App\Models\User::ADMIN)
+                        <button type="button" class="btn btn-warning" id="js_withdraw" data-url-paid-owner="{{route('admin.use-money-history.withdraw.index')}}" style="float: right">Rút</button>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
