@@ -15,9 +15,13 @@
         </tr>
         @php
            $i = 0;
+           $total = 0;
         @endphp
         @if(isset($products))
             @foreach ($products as $item)
+                @php
+                    $total += ($item->pro_money_yuan*$item->pro_number);
+                @endphp
                 <tr>
                     <td>{{ ++$i . ' -- ' .  $item->id}}</td>
                     <td>{{ $item->pro_name }}</td>
@@ -58,6 +62,9 @@
                     </td>
                 </tr>
             @endforeach
+            <tr>
+                <td>total: = {{ number_format($total,0,',','.') }} NDT</td>
+            </tr>
         @endif
       </tbody>
     </table>

@@ -128,6 +128,25 @@ class AdminProductController extends Controller
             $products->orderByDesc('id');
 
         }
+        if ($request->sort_pro_number) {
+            switch ($sort_pro_number) {
+                case 1:
+                    $products = $products->where('pro_number', '>', 0);
+                    $products->orderBy('pro_number', 'DESC');
+                    break;
+                case 2:
+                    $products = $products->where('pro_number', '>', 0);
+                    $products->orderBy('pro_number', 'ASC');
+                    break;
+            }
+            $products = $products->paginate(10000);
+            $viewData = [
+                'products'      => $products,
+                'categorys'     => $categorys,
+                'query'         => $request->query()
+            ];
+            return view('admin.product.index', $viewData);
+        }
         $products = $products->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
         $viewData = [
             'products'      => $products,
