@@ -234,7 +234,7 @@
     </table>
     <div class="footer-left"> Khách hàng <br/> ----- <br/> {{$transaction->user->name}} </div>
     <div class="footer-right"> Lạng Sơn, {{ date("d-m-Y", strtotime($transaction->tst_order_date )) }}<br/>
-        Nhân viên <br/>
+        ----- <br/>
         Zalo: 036.753.0598
     </div>
 </div>
