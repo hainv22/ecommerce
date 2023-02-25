@@ -35,6 +35,12 @@
 {{--                                            <option value="{{$i}}" {{ Request::get('month-use-money') == $i ? "selected='selected'" : "" }}>Tháng {{$i}}</option>--}}
 {{--                                        @endfor--}}
 {{--                                    </select>--}}
+                                    <select name="month_use_money" class="form-control">
+                                        <option value="">_ Tháng trong năm _</option>
+                                        @for ($i = 1; $i <=12; $i++)
+                                            <option value="{{$i}}" {{ Request::get('month_use_money') == $i ? "selected='selected'" : "" }}>Tháng {{$i}}</option>
+                                        @endfor
+                                    </select>
                                     <select name="year_use_money" class="form-control">
                                         <option value="">_ Năm _</option>
                                         <option value="2022" {{ Request::get('year_use_money') == 2022 ? "selected='selected'" : "" }}>Năm 2022</option>

@@ -501,6 +501,10 @@ class AdminStatisticalController extends Controller
             {
                 $data = $data->whereYear('umh_use_date', $year_use_money);
             }
+            if ($month_use_money = $request->month_use_money)
+            {
+                $data = $data->WhereMonth('umh_use_date', $month_use_money);
+            }
             $data = $data->orderByDesc('created_at')->get();
             $total = $data->sum('umh_money');
             $viewData = [
