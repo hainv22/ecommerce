@@ -110,7 +110,7 @@
                         <div class="box-body">
                             <div class="form-group col-sm-6">
                                 @foreach($product->orders as $value)
-                                    <label><a href="{{route('admin.transaction.detail', $value->transaction->id)}}">Đơn - {{$value->transaction->id}} - ({{$value->transaction->user->name}}) - {{ number_format($value->od_price,0,',','.') }} - qty: {{ $value->od_qty}}</a></label>
+                                    <label><a href="{{route('admin.transaction.detail', $value->transaction->id)}}">Đơn - {{$value->transaction->id}} - ({{$value->transaction->user->name}}) - {{ number_format($value->od_price,0,',','.') }} - qty: {{ $value->od_qty}} / {{ date("d-m-Y", strtotime($value->transaction->tst_order_date)) }}</a></label>
                                     <br>
                                 @endforeach
                             </div>

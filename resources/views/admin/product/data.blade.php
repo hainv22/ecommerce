@@ -60,7 +60,8 @@
                     <td>{{ $item->created_at }}</td>
                     <td>
                         <a href="{{ route('admin.product.update',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i> Edit</a>
-                        <a href="{{ route('admin.product.delete',$item->id) }}" class="btn btn-xs btn-danger js-delete-confirm"><i class="fa fa-trash"></i> Delete</a>
+{{--                        <a href="{{ route('admin.product.delete',$item->id) }}" class="btn btn-xs btn-danger js-delete-confirm"><i class="fa fa-trash"></i> Delete</a>--}}
+                        <a href="{{ route('admin.product.check.purchase',$item->id) }}" class="btn btn-sm btn-default js-view-purchase"><i class="fa fa-eye"></i> info</a>
                     </td>
                 </tr>
             @endforeach

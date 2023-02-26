@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('delete/{id}', [AdminProductController::class, 'delete'])->name('admin.product.delete');
             Route::get('active/{id}', [AdminProductController::class, 'active'])->name('admin.product.active');
             Route::get('hot/{id}', [AdminProductController::class, 'hot'])->name('admin.product.hot');
+            Route::get('check/purchase/{id}', [AdminProductController::class, 'checkPurchase'])->name('admin.product.check.purchase');
 
             Route::get('delete-image/{id}', [AdminProductController::class, 'deleteImage'])->name('admin.product.delete_image');
             Route::get('get-type-product/{categoryId?}', [AdminProductController::class, 'getTypeProduct'])->name('admin.product.get.typeproduct');

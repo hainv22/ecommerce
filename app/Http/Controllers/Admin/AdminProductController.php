@@ -415,4 +415,13 @@ class AdminProductController extends Controller
         $str = preg_replace("/(Đ)/", 'D', $str);
         return $str;
     }
+
+    public function checkPurchase(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+        $view_check_purchase = view('admin.product.check-purchase.check_purchase', compact('product'))->render();
+        return response([
+            'data' => $view_check_purchase
+        ]);
+    }
 }
