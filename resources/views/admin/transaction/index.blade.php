@@ -45,6 +45,13 @@
                         <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
                     </form>
                 </div><br>
+                <div class="box-title">
+                    <span>Tổng đơn hàng: <span style="color:red; font-size:20px">{{ count($transactions) }}</span></span>
+                </div>
+                <?php
+                    $chung = 0;
+                    $rieng = 0;
+                ?>
               <!-- /.box-header -->
               <div class="box-body table-responsive no-padding">
                 <table class="table table-hover">
@@ -111,8 +118,10 @@
                                         @if(\Auth::user()->role == \App\Models\User::ADMIN)
                                             số cân: @foreach($item->baos as $bao) - {{$bao->b_weight}} - @endforeach
                                             @if($item->tst_transaction_role == \App\Models\Transaction::ADMIN)
+                                            {{$rieng++}}
                                                 <li><span class="label label-success">Riêng</span></li>
                                             @else
+                                            {{$chung++}}
                                                 <li><span class="label label-warning">Chung</span></li>
                                             @endif
                                         @endif
@@ -151,6 +160,11 @@
               <!-- /.box-body -->
               {!! $transactions->appends($query)->links() !!}
               <div></div>
+              <div class="box-title">
+                    <span>Tổng đơn hàng: <span style="color:red; font-size:20px">{{ count($transactions) }}</span></span> <br>
+                    <span>Đơn chung:  {{$chung}}</span> <br>
+                    <span>Đơn riêng: {{$rieng}}</span> <br>
+                </div>
             </div>
             <!-- /.box -->
           </div>
