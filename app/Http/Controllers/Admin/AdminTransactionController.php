@@ -63,6 +63,10 @@ class AdminTransactionController extends Controller
             $transactions->where('tst_code_order', 'like', '%' . $code_order . '%');
         }
 
+        if ($transaction_role = $request->transaction_role) {
+            $transactions->where('tst_transaction_role', '=', $transaction_role);
+        }
+
         $transactions = $transactions->orderByDesc('id')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
         $viewData = [
             'transactions'  =>  $transactions,

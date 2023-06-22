@@ -40,6 +40,11 @@
                             <option value="3" {{ Request::get('status') == 3 ? "selected='selected'" : "" }}>Đã Bàn Giao</option>
                             <option value="-1" {{ Request::get('status') == -1 ? "selected='selected'" : "" }}>Hủy Bỏ</option>
                         </select>
+                        <select name="transaction_role" class="form-control">
+                            <option value="0">__Role__</option>
+                            <option value="1" {{ Request::get('transaction_role') == 1 ? "selected='selected'" : "" }}>Riêng</option>
+                            <option value="2" {{ Request::get('transaction_role') == 2 ? "selected='selected'" : "" }}>Chung</option>
+                        </select>
                         <input type="text" value="{{ Request::get('kg') }}" class="form-control" name="kg" placeholder="kg">
                         <input type="text" value="{{ Request::get('code_order') }}" class="form-control" name="code_order" placeholder="Mã đơn bên thứ 3">
                         <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
