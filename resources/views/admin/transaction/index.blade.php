@@ -23,6 +23,7 @@
               </div>
                 <div class="box-title">
                     <form action="" method="GET" class="form-inline">
+                        <input type="text" value="{{ Request::get('transaction_id') }}" class="form-control" name="transaction_id" placeholder="Transaction ID">
                         <select name="user_id" class="js-example-basic-single form-control">
                             <option value="0">__ Chọn Khách Hàng __</option>
                             @if (isset($users))

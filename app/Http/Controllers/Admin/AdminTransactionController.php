@@ -32,6 +32,11 @@ class AdminTransactionController extends Controller
         if (Auth::user()->role != User::ADMIN) {
             $transactions = $transactions->where('tst_transaction_role', Transaction::CHUNG);
         }
+
+        if ($transaction_id = $request->transaction_id) {
+            $transactions->where('id', $transaction_id);
+        }
+
         if ($user_id = $request->user_id) {
             $transactions->whereHas('user', function ($query) use ($user_id) {
                 $query->where('id', $user_id);
