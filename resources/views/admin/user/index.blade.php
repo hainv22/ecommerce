@@ -21,14 +21,12 @@
               <div class="box-header">
                   <h3 class="box-title"><a href="{{ route('admin.user.create') }}" class="btn btn-primary">Thêm mới </a></h3>
                 <div class="box-tools">
-                    <form action="" method="GET" class="form-inline">
-                      <div class="input-group input-group-sm" style="width: 150px;">
-                          <input type="text" value="{{ Request::get('email') }}" class="form-control" name="email" placeholder="nhập">
-                        <div class="input-group-btn">
-                          <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                        </div>
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" value="{{ Request::get('email') }}" class="form-control ajax-search-table" data-url="{{ route('admin.user.index') }}" name="table_search" placeholder="nhập">
+                      <div class="input-group-btn">
+                        <button type="button" class="btn btn-default" id="icon-search-js-pr" data-url="{{ route('admin.user.index') }}"><i class="fa fa-search"></i></button>
                       </div>
-                    </form>
+                    </div>
                 </div>
               </div>
               <!-- /.box-header -->
@@ -36,7 +34,7 @@
                     @include('admin.user.data')
                 </div>
               <!-- /.box-body -->
-              {!! $user->links() !!}
+              
               <div></div>
             </div>
             <!-- /.box -->
@@ -47,4 +45,28 @@
     <!-- /.row (main row) -->
   </section>
   <!-- /.content -->
+@endsection
+@section('script')
+<script>
+    $(document).ready(function(){
+      
+        $(document).on('click',"#icon-search-js-pr",function(e){
+            e.preventDefault();
+            var URL = $(this).attr('data-url');
+            console.log(URL);
+            var res = $(".ajax-search-table").val();
+            console.log(res);
+            $.ajax({
+                url:URL,
+                type:"GET",
+                data:{search:res},
+                success:function(results){
+                    if(results.data){
+                        $("#js-data").html(results.data);
+                    }
+                }
+            });
+        });
+  });
+  </script>
 @endsection

@@ -34,4 +34,5 @@
         @endif
         </tbody>
     </table>
+    {!! $user->links() !!}
 </div>

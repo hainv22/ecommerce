@@ -18,13 +18,30 @@ class AdminUserController extends Controller
     public function index(Request $request)
     {
         $user = User::query();
-        if ($email = $request->email) {
-            $user->where('email', 'like', '%' . $request->email . '%')
-                ->orwhere('name', 'like', '%' . $request->email . '%')
-                ->orwhere('phone', 'like', '%' . $request->email . '%');
-        }
+        // if ($email = $request->email) {
+        //     $user->where('email', 'like', '%' . $request->email . '%')
+        //         ->orwhere('name', 'like', '%' . $request->email . '%')
+        //         ->orwhere('phone', 'like', '%' . $request->email . '%');
+        // }
 
         $user = $user->orderByDesc('id')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
+
+        if ($request->ajax()) {
+            $a = $request->search;
+            if ($a == null || $a == '') {
+                $user = User::orderByDesc('id')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
+            } else {
+                $user = User::where('email', 'like', '%' . $a . '%')
+                ->orwhere('name', 'like', '%' . $a . '%')
+                ->orwhere('phone', 'like', '%' . $a . '%')->orderBy('id', 'DESC')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
+            }
+            $query  = $request->query();
+            $html = view('admin.user.data', compact('user', 'query'))->render();
+            return response([
+                'data'      => $html ?? null,
+                'messages'  => 'thành công !'
+            ]);
+        }
 
         $viewData = [
             'user'  => $user,
