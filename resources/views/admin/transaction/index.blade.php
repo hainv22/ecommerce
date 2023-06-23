@@ -123,10 +123,10 @@
                                         @if(\Auth::user()->role == \App\Models\User::ADMIN)
                                             số cân: @foreach($item->baos as $bao) - {{$bao->b_weight}} - @endforeach
                                             @if($item->tst_transaction_role == \App\Models\Transaction::ADMIN)
-                                            {{$rieng++}}
+                                            <?php $rieng++ ?>
                                                 <li><span class="label label-success">Riêng</span></li>
                                             @else
-                                            {{$chung++}}
+                                            <?php $chung++ ?>
                                                 <li><span class="label label-warning">Chung</span></li>
                                             @endif
                                         @endif
