@@ -71,6 +71,7 @@
                         <div class="table-responsive">
                             <div class="box-title">
                                 <form action="" method="GET" class="form-inline">
+                                <input type="text" value="{{Request::get('id_log')}}" name="id_log" class="form-control" placeholder="id_log">
                                     <select name="user_id" class="form-control">
                                         <option value="">-</option>
                                         @if (isset($users))
@@ -79,8 +80,9 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <input type="date" value="{{Request::get('date')}}" name="date" class="form-control" id="validationCustom01">
-                                    <input type="text" value="{{Request::get('data')}}" name="data" class="form-control" id="validationCustom01">
+                                    <input type="date" value="{{Request::get('date')}}" name="date" class="form-control" >
+                                    <input type="text" value="{{Request::get('data')}}" name="data" class="form-control" placeholder="data json">
+                                    <input type="text" value="{{Request::get('action')}}" name="action" class="form-control" placeholder="action type">
                                     <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
                                 </form>
                             </div>
@@ -100,8 +102,8 @@
                                     @foreach ($logs as $key => $item)
                                         <tr>
                                             <td>{{ $item->id }}</td>
-                                            <td><span class="label label-success" style="font-size: 15px;"> {{ $item->user->name }} </span> </td>
-                                            <td>{{ $item->data }}</td>
+                                            <td><span class="label label-success" style="font-size: 15px;"> {{ $item->user->name ?? null }} </span> </td>
+                                            <td> <pre>{{ print_r(json_decode($item->data), true) }}</pre></td>
                                             <td>{{ $item->type }}</td>
                                             <td>{{ $item->content }}</td>
                                             <td>{{ $item->created_at }}</td>

@@ -26,12 +26,7 @@ class OwnerChinaTransactionController extends Controller
 {
     public function index(Request $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'List Transaction Owner China',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('List Transaction Owner China', $request));
         $users = OwnerChina::all();
         $owner_transactions = OwnerTransaction::query()->with(['detail', 'owner', 'ownerBaos']);
         if (Auth::user()->role != User::ADMIN) {
@@ -58,12 +53,7 @@ class OwnerChinaTransactionController extends Controller
 
     public function create(Request $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'View Create Transaction Owner China',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('View Create Transaction Owner China', $request));
         $users = OwnerChina::all();
         $viewData = [
             'users'  =>  $users
@@ -73,12 +63,7 @@ class OwnerChinaTransactionController extends Controller
 
     public function products(Request $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Get Product When Create Transaction Owner China',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('Get Product When Create Transaction Owner China', $request));
         try {
             $products = Product::with('category:id,c_name');
             if ($search = strtolower($this->stripVN($request->search))) {
@@ -110,12 +95,6 @@ class OwnerChinaTransactionController extends Controller
 
     public function store(AdminOwnerTransactionRequest $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Store Transaction Owner China',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         DB::beginTransaction();
         try {
             $data = $request->all();
@@ -158,13 +137,14 @@ class OwnerChinaTransactionController extends Controller
             }
 
             if ($transaction) {
+                $log = $this->writeLogInDatabase($this->makeDataLogByRequest('Store Transaction Owner China', $request) + array('owner_china_transaction_id' => $transaction->id));
                 $owner = OwnerChina::find($data['ot_user_id']);
                 ChangeMoneyOwnerHistory::create([
                     'cmh_owner_china_id' => $data['ot_user_id'],
                     'cmh_money' => $total_money,
                     'cmh_money_after' => $owner->oc_total_money + $total_money,
                     'cmh_yuan' => 0,
-                    'cmh_content' => "Sinh ra khi tao đơn id = {$transaction->id}",
+                    'cmh_content' => "Sinh ra khi tao đơn id = {$transaction->id}, log_id_when_create_owner_china_transaction: $log->id",
                     'cmh_owner_transaction_id' => $transaction->id,
                     'cmh_money_before' => $owner->oc_total_money
                 ]);
@@ -190,35 +170,21 @@ class OwnerChinaTransactionController extends Controller
 
     public function getOwnerTransactionDetail(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'get Detail Transaction Owner China',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         $transaction = OwnerTransaction::query()->with(['detail', 'owner', 'changeMoneyOwnerHistories', 'ownerBaos'])->findOrFail($id);
         $order = OwnerTransactionDetail::with('product:id,pro_name,pro_avatar')
             ->where('otd_owner_transaction_id', $id)
             ->get();
+        $this->writeLogInDatabase($this->makeDataLogByRequest('get Detail Transaction Owner China', $request) + array('owner_china_transaction_id' => $transaction->id));
         return view('admin.owner_transaction.view', compact('transaction', 'order'));
     }
 
     public function updateSuccessDate(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Update da ve kho - nguoc lai',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         DB::beginTransaction();
         try {
             $detail = OwnerTransactionDetail::findOrfail($id);
             $detail->update([
                 'otd_status' => $request->value == 'true' ? 2 : 1
-            ]);
-            $product = Product::findOrfail($id)->update([
-
             ]);
             if($request->value == 'true') {
                 DB::table('products')
@@ -230,6 +196,7 @@ class OwnerChinaTransactionController extends Controller
                     ->decrement('pro_number', $detail->otd_qty);
             }
             $success = view('admin.owner_transaction.data.status', compact('detail'))->render();
+            $this->writeLogInDatabase($this->makeDataLogByRequest('Update da ve kho - nguoc lai', $request) + array('owner_transaction_detail_id' => $id));
             DB::commit();
             return response([
                 'data' => 'success',
@@ -246,12 +213,6 @@ class OwnerChinaTransactionController extends Controller
 
     public function update(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Update Transaction Owner China',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         DB::beginTransaction();
         try {
             $total_money = 0;
@@ -259,6 +220,7 @@ class OwnerChinaTransactionController extends Controller
             $data = $request->all();
             $transaction = OwnerTransaction::findOrFail($id);
 
+            $log = $this->writeLogInDatabase($this->makeDataLogByRequest('Update Transaction Owner China', $request) + array('owner_china_transaction_id' => $id));
             if(array_key_exists('txt_id_product', $data)) {
                 $check = true;
                 foreach ($transaction->detail as $key => $value) {
@@ -311,7 +273,8 @@ class OwnerChinaTransactionController extends Controller
                     'cmh_money' => $total_money-$transaction->ot_total_money,
                     'cmh_money_after' => $owner->oc_total_money+($total_money-$transaction->ot_total_money),
                     'cmh_yuan' => 0,
-                    'cmh_content' => "do cap nhat transaction id={$transaction->id}, Cập nhật: \n số lượng sp: {$transaction->ot_total_products} -> {$total_products} \n / Tiền: {$tst_total_money_old_format} -> $tst_total_money_new_format (la so tien cua don hang)",
+                    'cmh_content' => "do cap nhat transaction id={$transaction->id}, Cập nhật: \n số lượng sp: {$transaction->ot_total_products} -> {$total_products} \n / 
+                    Tiền: {$tst_total_money_old_format} -> $tst_total_money_new_format (la so tien cua don hang), log_id_when_update_owner_china_transaction: $log->id",
                     'cmh_owner_transaction_id' => $transaction->id,
                     'cmh_money_before' => $owner->oc_total_money
                 ]);

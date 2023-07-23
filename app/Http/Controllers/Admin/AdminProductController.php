@@ -17,12 +17,6 @@ class AdminProductController extends Controller
 {
     public function index(Request $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'List Product',
-            'content' => null,
-            'data' => json_encode($request->all())
-        ]);
         // $categorysKM = Category::where('id', 2)->first()->delete();
         // $categoryparentsKM = Category::where('c_parent_id', 2)->pluck('id')->all();
         // $typeProducts = TypeProduct::where('tp_category_id', 2)->pluck('id')->all();
@@ -38,11 +32,13 @@ class AdminProductController extends Controller
                 $product = Product::findOrfail((int)$request->p_id);
             }
             if ($request->p_hot == 1 || $request->p_hot == 2) {
+                $this->writeLogInDatabase($this->makeDataLogByRequest('update hot product', $request));
                 $product->pro_hot       = !$product->pro_hot;
                 $product->updated_at    = Carbon::now();
                 $product->save();
             }
             if ($request->p_status == 1 || $request->p_status == 2) {
+                $this->writeLogInDatabase($this->makeDataLogByRequest('update active product', $request));
                 $product->pro_active       = !$product->pro_active;
                 $product->updated_at    = Carbon::now();
                 $product->save();
@@ -171,17 +167,13 @@ class AdminProductController extends Controller
                 'data' => $html ?? null,
             ]);
         }
+        $this->writeLogInDatabase($this->makeDataLogByRequest('List Product', $request));
         return view('admin.product.index', $viewData);
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'View Create Product',
-            'content' => null,
-            'data' => null
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('View Create Product', $request));
         $categorys = Category::select('id', 'c_name', 'c_parent_id')->get();
         $viewData = [
             'categorys'          => $categorys,
@@ -191,12 +183,7 @@ class AdminProductController extends Controller
 
     public function store(AdminProductRequest $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Create Product',
-            'content' => null,
-            'data' => json_encode($request->all())
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('Create Product', $request));
             $data = $request->except('_token', 'pro_avatar', 'file');
             $data['pro_user_id'] = Auth::id();
             $data['pro_slug']   =   Str::slug($request->pro_name);
@@ -223,14 +210,9 @@ class AdminProductController extends Controller
             return redirect()->back();
     }
 
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Edit view Product',
-            'content' => null,
-            'data' => null
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('Edit view Product', $request));
         $product = Product::with('images', 'orders.transaction.user', 'ownerTransactionDetail.ownerTransaction.ownerChina')->findOrfail($id);
         $categorys = Category::select('id', 'c_name', 'c_parent_id')->get();
 
@@ -242,13 +224,8 @@ class AdminProductController extends Controller
     }
     public function update(AdminProductRequest $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Update Product',
-            'content' => null,
-            'data' => json_encode($request->all())
-        ]);
         $product = Product::findOrfail($id);
+        $p_old = Product::findOrfail($id);
         $data = $request->except('_token', 'pro_avatar', 'attribute', 'file');
 
         $data['pro_slug']   =   Str::slug($request->pro_name);
@@ -265,17 +242,14 @@ class AdminProductController extends Controller
             'type'      => 'success',
             'message'   => 'Update thành công !'
         ]);
+        $data_log = $this->makeDataLogByRequest('Update Product', $request) + array('old' => $p_old, 'new' => $product, 'diff_new' => array_diff($product->toArray(), $p_old->toArray()));
+        $this->writeLogInDatabase($data_log);
         return redirect()->back();
     }
 
     public function delete(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Delete Product',
-            'content' => null,
-            'data' => json_encode($request->all())
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('Delete Product', $request));
         DB::beginTransaction();
         $product = Product::with('images', 'orders')->findOrfail($id);
         if ($product) {
@@ -382,12 +356,7 @@ class AdminProductController extends Controller
     }
     public function deleteImage(Request $request, $imageID)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Delete image',
-            'content' => null,
-            'data' => json_encode($request->all())
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('Delete image', $request));
         DB::table('images')->where('id', $imageID)->delete();
         $request->session()->flash('toastr', [
             'type'      => 'success',

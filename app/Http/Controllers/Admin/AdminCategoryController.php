@@ -16,12 +16,7 @@ class AdminCategoryController extends Controller
 {
     public function index(Request $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Category Index',
-            'content' => null,
-            'data' => json_encode($request->all())
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('Category Index', $request));
         $categorys = Category::query()->orderBy('id', 'DESC')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
         if ($request->ajax()) {
             $a = $request->search;
@@ -45,26 +40,16 @@ class AdminCategoryController extends Controller
         return view('admin.category.index', compact('categorys'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'view create category',
-            'content' => null,
-            'data' => null
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('view create category', $request));
         $categorys = Category::all();
         return view('admin.category.create', compact('categorys'));
     }
 
     public function store(AdminCategoryRequest $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Create Category',
-            'content' => null,
-            'data' => json_encode($request->all())
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('Create Category', $request));
         $data = $request->except('_token', 'c_avatar');
         $data['c_slug']         = Str::slug($request->c_name);
         if ($request->c_avatar) {
@@ -81,14 +66,9 @@ class AdminCategoryController extends Controller
         return redirect()->back();
     }
 
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'View Edit Category',
-            'content' => null,
-            'data' => null
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('View Edit Category', $request));
         $categorys = Category::all();
         $category = Category::findOrfail($id);
         return view('admin.category.update', compact('category', 'categorys'));
@@ -96,13 +76,8 @@ class AdminCategoryController extends Controller
 
     public function update(AdminCategoryRequest $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Update Category',
-            'content' => null,
-            'data' => json_encode($request->all())
-        ]);
         $category = Category::findOrfail($id);
+        $c_old = Category::findOrfail($id);
         $data = $request->except('_token', 'c_avatar');
         if ($request->c_avatar) {
             $image = upload_image('c_avatar');
@@ -115,17 +90,14 @@ class AdminCategoryController extends Controller
             'type'      => 'success',
             'message'   => 'update thành công !'
         ]);
+        $data_log = $this->makeDataLogByRequest('Update Category', $request) + array('old' => $c_old, 'new' => $category);
+        $this->writeLogInDatabase($data_log);
         return redirect()->back();
     }
 
     public function delete(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Delete Category',
-            'content' => null,
-            'data' => json_encode($request->all())
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('Delete Category', $request));
         $idChildrenCategorys = Category::whereIn('c_parent_id', [$id])->pluck('id')->push((int)$id)->all();
         $products = Product::whereIn('pro_category_id', $idChildrenCategorys)->get();
         if (!empty($products[0])) {
@@ -146,12 +118,7 @@ class AdminCategoryController extends Controller
 
     public function hot(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Update Hot Category',
-            'content' => null,
-            'data' => json_encode($request->all())
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('Update Hot Category', $request));
         $category           = Category::findOrfail($id);
         $category->c_hot = !$category->c_hot;
         $category->updated_at = Carbon::now();
@@ -171,12 +138,7 @@ class AdminCategoryController extends Controller
 
     public function active(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Update active Category',
-            'content' => null,
-            'data' => json_encode($request->all())
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('Update active Category', $request));
         $idChildrenCategorys = Category::whereIn('c_parent_id', [$id])->pluck('id')->push((int)$id)->all();
         $products = Product::whereIn('pro_category_id', $idChildrenCategorys)->get();
         if (!empty($products[0])) {

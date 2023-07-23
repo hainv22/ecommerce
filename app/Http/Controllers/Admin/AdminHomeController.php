@@ -149,6 +149,10 @@ class AdminHomeController extends Controller
                 'id',
                 DB::table('logs')->select('user_id')->groupBy('user_id')->pluck('user_id')->toArray()
             )->get();
+
+        if ($id_log= $request->id_log) {
+            $logs->where('id', $id_log);
+        }
         if ($user_id= $request->user_id) {
             $logs->where('user_id', $user_id);
         }
@@ -157,6 +161,9 @@ class AdminHomeController extends Controller
         }
         if ($data= $request->data) {
             $logs->where('data', 'like', '%' . $data . '%');
+        }
+        if ($action= $request->action) {
+            $logs->where('type', 'like', '%' . $action . '%');
         }
         $logs = $logs->orderByDesc('id')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
 

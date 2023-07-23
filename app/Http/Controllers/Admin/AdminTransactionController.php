@@ -21,12 +21,7 @@ class AdminTransactionController extends Controller
 {
     public function index(Request $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Index Transaction',
-            'content' => null,
-            'data' => json_encode($request->all())
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('Index Transaction', $request));
         $users = User::all();
         $transactions = Transaction::query();
         if (Auth::user()->role != User::ADMIN) {
@@ -81,14 +76,9 @@ class AdminTransactionController extends Controller
         return view('admin.transaction.index', $viewData);
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'View Create Transaction',
-            'content' => null,
-            'data' => null
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('View Create Transaction', $request));
         $users = User::all();
         $transports = Transport::all();
         $viewData = [
@@ -100,12 +90,6 @@ class AdminTransactionController extends Controller
 
     public function store(AdminTransactionRequest $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Store Transaction',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         DB::beginTransaction();
         try {
             $data = $request->all();
@@ -172,10 +156,11 @@ class AdminTransactionController extends Controller
             $e = number_format($total_b_weight,0,',','.');
 
             if ($transaction) {
+                $log = $this->writeLogInDatabase($this->makeDataLogByRequest('Store Transaction', $request) + array('transaction_id' => $transaction->id));
                 TransactionHistory::create([
                     'th_transaction_id' => $transaction->id,
                     'th_content' => "Tạo đơn hàng thành công:  Tổng số sản phẩm: $a,
-                    Tổng số tiền: $b, Số tiền đặt cọc: {$c}, Tổng số bao: $d, Tổng số cân: $e"
+                    Tổng số tiền: $b, Số tiền đặt cọc: {$c}, Tổng số bao: $d, Tổng số cân: $e, log_id_when_create_transaction: $log->id"
                 ]);
             }
             DB::commit();
@@ -196,12 +181,6 @@ class AdminTransactionController extends Controller
 
     public function update(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Update Transaction',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         DB::beginTransaction();
         try {
             $total_money = 0;
@@ -269,9 +248,10 @@ class AdminTransactionController extends Controller
                 }
                 $tst_total_money_old_format = number_format($transaction->tst_total_money,0,',','.');
                 $tst_total_money_new_format = number_format($total_money,0,',','.');
+                $log = $this->writeLogInDatabase($this->makeDataLogByRequest('Update Transaction', $request) + array('transaction_id' => $transaction->id, 'update_transaction_type' => 'Update total product of transaction'));
                 TransactionHistory::create([
                     'th_transaction_id' => $transaction->id,
-                    'th_content' => "Cập nhật: \n số lượng sp: {$transaction->tst_total_products} -> {$total_products} \n / Tiền: {$tst_total_money_old_format} -> $tst_total_money_new_format "
+                    'th_content' => "Cập nhật: \n số lượng sp: {$transaction->tst_total_products} -> {$total_products} \n / Tiền: {$tst_total_money_old_format} -> $tst_total_money_new_format , log_id_when_update_product_transaction: $log->id"
                 ]);
 
                 $transaction->update([
@@ -320,9 +300,10 @@ class AdminTransactionController extends Controller
                         $weight_total += $data['b_weight'][$i];
                     }
                 }
+                $log = $this->writeLogInDatabase($this->makeDataLogByRequest('Update Transaction', $request) + array('transaction_id' => $transaction->id, 'update_transaction_type' => 'Update total bao of transaction'));
                 TransactionHistory::create([
                     'th_transaction_id' => $transaction->id,
-                    'th_content' => "Cập nhật: \n số lượng bao: {$count_bao_old} -> {$total_bao} \n số cân: {$sum_old} -> $weight_total "
+                    'th_content' => "Cập nhật: \n số lượng bao: {$count_bao_old} -> {$total_bao} \n số cân: {$sum_old} -> $weight_total, log_id_when_update_bao_transaction: $log->id"
                 ]);
             }
             if (array_key_exists('tst_order_date', $data) || array_key_exists('tst_expected_date', $data) || array_key_exists('tst_note', $data) || array_key_exists('tst_interest_rate', $data)  || array_key_exists('tst_code_order', $data)) {
@@ -332,6 +313,15 @@ class AdminTransactionController extends Controller
                     'tst_note' => $data['tst_note'],
                     'tst_interest_rate' => empty($data['tst_interest_rate']) ? $transaction->tst_interest_rate : $data['tst_interest_rate'],
                     'tst_code_order' => $data['tst_code_order']
+                ]);
+                $log = $this->writeLogInDatabase($this->makeDataLogByRequest('Update Transaction', $request) + array('transaction_id' => $transaction->id, 'update_transaction_type' => 'Update thong tin of transaction'));
+                TransactionHistory::create([
+                    'th_transaction_id' => $transaction->id,
+                    'th_content' => "Cập nhật: \n tst_order_date: {$transaction->tst_order_date}, \n
+                    tst_expected_date: {$transaction->tst_expected_date}, \n
+                    tst_note: {$transaction->tst_note}, \n
+                    tst_interest_rate: {$transaction->tst_interest_rate}, \n
+                    tst_code_order: {$transaction->tst_code_order}, log_id_when_update_thong_tin_transaction: $log->id"
                 ]);
             }
             DB::commit();
@@ -352,12 +342,6 @@ class AdminTransactionController extends Controller
 
     public function getTransactionDetail(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'View Transaction',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         $transports = Transport::all();
         $transaction = Transaction::query()->with(['baos', 'transaction_histories', 'transport'])->findOrFail($id);
         $order = Order::with('product:id,pro_name,pro_avatar')
@@ -375,17 +359,12 @@ class AdminTransactionController extends Controller
             $total_transport += ($item->b_weight * $item->transport->tp_fee);
         }
         $total_transport +=$total_transport_success;
+        $this->writeLogInDatabase($this->makeDataLogByRequest('View Transaction', $request) + array('transaction_id' => $transaction->id));
         return view('admin.transaction.view', compact('transaction', 'order', 'total_transport', 'transports'));
     }
 
     public function getAction(Request $request, $action, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Update Status Transaction',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         $transaction = Transaction::find($id);
         if ($transaction) {
             if($transaction->tst_status != -1) {
@@ -420,9 +399,10 @@ class AdminTransactionController extends Controller
                         break;
                 }
                 if(!empty($content)) {
+                    $log = $this->writeLogInDatabase($this->makeDataLogByRequest('Update Status Transaction', $request) + array('transaction_id' => $transaction->id));
                     TransactionHistory::create([
                         'th_transaction_id' => $id,
-                        'th_content' => $content
+                        'th_content' => $content.", log_id_when_status_transaction: $log->id"
                     ]);
                 }
                 $transaction->save();
@@ -433,12 +413,7 @@ class AdminTransactionController extends Controller
 
     public function order_detail_delete(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Delete order detail',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('Delete order detail', $request) + array('transaction_id' => $transaction->id));
         $order = Order::findOrfail($id);
         if ($order) {
             // if($order->od_sale){
@@ -460,12 +435,7 @@ class AdminTransactionController extends Controller
 
     public function delete($id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Delete Transaction',
-            'content' => null,
-            'data' =>  null
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('Delete Transaction', $request) + array('transaction_id' => $transaction->id));
         $transaction = Transaction::findOrfail($id);
         // $order=Order::query()->where('od_transaction_id',$id)->get();
         if ($transaction) {
@@ -484,12 +454,6 @@ class AdminTransactionController extends Controller
 
     public function updateSuccessDate(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'updateSuccessDate',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         DB::beginTransaction();
         try {
             $bao = Bao::with('transport')->findOrfail($id);
@@ -499,6 +463,7 @@ class AdminTransactionController extends Controller
             ]);
             $price_bao = view('admin.transaction.data_edit_bao.price_bao', compact('bao'))->render();
             $success_date = view('admin.transaction.data_edit_bao.success_date', compact('bao'))->render();
+            $this->writeLogInDatabase($this->makeDataLogByRequest('updateSuccessDate', $request));
             DB::commit();
             return response([
                 'data' => 'success',
@@ -513,12 +478,6 @@ class AdminTransactionController extends Controller
 
     public function updateTransportIdBao(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'update bao transaction',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         DB::beginTransaction();
         try {
             $bao = Bao::with('transport')->findOrfail($id);
@@ -528,6 +487,7 @@ class AdminTransactionController extends Controller
             ]);
             $bao = Bao::with('transport')->findOrfail($id);
             $price_bao = view('admin.transaction.data_edit_bao.price_bao', compact('bao'))->render();
+            $this->writeLogInDatabase($this->makeDataLogByRequest('update bao transaction', $request));
 
             DB::commit();
             return response([
@@ -541,12 +501,6 @@ class AdminTransactionController extends Controller
 
     public function updateMoney(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'update Money transaction',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         DB::beginTransaction();
         try {
             $transaction = Transaction::findOrfail($id);
@@ -567,11 +521,12 @@ class AdminTransactionController extends Controller
                 'tst_total_paid' => (int)$request->value + $tst_total_paid_old
             ]);
             $con_no_tong = number_format($transaction->tst_total_money - $transaction->tst_total_paid, 0,',','.');
+            $log = $this->writeLogInDatabase($this->makeDataLogByRequest('update Money transaction', $request) + array('transaction_id' => $transaction->id));
             TransactionHistory::create([
                 'th_transaction_id' => $id,
                 'th_content' => "Cập nhật Tiền hàng: \n Trả: {$value_format} đ \n/ Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền trả lần này): {$so_tien_no_cuoi_cu} - {$value_format} = {$tst_total_money_new_format} /
                 Tổng số tiền hàng đã trả: $so_tien_hang_da_tra_format
-                (còn nợ tổng: $con_no_tong)"
+                (còn nợ tổng: $con_no_tong), log_id_when_update_money_transaction: $log->id"
             ]);
             DB::commit();
         } catch (\Exception $e) {
@@ -595,12 +550,6 @@ class AdminTransactionController extends Controller
 
     public function updateMoneyTransport(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'update Money transport',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         DB::beginTransaction();
         try {
             $transaction = Transaction::findOrfail($id);
@@ -633,12 +582,13 @@ class AdminTransactionController extends Controller
                 'total_transport_paid' => $tst_total_transport_new
             ]);
             $con_no_tong = number_format($total_transport - $transaction->total_transport_paid,0,',','.');
+            $log = $this->writeLogInDatabase($this->makeDataLogByRequest('update Money transport', $request) + array('transaction_id' => $transaction->id));
             TransactionHistory::create([
                 'th_transaction_id' => $id,
                 'th_content' => "Cập nhật tiền vận chuyển: \n Trả: {$value_format} đ \n/
                 Số tiền còn nợ =(số tiền nợ cuối cũ - số tiền trả lần này): {$total_transport_old} - {$tst_total_transport_new} = {$so_tien_con_no_format}/
                 Tổng số tiền vận chuyển đã trả: $tst_total_transport_new_format
-                (còn nợ tổng: $con_no_tong)"
+                (còn nợ tổng: $con_no_tong), log_id_when_update_transport_transaction: $log->id"
             ]);
             DB::commit();
         } catch (\Exception $e) {
@@ -662,12 +612,6 @@ class AdminTransactionController extends Controller
 
     public function convertDeposit(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'convertDeposit',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         DB::beginTransaction();
         try {
             $transaction = Transaction::findOrfail($id);
@@ -693,13 +637,13 @@ class AdminTransactionController extends Controller
                 'tst_total_paid' => $tst_total_paid_new
 
             ]);
-
+            $log = $this->writeLogInDatabase($this->makeDataLogByRequest('convertDeposit', $request) + array('transaction_id' => $transaction->id));
             TransactionHistory::create([
                 'th_transaction_id' => $id,
                 'th_content' => "Convert tiền cọc: \n Tiền cọc: {$tst_deposit_format} đ \n/
                 Số tiền còn nợ = (số tiền nợ cuối cũ - số tiền cọc): {$tst_total_money_format} - {$tst_deposit_format} = {$a} /
                 Tổng số tiền hàng đã trả: $tst_total_paid_new_format
-                (còn nợ tổng: $a)"
+                (còn nợ tổng: $a), log_id_when_convert_deposit_transaction: $log->id"
             ]);
             DB::commit();
         } catch (\Exception $e) {
@@ -719,12 +663,6 @@ class AdminTransactionController extends Controller
 
     public function updateLockTransaction(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'updateLockTransaction',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         DB::beginTransaction();
         try {
             $transaction = Transaction::findOrfail($id);
@@ -740,6 +678,7 @@ class AdminTransactionController extends Controller
                 'type'      => $transaction->tst_lock == 1 ? "success" : "warning",
                 'message'   => $transaction->tst_lock == 1 ? "Đã khóa transaction" : "Đã mở khóa transaction"
             ]);
+            $log = $this->writeLogInDatabase($this->makeDataLogByRequest('updateLockTransaction', $request) + array('transaction_id' => $transaction->id));
 
             DB::commit();
         } catch (\Exception $e) {
@@ -786,12 +725,6 @@ class AdminTransactionController extends Controller
 
     public function printTransaction(Request $request, $id)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'printTransaction',
-            'content' => null,
-            'data' =>  json_encode($request->all())
-        ]);
         $transaction = Transaction::query()->with(['baos', 'transaction_histories', 'transport'])->findOrFail($id);
         $order = Order::with('product:id,pro_name,pro_avatar')
             ->where('od_transaction_id', $id)
@@ -807,6 +740,7 @@ class AdminTransactionController extends Controller
             $total_transport += ($item->b_weight * $item->transport->tp_fee);
         }
         $total_transport +=$total_transport_success;
+        $log = $this->writeLogInDatabase($this->makeDataLogByRequest('printTransaction', $request) + array('transaction_id' => $transaction->id));
         return view('admin.transaction.print', compact('transaction', 'order', 'total_transport'));
     }
 }

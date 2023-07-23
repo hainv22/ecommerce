@@ -470,20 +470,10 @@ class AdminStatisticalController extends Controller
         ];
         if($request->check == null)
         {
-            Log::create([
-                'user_id' => Auth::id(),
-                'type' => 'View Màn Thống Kê Tổng',
-                'content' => null,
-                'data' => json_encode($request->all())
-            ]);
+            $this->writeLogInDatabase($this->makeDataLogByRequest('View Màn Thống Kê Tổng', $request));
             return view('admin.statistical.index', $viewData);
         } else {
-            Log::create([
-                'user_id' => Auth::id(),
-                'type' => 'View Màn Thống Kê Trừ Tiền',
-                'content' => null,
-                'data' => json_encode($request->all())
-            ]);
+            $this->writeLogInDatabase($this->makeDataLogByRequest('View Màn Thống Kê Trừ Tiền', $request));
             $data = UseMoneyHistory::query();
             if ($type_status = $request->type_use_money)
             {
@@ -517,12 +507,7 @@ class AdminStatisticalController extends Controller
 
     public function withdraw(Request $request)
     {
-        Log::create([
-            'user_id' => Auth::id(),
-            'type' => 'Sử dụng Chức Năng Trừ Tiền',
-            'content' => null,
-            'data' => json_encode($request->all())
-        ]);
+        $this->writeLogInDatabase($this->makeDataLogByRequest('Sử dụng Chức Năng Trừ Tiền', $request));
         DB::beginTransaction();
         try {
             UseMoneyHistory::create([
