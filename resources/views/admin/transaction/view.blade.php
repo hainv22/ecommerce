@@ -9,6 +9,9 @@
         @else
             <span class="label label-warning">Chung</span>
         @endif
+        @if((($transaction->tst_total_money - $transaction->tst_total_paid) + ($total_transport - $transaction->total_transport_paid) == 0) && $transaction->tst_status == 3)
+            <span class="label label-default">Done</span>
+        @endif
     </h1>
     <ol class="breadcrumb">
       <li><a href="{{ route('admin.index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
