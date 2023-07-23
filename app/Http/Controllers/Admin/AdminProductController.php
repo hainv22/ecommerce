@@ -52,12 +52,10 @@ class AdminProductController extends Controller
             $products->where('id', $id);
         }
         if ($name = strtolower($this->stripVN($request->name))) {
-            $products->where('pro_name', 'like', '%' . $name . '%')->orWhere('pro_price', 'like', '%' . $name . '%');
+            $products->where('pro_name', 'like', '%' . $name . '%');
         }
         if ($idCategory = $request->category) {
-            $categorySearch = Category::where('c_parent_id', $parentId = Category::where('id', $idCategory)
-                ->value('id'))->pluck('id')->push($parentId)->all();
-            $products = Product::whereIn('pro_category_id', $categorySearch);
+            $products->where('pro_category_id', $idCategory);
         }
         if ($hot = $request->hot) {
             if ($hot == 1) {
