@@ -15,6 +15,7 @@
         <div class="form-group col-sm-12">
             <span class="label label-success" style="font-size: 13px">{{ number_format($product->pro_price,0,',','.') }} VND</span>
             <span class="label label-info" style="font-size: 13px">{{ number_format($product->pro_money_yuan,2,',','.') }} NDT</span>
+            <span class="label label-danger" style="font-size: 13px">Số Lượng Còn =  {{ $product->pro_number }} </span>
         </div>
     </div>
 </div>
@@ -46,7 +47,11 @@
     <div class="box-body">
         <div class="form-group col-sm-12">
             @foreach($product->ownerTransactionDetail as $value)
-                <label><a target="_blank" href="{{route('admin.owner-china-transactions.detail', $value->ownerTransaction->id)}}">{{$value->ownerTransaction->id}} - ({{$value->ownerTransaction->ownerChina->oc_name}}) - {{ number_format($value->otd_price,1,',','.') }} - qty: {{$value->otd_qty}} / {{$value->ownerTransaction->ot_order_date}}</a></label>
+                <label><a target="_blank" href="{{route('admin.owner-china-transactions.detail', $value->ownerTransaction->id)}}">{{$value->ownerTransaction->id}} - ({{$value->ownerTransaction->ownerChina->oc_name}}) - {{ number_format($value->otd_price,1,',','.') }} - qty: {{$value->otd_qty}} / {{$value->ownerTransaction->ot_order_date}} / 
+                    @if($value->otd_status == 2) 
+                        <span class="label label-success">Done</span>
+                    @endif
+                </a></label>
                 <br>
             @endforeach
         </div>

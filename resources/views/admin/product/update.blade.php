@@ -137,7 +137,11 @@
                         <div class="box-body">
                             <div class="form-group col-sm-12">
                                 @foreach($product->ownerTransactionDetail as $value)
-                                    <label><a href="{{route('admin.owner-china-transactions.detail', $value->ownerTransaction->id)}}">{{$value->ownerTransaction->id}} - ({{$value->ownerTransaction->ownerChina->oc_name}}) - {{ number_format($value->otd_price,1,',','.') }} - qty: {{$value->otd_qty}} / {{$value->ownerTransaction->ot_order_date}}</a></label>
+                                    <label><a href="{{route('admin.owner-china-transactions.detail', $value->ownerTransaction->id)}}">{{$value->ownerTransaction->id}} - ({{$value->ownerTransaction->ownerChina->oc_name}}) - {{ number_format($value->otd_price,1,',','.') }} - qty: {{$value->otd_qty}} / {{$value->ownerTransaction->ot_order_date}} / 
+                                        @if($value->otd_status == 2) 
+                                            <span class="label label-success">Done</span>
+                                        @endif
+                                    </a></label>
                                     <br>
                                 @endforeach
                             </div>
