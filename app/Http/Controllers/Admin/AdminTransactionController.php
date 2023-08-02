@@ -66,6 +66,18 @@ class AdminTransactionController extends Controller
         if ($transaction_role = $request->transaction_role) {
             $transactions->where('tst_transaction_role', '=', $transaction_role);
         }
+        $month = $request->month;
+        $year = $request->year;
+        if ($month && $year) {
+            $transactions->whereYear('tst_order_date', '=', $year)->whereMonth('tst_order_date', '=' ,(int)$month);
+            $transactions = $transactions->orderByDesc('id')->paginate(99999);
+            $viewData = [
+                'transactions'  =>  $transactions,
+                'users' => $users,
+                'query'         =>  $request->query()
+            ];
+            return view('admin.transaction.index', $viewData);
+        }
 
         $transactions = $transactions->orderByDesc('id')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
         $viewData = [

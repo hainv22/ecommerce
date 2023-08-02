@@ -74,11 +74,12 @@
                                          <td>{{ number_format($tien_lai[$key]->totalMoney,0,',','.') }} vnd</td>
                                          <td>
                                              @if (!(empty(Request::get('year'))) && empty(Request::get('day')) && empty(Request::get('month')))
-                                                 Tháng {{ $item->day }} Năm {{Request::get('year')}}
+                                                Tháng {{ $item->day }} Năm {{Request::get('year')}}
+                                                <a target="_blank" href="{{ route('admin.transaction.index') }}?month={{$item->day}}&year={{Request::get('year')}}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
                                              @else
-                                                 {{ date('d-m-Y', strtotime($item->day)) }}
+                                                {{ date('d-m-Y', strtotime($item->day)) }}
+                                                <a target="_blank" href="{{ route('admin.transaction.index') }}?date={{$item->day}}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
                                              @endif
-                                                 <a target="_blank" href="{{ route('admin.transaction.index') }}?date={{$item->day}}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
                                          </td>
                                      </tr>
                                  @endforeach

@@ -48,6 +48,17 @@
                         </select>
                         <input type="text" value="{{ Request::get('kg') }}" class="form-control" name="kg" placeholder="kg">
                         <input type="text" value="{{ Request::get('code_order') }}" class="form-control" name="code_order" placeholder="Mã đơn bên thứ 3">
+                        <select name="month" class="form-control">
+                            <option value="">__ Tháng __</option>
+                            @for($i=1;$i<=12;$i++)
+                                <option value="{{$i}}" {{ Request::get('month') == $i ? "selected='selected'" : "" }}>Tháng {{$i}}</option>
+                            @endfor
+                        </select>
+                        <select name="year" class="form-control">
+                            <option value="">__ Năm __</option>
+                            <option value="2022" {{ Request::get('year') == 2022 ? "selected='selected'" : "" }}>Năm 2022</option>
+                            <option value="2023" {{ Request::get('year') == 2023 ? "selected='selected'" : "" }}>Năm 2023</option>
+                        </select>
                         <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
                     </form>
                 </div><br>
