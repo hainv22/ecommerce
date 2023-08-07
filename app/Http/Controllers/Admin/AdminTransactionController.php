@@ -755,4 +755,73 @@ class AdminTransactionController extends Controller
         $log = $this->writeLogInDatabase($this->makeDataLogByRequest('printTransaction', $request) + array('transaction_id' => $transaction->id));
         return view('admin.transaction.print', compact('transaction', 'order', 'total_transport'));
     }
+
+    public function convertSuccessMoneyAll(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $total_money = 0;
+            $total_transport_paid = 0;
+
+            $transaction = Transaction::findOrfail($id);
+            $transaction_old = Transaction::findOrfail($id);
+            $deposit_format = number_format($transaction->tst_deposit,0,',','.');
+            $deposit_old = $transaction->tst_deposit;
+            if($transaction->tst_deposit > 0) {
+                $transaction->tst_deposit = 0;
+                $total_money += $transaction->tst_deposit;
+            }
+
+            if($transaction->tst_total_money - $transaction->tst_total_paid - $transaction->tst_deposit > 0) {
+                $total_money += ($transaction->tst_total_money-$transaction->tst_total_paid-$transaction->tst_deposit);
+            }
+
+            $transport_success = Bao::where('b_transaction_id', $id)->whereNotNull('b_success_date')->get();
+            $total_transport_success = 0;
+            foreach ($transport_success as $item) {
+                $total_transport_success += ($item->b_weight * $item->b_fee);
+            }
+            $total_transport = 0;
+            $transport_pending = Bao::with('transport')->where('b_transaction_id', $id)->whereNull('b_success_date')->get();
+            foreach ($transport_pending as $item) {
+                $total_transport += ($item->b_weight * $item->transport->tp_fee);
+            }
+            $total_transport +=$total_transport_success;
+            if($transaction->total_transport_paid < $total_transport) {
+                $total_transport_paid += ($total_transport-$transaction->total_transport_paid);
+            }
+            $total_money_format = number_format($total_money-$deposit_old,0,',','.');
+
+            $total_transport_paid_format = number_format($total_transport-$transaction->total_transport_paid,0,',','.');
+            $transaction->tst_total_paid = $total_money + $transaction->tst_total_paid;
+            $transaction->total_transport_paid = $transaction->total_transport_paid + $total_transport_paid;
+            $transaction->tst_status = 3;
+            $transaction->tst_lock = 1;
+            $transaction->save();
+
+            $log = $this->writeLogInDatabase($this->makeDataLogByRequest('convertSuccessMoneyAll', $request) + array('transaction_id' => $transaction->id, 'old' => $transaction_old, 'new' => $transaction, 'diff_new' => array_diff($transaction->toArray(), $transaction_old->toArray())));
+            TransactionHistory::create([
+                'th_transaction_id' => $id,
+                'th_content' => "Thanh Toán Hết: \n
+                Tiền cọc: {$deposit_format} đ \n/
+                Tiền Hàng: {$total_money_format} \n/
+                Tiền Vận Chuyển: {$total_transport_paid_format} \n/
+                Cập nhật trạng thái sang đã bàn giao, \n/
+                log_id_when_convert_success_money_all_transaction: $log->id"
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response([
+                'code' => 400,
+                'message' => $e->getMessage(),
+                'data' => ''
+            ]);
+        }
+        return response([
+            'code' => 200,
+            'message' => 'Update số tiền thành công',
+            'data' => ''
+        ]);
+    }
 }

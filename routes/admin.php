@@ -84,6 +84,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('update-transport-id-bao/{id}', [AdminTransactionController::class, 'updateTransportIdBao'])->name('admin.update.transport.id.bao');
             Route::get('order-delete/{id}', [AdminTransactionController::class, 'order_detail_delete'])->name('admin.order_detail.delete');
             Route::get('action/{action}/{id}', [AdminTransactionController::class, 'getAction'])->name('admin.transaction.action');
+            Route::get('convert-success-money-all/{id}', [AdminTransactionController::class, 'convertSuccessMoneyAll'])->name('admin.transaction.convert.success.all');
         });
 
 

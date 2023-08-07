@@ -216,8 +216,20 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Ngày Mua Đơn Hàng</td>
-                                        <td><span >{{ $transaction->created_at }}</span></td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        @if(!((($transaction->tst_total_money - $transaction->tst_total_paid) + ($total_transport - $transaction->total_transport_paid) == 0) && $transaction->tst_status == 3))
+                                            <button type="button" class="btn btn-danger {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}"
+                                                id="{{$transaction->tst_lock == 1 ? 'js_click_lock' : 'js_convert_success_money_all'}}"
+                                                data-url-convert="{{route('admin.transaction.convert.success.all', $transaction->id)}}">THANH TOÁN HẾT</button>
+                                            <br>
+                                            (tiền hàng đang nợ + tiền vận chuyển đang nợ + nếu có cọc thì convert luôn)
+                                        @endif
+                                        </td>
+                                        <td>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -796,6 +808,45 @@
             $.confirm({
                 title: ' Bạn muốn chuyển tiền đặt cọc',
                 content: 'Chuyển tiền cọc sang tiền khách hàng trả!',
+                type: 'red',
+                buttons: {
+                    ok: {
+                        text: "ok!",
+                        btnClass: 'btn-primary',
+                        keys: ['enter'],
+                        action: function(){
+                            if(URL){
+                                $.ajax({
+                                    url:URL,
+                                    success:function(results){
+                                        console.log(results.code)
+                                        if(results.code == 200) {
+                                            location.reload();
+                                            toastr.success(results.message);
+                                        } else {
+                                            toastr.error(results.message);
+                                        }
+                                    },
+                                    error:function(error){
+                                        console.log(error.messages);
+                                    }
+                                });
+                            }
+                        }
+                    },
+                    cancel: function(){
+                        console.log('the user clicked cancel');
+                    }
+                }
+            });
+        })
+
+        $('#js_convert_success_money_all').click(function(event){
+            event.preventDefault();
+            let URL=$(this).attr('data-url-convert');
+            $.confirm({
+                title: 'THANH TOÁN HẾT',
+                content: 'Thanh Toán Hết',
                 type: 'red',
                 buttons: {
                     ok: {
