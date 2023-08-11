@@ -80,7 +80,9 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <input type="date" value="{{Request::get('date')}}" name="date" class="form-control" >
+                                    <!-- <input type="date" value="{{Request::get('date')}}" name="date" class="form-control" > -->
+                                    <input type="datetime-local" name="start_date" class="form-control" value="{{Request::get('start_date')}}">
+                                    <input type="datetime-local" name="end_date" class="form-control" value="{{Request::get('end_date')}}">
                                     <input type="text" value="{{Request::get('data')}}" name="data" class="form-control" placeholder="data json">
                                     <input type="text" value="{{Request::get('action')}}" name="action" class="form-control" placeholder="action type">
                                     <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>

@@ -156,15 +156,23 @@ class AdminHomeController extends Controller
         if ($user_id= $request->user_id) {
             $logs->where('user_id', $user_id);
         }
-        if ($date= $request->date) {
-            $logs->whereDate('created_at', $date);
-        }
+        // if ($date= $request->date) {
+        //     $logs->whereDate('created_at', $date);
+        // }
         if ($data= $request->data) {
             $logs->where('data', 'like', '%' . $data . '%');
         }
         if ($action= $request->action) {
             $logs->where('type', 'like', '%' . $action . '%');
         }
+
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
+        if ($start_date && $end_date) {
+            $logs->whereBetween('created_at', [$start_date, $end_date]);
+        }
+
         $logs = $logs->orderByDesc('id')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
 
         $viewData = [
