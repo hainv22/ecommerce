@@ -63,7 +63,8 @@
                     </form>
                 </div><br>
                 <div class="box-title">
-                    <span>Tổng đơn hàng: <span style="color:red; font-size:20px">{{ count($transactions) }}</span></span>
+                    <span>Tổng đơn hàng: <span style="color:red; font-size:20px">{{ $transactions->total() }}</span></span><br>
+                    <span>Số đơn hàng của trang hiện tại: <span style="color:red; font-size:20px">{{ count($transactions) }}</span></span>
                 </div>
                 <?php
                     $chung = 0;
@@ -177,10 +178,21 @@
               <!-- /.box-body -->
               {!! $transactions->appends($query)->links() !!}
               <div></div>
-              <div class="box-title">
-                    <span>Tổng đơn hàng: <span style="color:red; font-size:20px">{{ count($transactions) }}</span></span> <br>
-                    <span>Đơn chung:  {{$chung}}</span> <br>
-                    <span>Đơn riêng: {{$rieng}}</span> <br>
+                <div class="box-title">
+                    <div  class="row">
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                            <span>Tổng</span> <br>
+                            <span>Tổng đơn hàng: <span style="color:red; font-size:20px">{{ count($t_chung) + count($t_rieng) }}</span></span> <br>
+                            <span>Tổng Đơn chung:  {{ count($t_chung) }}</span> <br>
+                            <span>Tổng Đơn riêng: {{ count($t_rieng) }}</span> <br>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                            <span>Trang hiện tại</span> <br>
+                            <span>Số đơn hàng của trang hiện tại: <span style="color:red; font-size:20px">{{ count($transactions) }}</span></span> <br>
+                            <span>Đơn chung của trang hiện tại:  {{$chung}}</span> <br>
+                            <span>Đơn riêng của trang hiện tại: {{$rieng}}</span> <br>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- /.box -->

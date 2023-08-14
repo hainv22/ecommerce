@@ -60,7 +60,7 @@
             <div class="col-md-12">
                 <div class="box box-warning">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Log</h3>
+                        <h3 class="box-title">Log</h3>: <span style="color:red; font-size:20px"> {{ $logs->total() }}</span>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                             </button>

@@ -74,7 +74,9 @@ class AdminTransactionController extends Controller
             $viewData = [
                 'transactions'  =>  $transactions,
                 'users' => $users,
-                'query'         =>  $request->query()
+                'query'         =>  $request->query(),
+                't_chung' => Transaction::where('tst_transaction_role', 2)->get(),
+                't_rieng' => Transaction::where('tst_transaction_role', 1)->get()
             ];
             return view('admin.transaction.index', $viewData);
         }
@@ -83,7 +85,9 @@ class AdminTransactionController extends Controller
         $viewData = [
             'transactions'  =>  $transactions,
             'users' => $users,
-            'query'         =>  $request->query()
+            'query'         =>  $request->query(),
+            't_chung' => Transaction::where('tst_transaction_role', 2)->get(),
+            't_rieng' => Transaction::where('tst_transaction_role', 1)->get()
         ];
         return view('admin.transaction.index', $viewData);
     }
