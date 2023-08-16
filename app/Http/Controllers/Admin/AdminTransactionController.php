@@ -70,7 +70,7 @@ class AdminTransactionController extends Controller
         $year = $request->year;
         if ($month && $year) {
             $transactions->whereYear('tst_order_date', '=', $year)->whereMonth('tst_order_date', '=' ,(int)$month);
-            $transactions = $transactions->orderByDesc('id')->paginate(99999);
+            $transactions = $transactions->orderByDesc('tst_order_date')->paginate(99999);
             $viewData = [
                 'transactions'  =>  $transactions,
                 'users' => $users,
