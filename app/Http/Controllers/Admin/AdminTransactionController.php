@@ -24,16 +24,26 @@ class AdminTransactionController extends Controller
         $this->writeLogInDatabase($this->makeDataLogByRequest('Index Transaction', $request));
         $users = User::all();
         $transactions = Transaction::query();
+        $t_rieng = Transaction::query()->where('tst_transaction_role', Transaction::ADMIN);
+        $t_chung = Transaction::query()->where('tst_transaction_role', Transaction::CHUNG);
         if (Auth::user()->role != User::ADMIN) {
             $transactions = $transactions->where('tst_transaction_role', Transaction::CHUNG);
         }
 
         if ($transaction_id = $request->transaction_id) {
             $transactions->where('id', $transaction_id);
+            $t_rieng->where('id', $transaction_id);
+            $t_chung->where('id', $transaction_id);
         }
 
         if ($user_id = $request->user_id) {
             $transactions->whereHas('user', function ($query) use ($user_id) {
+                $query->where('id', $user_id);
+            });
+            $t_rieng->whereHas('user', function ($query) use ($user_id) {
+                $query->where('id', $user_id);
+            });
+            $t_chung->whereHas('user', function ($query) use ($user_id) {
                 $query->where('id', $user_id);
             });
         }
@@ -42,14 +52,24 @@ class AdminTransactionController extends Controller
             $transactions->whereHas('user', function ($query) use ($phone) {
                 $query->where('phone', $phone);
             });
+            $t_rieng->whereHas('user', function ($query) use ($phone) {
+                $query->where('phone', $phone);
+            });
+            $t_chung->whereHas('user', function ($query) use ($phone) {
+                $query->where('phone', $phone);
+            });
         }
 
         if ($date = $request->date) {
             $transactions->whereDate('tst_order_date', '=', $date);
+            $t_rieng->whereDate('tst_order_date', '=', $date);
+            $t_chung->whereDate('tst_order_date', '=', $date);
         }
 
         if ($status = $request->status) {
             $transactions->where('tst_status', $status);
+            $t_rieng->where('tst_status', $status);
+            $t_chung->where('tst_status', $status);
         }
 
 
@@ -57,26 +77,38 @@ class AdminTransactionController extends Controller
             $transactions->whereHas('baos', function ($query) use ($kg) {
                 $query->where('b_weight', $kg);
             });
+            $t_rieng->whereHas('baos', function ($query) use ($kg) {
+                $query->where('b_weight', $kg);
+            });
+            $t_chung->whereHas('baos', function ($query) use ($kg) {
+                $query->where('b_weight', $kg);
+            });
         }
 
         if ($code_order = $request->code_order) {
             $transactions->where('tst_code_order', 'like', '%' . $code_order . '%');
+            $t_rieng->where('tst_code_order', 'like', '%' . $code_order . '%');
+            $t_chung->where('tst_code_order', 'like', '%' . $code_order . '%');
         }
 
         if ($transaction_role = $request->transaction_role) {
             $transactions->where('tst_transaction_role', '=', $transaction_role);
+            $t_rieng->where('tst_transaction_role', '=', $transaction_role);
+            $t_chung->where('tst_transaction_role', '=', $transaction_role);
         }
         $month = $request->month;
         $year = $request->year;
         if ($month && $year) {
             $transactions->whereYear('tst_order_date', '=', $year)->whereMonth('tst_order_date', '=' ,(int)$month);
+            $t_rieng->whereYear('tst_order_date', '=', $year)->whereMonth('tst_order_date', '=' ,(int)$month);
+            $t_chung->whereYear('tst_order_date', '=', $year)->whereMonth('tst_order_date', '=' ,(int)$month);
             $transactions = $transactions->orderByDesc('tst_order_date')->paginate(99999);
             $viewData = [
                 'transactions'  =>  $transactions,
                 'users' => $users,
                 'query'         =>  $request->query(),
-                't_chung' => Transaction::where('tst_transaction_role', 2)->get(),
-                't_rieng' => Transaction::where('tst_transaction_role', 1)->get()
+                't_rieng' => $t_rieng->get(),
+                't_chung' => $t_chung->get()
             ];
             return view('admin.transaction.index', $viewData);
         }
@@ -86,8 +118,8 @@ class AdminTransactionController extends Controller
             'transactions'  =>  $transactions,
             'users' => $users,
             'query'         =>  $request->query(),
-            't_chung' => Transaction::where('tst_transaction_role', 2)->get(),
-            't_rieng' => Transaction::where('tst_transaction_role', 1)->get()
+            't_rieng' => $t_rieng->get(),
+            't_chung' => $t_chung->get()
         ];
         return view('admin.transaction.index', $viewData);
     }
