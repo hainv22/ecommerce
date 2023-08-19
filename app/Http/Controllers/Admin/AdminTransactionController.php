@@ -392,7 +392,7 @@ class AdminTransactionController extends Controller
     {
         $transports = Transport::all();
         $transaction = Transaction::query()->with(['baos', 'transaction_histories', 'transport'])->findOrFail($id);
-        $order = Order::with('product:id,pro_name,pro_avatar')
+        $order = Order::with('product:id,pro_name,pro_avatar,pro_number')
             ->where('od_transaction_id', $id)
             ->get();
         $transport_success = Bao::where('b_transaction_id', $id)->whereNotNull('b_success_date')->get();
