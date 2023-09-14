@@ -69,6 +69,14 @@
                             <option value="1" {{ Request::get('sort_pro_number') == 1 ? "selected='selected'" : "" }}>Nhiều -> Ít</option>
                             <option value="2" {{ Request::get('sort_pro_number') == 2 ? "selected='selected'" : "" }}>Ít -> Nhiều</option>
                         </select>
+                        <select name="user_id" class="js-example-basic-single form-control">
+                            <option value="0">__ Chọn Khách Hàng __</option>
+                            @if (isset($users))
+                                @foreach($users as $user)
+                                    <option value="{{$user->id}}" {{ Request::get('user_id') == $user->id ? "selected='selected'" : "" }}>{{$user->name}} - @if(\Auth::user()->role == \App\Models\User::ADMIN) {{$user->phone}} @endif</option>
+                                @endforeach
+                            @endif
+                        </select>
                         <br>
                         <button type="submit" class="btn btn-success" style="margin-bottom: 10px"><i class="fa fa-search"> </i> Search</button>
                         <button type="submit" class="btn btn-danger" style="margin-bottom: 10px">

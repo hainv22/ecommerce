@@ -72,5 +72,9 @@
         @endif
       </tbody>
     </table>
-  <div>{!! $products->appends($query ?? [])->links() !!}</div>
+  <div>
+    @if(empty($check))
+        {!! $products->appends($query ?? [])->links() !!}
+    @endif
+</div>
   </div>

@@ -7,11 +7,15 @@ use App\Http\Requests\AdminProductRequest;
 use App\Models\Category;
 use App\Models\Log;
 use App\Models\Product;
+use App\Models\Transaction;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use App\Models\User;
 
 class AdminProductController extends Controller
 {
@@ -25,7 +29,7 @@ class AdminProductController extends Controller
 
         // TypeProduct::destroy($typeProducts);
         // dd($typeProducts);
-
+        $users = User::all();
 
         if ($request->ajax()) {
             if ($request->p_id) {
@@ -118,6 +122,30 @@ class AdminProductController extends Controller
                 $products->where('pro_name', 'like', '%' . $search . '%');
             }
         }
+
+        if ($user_id = $request->user_id) {
+            $transactions_id_of_user = Transaction::where('tst_user_id', $user_id)->pluck('id')->toArray();
+            $prds_id_of_user = array_unique(array_reverse(Order::whereIn('od_transaction_id', $transactions_id_of_user)->pluck('od_product_id')->toArray()));
+            $products_ids = $products->whereIn('id', $prds_id_of_user)->pluck('id')->toArray();
+            foreach($prds_id_of_user as $key => $value){
+                if(!in_array($value, $products_ids)) {
+                    unset($prds_id_of_user[$key]);
+                }
+            }
+            $c = Collection::make(new Product);
+            foreach($prds_id_of_user as $item){
+                $c->push(Product::with('category:id,c_name')->where('id', $item)->get()[0]);
+            }
+            $viewData = [
+                'products'      => $c,
+                'categorys'     => $categorys,
+                'query'         => $request->query(),
+                'check'         => 1,
+                'users' => $users,
+            ];
+            return view('admin.product.index', $viewData);
+        }
+
         if (!($request->sort && $request->sort_pay)) {
             $products->orderByDesc('id');
 
@@ -137,6 +165,7 @@ class AdminProductController extends Controller
             $viewData = [
                 'products'      => $products,
                 'categorys'     => $categorys,
+                'users' => $users,
                 'query'         => $request->query()
             ];
             return view('admin.product.index', $viewData);
@@ -145,6 +174,7 @@ class AdminProductController extends Controller
         $viewData = [
             'products'      => $products,
             'categorys'     => $categorys,
+            'users' => $users,
             'query'         => $request->query()
         ];
         if ($request->ajax()) {
