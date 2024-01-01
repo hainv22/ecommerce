@@ -45,6 +45,7 @@
                                         <option value="">_ Năm _</option>
                                         <option value="2022" {{ Request::get('year_use_money') == 2022 ? "selected='selected'" : "" }}>Năm 2022</option>
                                         <option value="2023" {{ Request::get('year_use_money') == 2023 ? "selected='selected'" : "" }}>Năm 2023</option>
+                                        <option value="2024" {{ Request::get('year_use_money') == 2024 ? "selected='selected'" : "" }}>Năm 2024</option>
                                     </select>
                                     <select name="type_use_money" class="form-control">
                                         <option value="">_ Type _</option>
