@@ -17,12 +17,14 @@
            $i = 0;
            $total = 0;
            $total_number = 0;
+           $total_cost = 0;
         @endphp
         @if(isset($products))
             @foreach ($products as $item)
                 @php
                     $total += ($item->pro_money_yuan*$item->pro_number);
                     $total_number += $item->pro_number;
+                    $total_cost += ($item->pro_number*$item->pro_cost);
                 @endphp
                 <tr>
                     <td>{{ ++$i . ' -- ' .  $item->id}}</td>
@@ -39,6 +41,9 @@
                         @else
                             <span class="label label-success" style="font-size: 13px">{{ number_format($item->pro_price,0,',','.') }} VND</span>
                             <span class="label label-info" style="font-size: 13px">{{ number_format($item->pro_money_yuan,2,',','.') }} NDT</span>
+                            <br>
+                            <br>
+                            Giá Gốc: {{ number_format($item->pro_cost,0,',','.') }} VNĐ
                         @endif
                     </td>
                     <td> <span style="font-size: 17px;color: orangered">{{ $item->pro_number }} </span></span></td>
@@ -68,6 +73,7 @@
             <tr>
                 <td>total: = {{ number_format($total,0,',','.') }} NDT</td>
                 <td>total so luong: = {{ number_format($total_number,0,',','.') }}</td>
+                <td>Tổng Tiền Việt: = {{ number_format($total_cost,0,',','.') }}</td>
             </tr>
         @endif
       </tbody>

@@ -44,6 +44,15 @@
                                 @endif
                             </div>
 
+                            <div class="form-group col-sm-6" >
+                                <label for="pro_cost">Giá Gốc</label>
+                                <div class="input-group ">
+                                    <span class="input-group-addon">$</span>
+                                        <input type="number" name="pro_cost" value="{{ $product->pro_cost }}" class="form-control">
+                                        <span class="input-group-addon"><i class="fa fa-ambulance"></i></span>
+                                  </div>
+                            </div>
+
                               <div class="form-group {{ $errors->first('pro_money_yuan') ? 'has-error' : '' }}" >
                                   <label for="pro_money_yuan">Giá trung</label>
                                   <div class="input-group ">
