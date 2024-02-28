@@ -436,7 +436,7 @@ class AdminStatisticalController extends Controller
         $productsTop = $productsTop->select(DB::raw('sum(od_qty) as total, od_product_id'))
             ->groupBy('od_product_id')
             ->orderBy('total', 'DESC')
-            ->take(5)
+            ->take(200)
             ->get();
 
         $statusTransaction = [

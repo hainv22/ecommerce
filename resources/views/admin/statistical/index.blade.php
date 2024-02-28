@@ -114,7 +114,7 @@
         </div>
     </div>
     <div class="row" style="margin-bottom: 20px">
-        <div class="col-md-8">
+        <div class="col-md-12" style="margin-bottom: 40px">
             {{-- <div class="box-title">
                 <form action="" method="GET" class="form-inline">
                     <select name="mt" class="form-control">
@@ -140,51 +140,7 @@
                 ></div>
             </figure>
         </div>
-
-        <div class="col-md-4">
-            <div class="box box-info">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Top sản phẩm bán trong tháng {{$mt}}</h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                    </div>
-                </div>
-                <div class="box-body" style="">
-                    <div class="table-responsive">
-                        <table class="table no-margin">
-                            <thead>
-                            <tr>
-                                <th>STT</th>
-                                <th>số lượng</th>
-                                <th>số lượng</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @if(isset($productsT7))
-                                @foreach ($productsT7 as $key =>$item)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>
-                                            <ul>
-                                                <li>Name: {{ $item->product->pro_name }}</li>
-
-                                                {{-- <li>Email: {{ $$item->product->pro_price }}</li> --}}
-                                                <li>tổng sô: {{ number_format($item->total,0,',','.')}} cái</li>
-                                                <a href="{{ route('admin.product.edit',$item->product->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
-                                            </ul>
-                                        </td>
-                                        <td><img src="{{ pare_url_file($item->product->pro_avatar) }}" alt="" width="150px" height="100px"> </td>
-                                    </tr>
-                                @endforeach
-                            @endif
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
         @if(\Auth::user()->role == \App\Models\User::ADMIN)
         <div class="col-md-6">
@@ -230,6 +186,50 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-12">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Top sản phẩm bán trong tháng {{$mt}}</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body" style="">
+                    <div class="table-responsive">
+                        <table class="table no-margin">
+                            <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>số lượng</th>
+                                <th>số lượng</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @if(isset($productsT7))
+                                @foreach ($productsT7 as $key =>$item)
+                                    <tr>
+                                        <td>{{ $key + 1 }}</td>
+                                        <td>
+                                            <ul>
+                                                <li>Name: {{ $item->product->pro_name }}</li>
+
+                                                {{-- <li>Email: {{ $$item->product->pro_price }}</li> --}}
+                                                <li>tổng sô: {{ number_format($item->total,0,',','.')}} cái</li>
+                                                <a href="{{ route('admin.product.edit',$item->product->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</a>
+                                            </ul>
+                                        </td>
+                                        <td><img src="{{ pare_url_file($item->product->pro_avatar) }}" alt="" width="150px" height="100px"> </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
         <div class="col-md-6">
             <div class="box box-info">
