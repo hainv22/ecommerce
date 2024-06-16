@@ -146,7 +146,10 @@ class AdminUserController extends Controller
         $transactions = Transaction::where('tst_user_id', $id)->get();
         $total_transport_success = 0;
         $total_transport = 0;
-        $tst_interest_rate = Transaction::where('tst_user_id', $id)->sum('tst_interest_rate');
+        $tst_interest_rate_total = Transaction::where('tst_user_id', $id)->sum('tst_interest_rate');
+        $tst_interest_rate_2023 = 0;
+        $tst_interest_rate_2024 = Transaction::where('tst_user_id', $id)
+        ->whereBetween('tst_order_date',[date('2024-02-01'), date('2025-01-28')])->sum('tst_interest_rate');
         foreach ($transactions as $transaction) {
             $transport_success = Bao::where('b_transaction_id', $transaction->id)->whereNotNull('b_success_date')->get();
             foreach ($transport_success as $item) {
@@ -166,7 +169,9 @@ class AdminUserController extends Controller
             'total_money_paid' => $total_money_paid,
             'total_money_transport_paid' => $total_money_transport_paid,
             'total_transport' => $total_transport,
-            'tst_interest_rate' => $tst_interest_rate
+            'tst_interest_rate_total' => $tst_interest_rate_total,
+            'tst_interest_rate_2023' => $tst_interest_rate_total-$tst_interest_rate_2024,
+            'tst_interest_rate_2024' => $tst_interest_rate_2024
         ];
         return view('admin.user.detail', $viewData);
     }
