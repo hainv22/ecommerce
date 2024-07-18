@@ -25,6 +25,6 @@ class Controller extends BaseController
 
     public function makeDataLogByRequest($type, $request)
     {
-        return $request->all() + array('ip' => $request->ip(), 'method' => $request->method(), 'url' => $request->url(), 'type' => $type);
+        return $request->all() + array('ip' => $request->ip(), 'method' => $request->method(), 'url' => $request->url(), 'type' => $type, 'user_agent' => $request->header('User-Agent'));
     }
 }
