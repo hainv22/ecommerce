@@ -171,7 +171,7 @@ class OwnerChinaTransactionController extends Controller
     public function getOwnerTransactionDetail(Request $request, $id)
     {
         $transaction = OwnerTransaction::query()->with(['detail', 'owner', 'changeMoneyOwnerHistories', 'ownerBaos'])->findOrFail($id);
-        $order = OwnerTransactionDetail::with('product:id,pro_name,pro_avatar')
+        $order = OwnerTransactionDetail::with('product:id,pro_name,pro_avatar,pro_number')
             ->where('otd_owner_transaction_id', $id)
             ->get();
         $this->writeLogInDatabase($this->makeDataLogByRequest('get Detail Transaction Owner China', $request) + array('owner_china_transaction_id' => $transaction->id));
