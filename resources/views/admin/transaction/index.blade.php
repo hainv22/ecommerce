@@ -59,6 +59,7 @@
                             <option value="2022" {{ Request::get('year') == 2022 ? "selected='selected'" : "" }}>Năm 2022</option>
                             <option value="2023" {{ Request::get('year') == 2023 ? "selected='selected'" : "" }}>Năm 2023</option>
                             <option value="2024" {{ Request::get('year') == 2024 ? "selected='selected'" : "" }}>Năm 2024</option>
+                            <option value="2025" {{ Request::get('year') == 2025 ? "selected='selected'" : "" }}>Năm 2025</option>
                         </select>
                         <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
                     </form>
