@@ -308,6 +308,8 @@
             $data_this.css("color", "red")
             $data_this.parent().next().children().attr("src", SRC);
             $data_this.parent().next().next().html("<span> việt: "+ PRICE +"</span>"+"<br><span> trung: "+ PRICE_YUAN +"</span>" + " <br><span>"+ NAME +"</span>" + " <br><span>"+ PRO_NUMBER +" Cái</span>");
+            $data_this.parent().next().next().next().children().attr("value", PRO_NUMBER);
+            $data_this.parent().next().next().next().next().children().val(PRICE_YUAN);
             $('#myModal').modal('toggle');
         });
 
