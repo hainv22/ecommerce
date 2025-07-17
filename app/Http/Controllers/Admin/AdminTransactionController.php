@@ -113,7 +113,7 @@ class AdminTransactionController extends Controller
             return view('admin.transaction.index', $viewData);
         }
 
-        $transactions = $transactions->orderByDesc('id')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
+        $transactions = $transactions->orderByDesc('tst_order_date')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
         $viewData = [
             'transactions'  =>  $transactions,
             'users' => $users,
