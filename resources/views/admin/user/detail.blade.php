@@ -137,6 +137,7 @@
                                             <span style="color: red;"> 2023: </span><span class="js_tst_money">{{number_format($tst_interest_rate_2023,0,',','.') }}</span> đ <br>
                                             <span style="color: red;"> 2024: </span><span class="js_tst_money">{{number_format($tst_interest_rate_2024,0,',','.') }}</span> đ <br>
                                             <span style="color: red;"> 2025: </span><span class="js_tst_money">{{number_format($tst_interest_rate_2025,0,',','.') }}</span> đ <br>
+                                            <span style="color: red;"> 2026: </span><span class="js_tst_money">{{number_format($tst_interest_rate_2026,0,',','.') }}</span> đ <br>
                                         </td>
                                     </tr>
 
