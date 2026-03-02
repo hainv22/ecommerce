@@ -113,7 +113,7 @@ class OwnerChinaTransactionController extends Controller
                 'ot_note' => $data['ot_note'],
                 'ot_status' => 1,
                 'ot_order_date' => $data['ot_order_date'],
-                'ot_transaction_role' => Transaction::CHUNG
+                'ot_transaction_role' => $data['ot_transaction_role']
             ]);
 
             foreach ($data['txt_id_product'] as $key => $idProduct) {

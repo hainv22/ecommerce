@@ -44,6 +44,7 @@
                                 <th>Info</th>
                                 <th>Money</th>
                                 <th>Trạng thái </th>
+                                <th>Loại đơn</th>
                                 <th>Time</th>
                                 <th>Action</th>
                             </tr>
@@ -74,7 +75,7 @@
                                                 ?>
                                             @if($check)
                                                 <span class="label label-success">
-                                                Đã về đến kho hết
+                                                Đã giao đủ
                                             </span>
                                             @else
                                                 <span class="label label-danger">
@@ -82,6 +83,19 @@
                                             </span>
                                             @endif
 
+                                        </td>
+                                        <td>
+                                        <?php
+                                            if ($item->ot_transaction_role == 1) {
+                                                echo "<span class='label label-default'>Admin</span>";
+                                            } elseif ($item->ot_transaction_role == 2) {
+                                                echo "<span class='label label-default'>Chung</span>";
+                                            } elseif ($item->ot_transaction_role == 3) {
+                                                echo "<span class='label label-info'>Đi thẳng</span>";
+                                            } else {
+                                                echo "<span class='label label-primary'>Về quán</span>";
+                                            }
+                                            ?>
                                         </td>
                                         <td>
                                             Ngày tạo: {{ date("d/m/Y H:i:s", strtotime($item->created_at)) }} <br>

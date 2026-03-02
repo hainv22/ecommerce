@@ -36,7 +36,8 @@
 
                             <div class="form-group {{ $errors->first('ot_user_id') ? 'has-error' : '' }}">
                                 <label for="pro_name">Owner</label>
-                                <select name="ot_user_id" class="form-control">
+                                <select name="ot_user_id" class="form-control" required>
+                                    <option value="">- -</option>
                                     @if (isset($users))
                                         @foreach($users as $user)
                                             <option value="{{$user->id}}">{{$user->oc_name}}</option>
@@ -52,7 +53,7 @@
                                 <label for="pro_price">Ngày đặt hàng</label>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-                                    <input type="date" name="ot_order_date" class="form-control" value="{{ old('ot_order_date') }}">
+                                    <input type="date" name="ot_order_date" class="form-control" value="{{ old('ot_order_date') }}" required>
                                 </div>
                                 <small id="emailHelp" class="form-text text-muted "></small>
                                 @if ($errors->first('ot_order_date'))
@@ -64,9 +65,12 @@
                                 <label for="pro_price"> Loại </label>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-                                    <select name="ot_transaction_role" class="form-control">
+                                    <select name="ot_transaction_role" class="form-control" required>
+                                        <option value="" >- -</option>
+                                        <option value="3" >Đi thẳng</option>
+                                        <option value="4" >Về quán</option>
                                         @if(\Auth::user()->role == \App\Models\User::ADMIN)
-                                            <option value="1" >Admin - Của Tôi</option>
+                                        <option value="1" >Admin - Của Tôi</option>
                                         @endif
                                         <option value="2" >Chung</option>
                                     </select>
