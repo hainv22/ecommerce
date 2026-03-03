@@ -36,7 +36,7 @@
 
                             <div class="form-group {{ $errors->first('ot_user_id') ? 'has-error' : '' }}">
                                 <label for="pro_name">Owner</label>
-                                <select name="ot_user_id" class="form-control" required>
+                                <select name="ot_user_id" class="js-example-basic-single form-control" required>
                                     <option value="">- -</option>
                                     @if (isset($users))
                                         @foreach($users as $user)

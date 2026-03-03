@@ -23,7 +23,7 @@
                     </div>
                     <div class="box-title">
                         <form action="" method="GET" class="form-inline">
-                            <select name="user_owner_id" class="form-control">
+                            <select name="user_owner_id" class="js-example-basic-single form-control">
                                 <option value="0">__ Chọn Khách Hàng __</option>
                                 @if (isset($users))
                                     @foreach($users as $user)
@@ -31,6 +31,14 @@
                                     @endforeach
                                 @endif
                             </select>
+                            <select name="owner_transaction_role" class="form-control">
+                                <option value="">__ Loại đơn __</option>
+                                <option value="3" {{ Request::get('owner_transaction_role') == 3 ? "selected='selected'" : "" }}>Đi thẳng</option>
+                                <option value="4" {{ Request::get('owner_transaction_role') == 4 ? "selected='selected'" : "" }}>Về quán</option>
+                                <option value="2" {{ Request::get('owner_transaction_role') == 2 ? "selected='selected'" : "" }}>Chung</option>
+                                <option value="1" {{ Request::get('owner_transaction_role') == 1 ? "selected='selected'" : "" }}>Admin - Của Tôi</option>
+                            </select>
+                            <input type="date" value="{{ Request::get('date') }}" class="form-control" name="date" placeholder="date">
                             <input type="text" value="{{ Request::get('kg') }}" class="form-control" name="kg" placeholder="số kg">
                             <button type="submit" class="btn btn-success"><i class="fa fa-search"> </i> Search</button>
                         </form>

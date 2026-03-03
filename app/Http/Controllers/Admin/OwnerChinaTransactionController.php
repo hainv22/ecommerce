@@ -42,6 +42,12 @@ class OwnerChinaTransactionController extends Controller
                 $query->where('b_weight', $kg);
             });
         }
+        if ($owner_transaction_role = $request->owner_transaction_role) {
+            $owner_transactions->where('ot_transaction_role', $owner_transaction_role);
+        };
+        if ($date = $request->date) {
+            $owner_transactions->whereDate('ot_order_date', '=', $date);
+        }
         $owner_transactions = $owner_transactions->orderByDesc('ot_order_date')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
         $viewData = [
             'transactions'  =>  $owner_transactions,
