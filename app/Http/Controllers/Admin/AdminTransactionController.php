@@ -143,10 +143,12 @@ class AdminTransactionController extends Controller
             $data = $request->all();
             $total_money = 0;
             $total_products = 0;
+            $f=0;
             foreach ($data['txt_id_product'] as $key => $idProduct) {
                 $product = Product::find($idProduct);
                 $total_money += ($product->pro_price * $data['txt_quantity_product'][$key]);
                 $total_products += $data['txt_quantity_product'][$key];
+                $f += ($product->pro_money_yuan * $data['txt_quantity_product'][$key]);
             }
 
             $transaction = Transaction::create([
@@ -208,7 +210,7 @@ class AdminTransactionController extends Controller
                 TransactionHistory::create([
                     'th_transaction_id' => $transaction->id,
                     'th_content' => "Tạo đơn hàng thành công:  Tổng số sản phẩm: $a,
-                    Tổng số tiền: $b, Số tiền đặt cọc: {$c}, Tổng số bao: $d, Tổng số cân: $e, log_id_when_create_transaction: $log->id"
+                    Tổng số tiền: $b, tiền tàu: $f, Số tiền đặt cọc: {$c}, Tổng số bao: $d, Tổng số cân: $e, log_id_when_create_transaction: $log->id"
                 ]);
             }
             DB::commit();

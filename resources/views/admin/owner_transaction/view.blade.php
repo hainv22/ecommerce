@@ -143,9 +143,13 @@
                                     <tbody>
                                     @php
                                         $i=0;
+                                        $a=0;
                                     @endphp
                                     @if(!empty($transaction->ownerBaos))
                                         @foreach ($transaction->ownerBaos as $item)
+                                        @php
+                                            $a += $item->b_weight;
+                                        @endphp
                                             <tr>
                                                 <td>{{ ++$i }} <input type="hidden" value="{{$item->id}}" name="id_bao[]"></td>
                                                 <td class="cls_td ">
@@ -165,6 +169,8 @@
                             </div>
                             @if(\Auth::user()->role == \App\Models\User::ADMIN)
                             <div class="clear-both text-center">
+                                tổng cân: {{$a}} ///// 
+                                tổng tiền: {{$a}} * 9 = {{$a*9}}
                                 <button type="submit" class="btn btn-danger {{$transaction->tst_lock == 1 ? 'js_click_lock' : ''}}" onclick="{{$transaction->tst_lock == 1 ? '' : "return confirm('Bạn muốn cập nhật?')"}}">Cập nhật số lượng bao</button>
                             </div>
                             @endif
