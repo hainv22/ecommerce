@@ -234,6 +234,7 @@ class AdminTransactionController extends Controller
         DB::beginTransaction();
         try {
             $total_money = 0;
+            $f=0;
             $total_products = 0;
             $data = $request->all();
             $transaction = Transaction::with('transport')->findOrFail($id);
@@ -273,6 +274,7 @@ class AdminTransactionController extends Controller
                         'od_note' => $data['od_note'][$key],
                     ]);
                     $total_money += ($item->od_price * $data['txt_quantity_product'][$key]);
+                    $f += ($item->product->pro_money_yuan * $data['txt_quantity_product'][$key]);
                     $total_products += $data['txt_quantity_product'][$key];
 
                 }
@@ -287,6 +289,7 @@ class AdminTransactionController extends Controller
                             'od_note' => $data['od_note'][$i]
                         ]);
                         $total_money += (Product::find($data['txt_id_product'][$i])->pro_price * $data['txt_quantity_product'][$i]);
+                        $f += (Product::find($data['txt_id_product'][$i])->pro_money_yuan * $data['txt_quantity_product'][$i]);
                         $total_products += $data['txt_quantity_product'][$i];
                         DB::table('products')
                             ->where('id', $data['txt_id_product'][$i])
@@ -301,7 +304,7 @@ class AdminTransactionController extends Controller
                 $log = $this->writeLogInDatabase($this->makeDataLogByRequest('Update Transaction', $request) + array('transaction_id' => $transaction->id, 'update_transaction_type' => 'Update total product of transaction'));
                 TransactionHistory::create([
                     'th_transaction_id' => $transaction->id,
-                    'th_content' => "Cập nhật: \n số lượng sp: {$transaction->tst_total_products} -> {$total_products} \n / Tiền: {$tst_total_money_old_format} -> $tst_total_money_new_format , log_id_when_update_product_transaction: $log->id"
+                    'th_content' => "Cập nhật: \n số lượng sp: {$transaction->tst_total_products} -> {$total_products} \n / Tiền: {$tst_total_money_old_format} -> $tst_total_money_new_format , Tiền tàu: {$f} , log_id_when_update_product_transaction: $log->id"
                 ]);
 
                 $transaction->update([
