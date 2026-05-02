@@ -31,6 +31,27 @@ class AdminProductController extends Controller
         // dd($typeProducts);
         $users = User::all();
 
+        if ($request->ajax() && $request->search) {
+            $products = Product::with('category:id,c_name');
+            $categorys = Category::all();
+            if ($search = strtolower($this->stripVN($request->search))) {
+                $products->where('pro_name', 'like', '%' . $search . '%');
+            }
+            $products = $products->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
+            $viewData = [
+                'products'      => $products,
+                'categorys'     => $categorys,
+                'users' => $users,
+                'query'         => $request->query()
+            ];
+            if ($request->ajax()) {
+                $html = view('admin.product.data', $viewData)->render();
+                return response([
+                    'data' => $html ?? null,
+                ]);
+            }
+        }
+
         if ($request->ajax()) {
             if ($request->p_id) {
                 $product = Product::findOrfail((int)$request->p_id);
