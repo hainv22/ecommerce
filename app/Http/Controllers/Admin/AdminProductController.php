@@ -37,7 +37,7 @@ class AdminProductController extends Controller
             if ($search = strtolower($this->stripVN($request->search))) {
                 $products->where('pro_name', 'like', '%' . $search . '%');
             }
-            $products = $products->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
+            $products = $products->orderByDesc('id')->paginate((int)config('contants.PER_PAGE_DEFAULT_ADMIN'));
             $viewData = [
                 'products'      => $products,
                 'categorys'     => $categorys,
