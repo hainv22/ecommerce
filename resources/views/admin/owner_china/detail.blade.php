@@ -18,7 +18,7 @@
         <div class="row">
             <form role="form" action="" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="box box-danger">
                         <div class="box-header with-border">
                             <h3 class="box-title">Thông tin cơ bản</h3>
@@ -52,12 +52,15 @@
                 </div>
 
 
-                <div class="col-md-6">
+                <div class="col-md-8">
 
                     <div class="box box-info">
                         <div class="box-header with-border">
                             <h3 class="box-title">Lịch sử cộng trừ 3 tháng gần nhất </h3>
                         </div>
+                        @if(\Auth::user()->role == \App\Models\User::ADMIN)
+                            <button type="button" class="btn btn-warning" id="js_owner_china_paid" data-url-paid-owner="{{route('admin.owner-china.paid-owner', $owner->id	)}}" style="float: right">Paid</button>
+                        @endif
                         <div class="box-body">
                             <div class="box-body table-responsive no-padding">
                                 <table class="table table-hover">
@@ -95,9 +98,6 @@
                             </div>
                         </div>
                     </div>
-                    @if(\Auth::user()->role == \App\Models\User::ADMIN)
-                        <button type="button" class="btn btn-warning" id="js_owner_china_paid" data-url-paid-owner="{{route('admin.owner-china.paid-owner', $owner->id	)}}" style="float: right">Paid</button>
-                    @endif
                 </div>
 
                 {{--<div class="col-md-12">

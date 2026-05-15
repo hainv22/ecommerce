@@ -40,7 +40,7 @@ class OwnerChinaController extends Controller
         ])->get();
         $viewData = [
             'owner' => $owner,
-            'use' => $use
+            'use' => $use->sortByDesc('id')
         ];
         return view('admin.owner_china.detail', $viewData);
     }
